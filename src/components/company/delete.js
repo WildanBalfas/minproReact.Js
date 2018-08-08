@@ -7,31 +7,28 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-export default ({ deleteUser,handleChange, handleClose,handleDelete,user: {username, first,middle,last, email, phone,activate}}) => {
+export default ({ deleteCompany,handleChange, handleClose,handleDelete, company: {code, name, email, phone,address}}) => {
     return <Fragment>
         <Dialog
-            open={deleteUser}
+            open={deleteCompany}
             onClose={handleClose}
         >
-            <DialogTitle id="alert-dialog-title">{"Delete User"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{"Delete Company"}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                    Are you sure to delete ?
             </DialogContentText>
             <form>
-                <TextField label='User Name' value={username} margin='normal' disabled={true}/>
+                <TextField label='Company Code' value={code} margin='normal' disabled={true}/>
                 &nbsp;
-                <TextField label='First Name' value={first} margin='normal' disabled={true}/>
-                &nbsp;
-                <TextField label='Middle Name' value={middle} margin='normal' disabled={true}/>
-                &nbsp;
-                <TextField label='Last Name' value={last} margin='normal' disabled={true}/>
+                <TextField label='Company Name' value={name} margin='normal' disabled={true}/>
                 &nbsp;
                 <TextField label='Email' value={email} margin='normal' disabled={true}/>
                 &nbsp;
                 <TextField label='Phone' value={phone} margin='normal' disabled={true}/>
                 &nbsp;
-                <TextField label='Activate' value={activate} margin='normal' disabled={true}/>
+                <TextField label='Address' value={address} margin='normal' disabled={true}/>
+                &nbsp;
             </form>
             </DialogContent>
             <DialogActions>

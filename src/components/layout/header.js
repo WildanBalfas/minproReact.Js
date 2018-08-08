@@ -34,7 +34,7 @@ class Header extends React.Component {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="title" color="inherit">
-                            X Kitchen
+                           Marcom Apps
                         </Typography>
                     </ToolBar>
                 </AppBar>
