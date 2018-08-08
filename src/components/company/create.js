@@ -9,9 +9,9 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
-export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, company: {code, name, email, phone,address}}) => {
+export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, company: {code, name, email, phone, address}}) => {
     return <Fragment>
-        <Button onClick={handleToggle} variant="contained" color="primary">Add</Button>
+        <Button onClick={handleToggle} variant="contained" color="primary" style={{float: 'right'}}>Add</Button>
         <Dialog
             open={createNew}
             onClose={handleClose}

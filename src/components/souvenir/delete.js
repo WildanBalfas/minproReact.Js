@@ -7,27 +7,25 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-export default ({ deleteCompany,handleChange, handleClose,handleDelete, company: {code, name, email, phone,address}}) => {
+export default ({ deleteSouvenir, handleClose,handleDelete,souvenir: {code, name, m_unit_id, description}}) => {
     return <Fragment>
         <Dialog
-            open={deleteCompany}
+            open={deleteSouvenir}
             onClose={handleClose}
         >
-            <DialogTitle id="alert-dialog-title">{"Delete Company"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{"Delete Souvenir"}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                    Delete Data ?
             </DialogContentText>
             <form>
-                <TextField label='Company Code' value={code} margin='normal' disabled={true}/>
+                <TextField label='Souvenir Code' value={code} margin='normal' disabled={true}/>
                 &nbsp;
-                <TextField label='Company Name' value={name} margin='normal' disabled={true}/>
+                <TextField label='Souvenir Name' value={name} margin='normal' disabled={true}/>
                 &nbsp;
-                <TextField label='Email' value={email} margin='normal' disabled={true}/>
+                <TextField label='Unit Name' value={m_unit_id} margin='normal' disabled={true}/>
                 &nbsp;
-                <TextField label='Phone' value={phone} margin='normal' disabled={true}/>
-                &nbsp;
-                <TextField label='Address' value={address} fullWidth={true} multiline={true} margin='normal' disabled={true}/>
+                <TextField label='Description' value={description} margin='normal' disabled={true}/>
                 &nbsp;
             </form>
             </DialogContent>

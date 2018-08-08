@@ -9,29 +9,28 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
-export default ({editCompany,handleChange,handleClose,handleEdit,handleSubmit, company: {code, name, email, phone,address}}) => {
+export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, souvenir: {code, name, m_unit_id, description }}) => {
     return <Fragment>
+        <Button onClick={handleToggle} variant="contained" color="primary" style={{float: 'right'}}>Add</Button>
         <Dialog
-            open={editCompany}
+            open={createNew}
             onClose={handleClose}
         >
-            <DialogTitle id="alert-dialog-title">{"Update company"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{"Create new Souvenir"}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                   Please edit data
-            </DialogContentText>
+                   Please fill out the form below!
             <form>
-                <TextField label='Company Code' value={code} onChange={handleChange('code')} margin='normal'/>
+                <TextField label='Souvenir Code' value={code} onChange={handleChange('code')} margin='normal'/>
                 &nbsp;
-                <TextField label='Company Name' value={name} onChange={handleChange('name')} margin='normal'/>
+                <TextField label='Souvenir Name' value={name} onChange={handleChange('name')} margin='normal'/>
                 &nbsp;
-                <TextField label='Email' value={email} onChange={handleChange('email')} margin='normal'/>
+                <TextField label='Unit Name' value={m_unit_id} onChange={handleChange('m_unit_data')} margin='normal'/>
                 &nbsp;
-                <TextField label='Phone' value={phone} onChange={handleChange('phone')} margin='normal'/>
-                &nbsp;
-                <TextField label='Address' value={address} onChange={handleChange('address')} fullWidth={true} multiline={true} margin='normal'/>
+                <TextField label='Description' value={description} onChange={handleChange('description')} margin='normal'/>
                 &nbsp;
             </form>
+            </DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">

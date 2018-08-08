@@ -4,14 +4,14 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import CreateCompany from './create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
-import EditCompany from './edit';
-import DeleteCompany from './delete';
-import ViewCompany from './view';
+import CreateSouvenir from './create';
+import EditSouvenir from './edit';
+import DeleteSouvenir from './delete';
+import ViewSouvenir from './view';
 import { Button } from '../../../node_modules/@material-ui/core';
 import { config } from '../configuration/config';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -20,42 +20,41 @@ import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import Checkbox from '@material-ui/core/Checkbox';  
 
-class Companies extends React.Component  {
+class Souvenirs extends React.Component  {
 
-    companyModel = 
+    souvenirModel = 
     {
         _id: '',
         code: '',
         name: '',
-        phone: '',
-        email: '',
-        address: '',
+        description: '',
+        m_unit_id: '',
         createDate: '',
-        createBy: '',
-        is_delete: ''
+        createBy: ''
     }
     constructor(props) {
         super(props);
         this.state = {
-            companies: [],
+            souvenirs: [],
+            souvenirdata: [],
             createNew: false,
-            editCompany: false,
-            deleteCompany: false,
+            editSouvenir: false,
+            deleteSouvenir: false,
             loading: true,
-            company: this.companyModel,
+            souvenir: this.souvenirModel,
 
         }
     }
 
-    reloadCompanyData = () => {
-        axios.get(config.url + '/m_company')
+    reloadSouvenirData = () => {
+        axios.get(config.url + '/m_souvenir')
         .then(res => {
             this.setState({
-                companies : res.data,
+                souvenir : res.data,
                 createNew: false,
-                editCompany: false,
-                deleteCompany: false,
-                company: this.companyModel,
+                editSouvenir: false,
+                deleteSouvenir: false,
+                souvenir: this.souvenirModel,
                 loading: false
             })
         })
@@ -65,15 +64,15 @@ class Companies extends React.Component  {
     }
 
     componentDidMout(){
-        this.reloadCompanyData();
+        this.reloadSouvenirData();
     }
 
     //API connect to cloud
     componentDidMount() {
-        axios.get(config.url + '/m_company')
+        axios.get(config.url + '/m_souvenir_unit')
             .then(res => {
                 this.setState({
-                    companies: res.data,
+                    souvenirdata: res.data,
                     loading: false
                 })
             })
@@ -91,17 +90,17 @@ class Companies extends React.Component  {
     handleClose = () => {
         this.setState({
             createNew: false,
-            editCompany: false,
-            deleteCompany: false,
-            viewCompany: false,
-            company: this.companyModel
+            editSouvenir: false,
+            deleteSouvenir: false,
+            viewSouvenir: false,
+            souvenir: this.souvenirModel
         });
     }
     //bisa diketik
     handleChange = name => ({ target: { value } }) => {
         this.setState({
-            company: {
-                ...this.state.company,
+            souvenir: {
+                ...this.state.souvenir,
                 [name]: value
             }
         })
@@ -109,42 +108,40 @@ class Companies extends React.Component  {
 
     handleChangeCheckBox =  name => event => {
         this.setState({
-            company: {
-                ...this.state.company,
+            souvenir: {
+                ...this.state.souvenir,
                 [name]: event.target.checked
             }
         })
     }
 
     handleSubmit = () => {
-        const { company, createNew } = this.state;
+        const { souvenir, createNew } = this.state;
 
-        let newCompany =
+        let newSouvenir =
         {
-            code: company.code,
-            name: company.name,
-            phone: company.phone,
-            email: company.email,
-            address: company.address,
-            createDate: company.createDate,
-            createBy: company.createBy,
-            is_delete: 0
+            code: souvenir.code,
+            name: souvenir.name,
+            m_unit_id:souvenir.m_unit_id,
+            description: souvenir.description,
+            createDate: souvenir.createDate,
+            createBy: souvenir.createBy
         }
 
         if(createNew){
-            axios.post(config.url + '/m_company', newCompany)
+            axios.post(config.url + '/m_souvenir', newSouvenir)
                 .then(res => {
-                    this.reloadCompanyData();
-                    alert('Company has been saved');
+                    this.reloadSouvenirData();
+                    alert('Souvenir has been saved');
                 })
                 .catch((error) => {
                     alert(error)
                 })
         }else{
-            axios.put(config.url + '/m_company/' +company._id , newCompany)
+            axios.put(config.url + '/m_souvenir/' +souvenir._id , newSouvenir)
             .then(res => {
-                this.reloadCompanyData();
-                alert('Company has been updated');
+                this.reloadSouvenirData();
+                alert('Souvenir has been updated');
             })
             .catch((error) => {
                 alert(error)
@@ -153,106 +150,106 @@ class Companies extends React.Component  {
     }
     
     handleEdit = (_id) => {
-        const { companies } = this.state;
-        const company = companies.find(u => u._id === _id);
+        const { souvenirs } = this.state;
+        const souvenir = souvenirs.find(u => u._id === _id);
         this.setState({
-            editCompany: true,
-            company: {
-                _id: company._id,
-                code: company.code,
-                name: company.name,
-                phone: company.phone,
-                email: company.email,
-                address: company.address
+            editSouvenir: true,
+            souvenir: {
+                _id: souvenir._id,
+                code: souvenir.code,
+                name: souvenir.name,
+                m_unit_id:souvenir.m_unit_id,
+                description: souvenir.description,
+                createDate: souvenir.createDate,
+                createBy: souvenir.createBy
             }
         })
     }
 
     handleDelete = (_id) => {
-        const { companies } = this.state;
-        const company = companies.find(u => u._id === _id);
+        const { souvenirs } = this.state;
+        const souvenir = souvenirs.find(u => u._id === _id);
         this.setState({
-            deleteCompany: true,
-             company: {
-                _id: company._id,
-                code: company.code,
-                name: company.name,
-                phone: company.phone,
-                email: company.email,
-                address: company.address
+            deleteSouvenir: true,
+            souvenir: {
+                _id: souvenir._id,
+                code: souvenir.code,
+                name: souvenir.name,
+                m_unit_id:souvenir.m_unit_id,
+                description: souvenir.description,
+                createDate: souvenir.createDate,
+                createBy: souvenir.createBy
             }
         })
     }
 
-    handleView = (_id) => {
-        const { companies } = this.state;
-        const company = companies.find(u => u._id === _id);
+    handleDelete = (_id) => {
+        const { souvenirs } = this.state;
+        const souvenir = souvenirs.find(u => u._id === _id);
         this.setState({
-            viewCompany: true,
-             company: {
-                _id: company._id,
-                code: company.code,
-                name: company.name,
-                phone: company.phone,
-                email: company.email,
-                address: company.address
+            viewSouvenir: true,
+            souvenir: {
+                _id: souvenir._id,
+                code: souvenir.code,
+                name: souvenir.name,
+                m_unit_id:souvenir.m_unit_id,
+                description: souvenir.description,
+                createDate: souvenir.createDate,
+                createBy: souvenir.createBy
             }
         })
     }
 
 
     handleDeleteConfirm = () => {
-        const { company } = this.state;
-        let delProp = {
-            is_delete: company.is_delete + 1,
-        }
-        
-        axios.put(config.url + '/m_company/' + company._id, delProp)
-        .then(res =>{
-            this.reloadCompanyData();
-            alert('has been deleted');
+        const { souvenir } = this.state;
+
+        axios.delete(config.url + '/m_souvenir/' + souvenir._id)
+        .then(res => {
+            this.reloadSouvenirData();
+            alert('Souvenir has been deleted');
         })
         .catch((error) => {
             alert(error);
         })
-        
+
     }
 
-
     render() {
-        const {companies, loading} = this.state;
+        const {souvenirs, souvenirdata, loading} = this.state;
         const {classes} = this.props;
         let i=1;
         return (
             <div>
                 <h3><center>List Company</center></h3>
-                <CreateCompany createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} company={this.state.company} />
-                <EditCompany editCompany={this.state.editCompany} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} company={this.state.company} />
-                <DeleteCompany deleteCompany={this.state.deleteCompany} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} company={this.state.company} />
-                <ViewCompany viewCompany={this.state.viewCompany} handleView={this.handleView} handleClose={this.handleClose} company={this.state.company} />
+                <CreateSouvenir createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} souvenir={this.state.souvenir} />
+                <EditSouvenir editSouvenir={this.state.editCompany} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} souvenir={this.state.souvenir} />
+                <DeleteSouvenir deleteSouvenir={this.state.deleteCompany} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} souvenir={this.state.souvenir} />
+                <ViewSouvenir viewSouvenir={this.state.viewCompany} handleView={this.handleView} handleClose={this.handleClose} souvenir={this.state.souvenir} />
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
                 <Table>
                     <TableHead >
                         <TableRow>
                             <TableCell style={{fontWeight:900}}>No</TableCell>
-                            <TableCell style={{fontWeight:900}}>Company Code</TableCell>
-                            <TableCell style={{fontWeight:900}}>Company Name</TableCell>
+                            <TableCell style={{fontWeight:900}}>Souvenir Code</TableCell>
+                            <TableCell style={{fontWeight:900}}>Souvenir Name</TableCell>
+                            <TableCell style={{fontWeight:900}}>Unit</TableCell>
                             <TableCell style={{fontWeight:900}}>Create Date</TableCell>
                             <TableCell style={{fontWeight:900}}>Create By</TableCell>
-                            <TableCell style={{fontWeight:900}}>is_delete</TableCell>
                             <TableCell style={{fontWeight:900, textAlign:'center'}}>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {companies.map(n => {
+                        {souvenirdata.map(n => {
+
                             return (
                                 <TableRow>
                                     <TableCell component="th" scope="row">{i++}</TableCell>
                                     <TableCell component="th" scope="row">{n.code}</TableCell>
                                     <TableCell>{n.name}</TableCell>
+                                    <TableCell>{n.unit}</TableCell>
                                     <TableCell>{n.createDate}</TableCell>
                                     <TableCell>{n.createBy}</TableCell>
-                                    <TableCell>{n.is_delete}</TableCell>
                                     <TableCell style={{textAlign:'center'}}><IconButton><EditIcon onClick={() => this.handleEdit(n._id)}/></IconButton>
                                     <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} /></IconButton>
                                     <IconButton><SearchIcon onClick={() => this.handleView(n._id)} /></IconButton> </TableCell>
@@ -275,7 +272,7 @@ const styles = theme => ({
     },
 });
 
-Companies.PropTypes = {
+Souvenirs.PropTypes = {
     classes: PropTypes.object.isRequired
 };
-export default withStyles(styles)(Companies);
+export default withStyles(styles)(Souvenirs);

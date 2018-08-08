@@ -9,27 +9,25 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
-export default ({editCompany,handleChange,handleClose,handleEdit,handleSubmit, company: {code, name, email, phone,address}}) => {
+export default ({editSouvenir,handleChange,handleClose,handleEdit,handleSubmit, souvenir: {code, name, m_unit_id, description }}) => {
     return <Fragment>
         <Dialog
-            open={editCompany}
+            open={editSouvenir}
             onClose={handleClose}
         >
-            <DialogTitle id="alert-dialog-title">{"Update company"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{"Update souvenir"}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                    Please edit data
             </DialogContentText>
             <form>
-                <TextField label='Company Code' value={code} onChange={handleChange('code')} margin='normal'/>
+                <TextField label='Souvenir Code' value={code} onChange={handleChange('code')} margin='normal'/>
                 &nbsp;
-                <TextField label='Company Name' value={name} onChange={handleChange('name')} margin='normal'/>
+                <TextField label='Souvenir Name' value={name} onChange={handleChange('name')} margin='normal'/>
                 &nbsp;
-                <TextField label='Email' value={email} onChange={handleChange('email')} margin='normal'/>
+                <TextField label='Unit Name' value={m_unit_id} onChange={handleChange('m_unit_id')} margin='normal'/>
                 &nbsp;
-                <TextField label='Phone' value={phone} onChange={handleChange('phone')} margin='normal'/>
-                &nbsp;
-                <TextField label='Address' value={address} onChange={handleChange('address')} fullWidth={true} multiline={true} margin='normal'/>
+                <TextField label='Description' value={description} onChange={handleChange('description')} margin='normal'/>
                 &nbsp;
             </form>
             </DialogContent>

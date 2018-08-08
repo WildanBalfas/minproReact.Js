@@ -1,4 +1,4 @@
 export const config ={
-    url : 'http://localhost:3300/api'
+    url : 'http://localhost:8000/api'
     // url : ''
 }

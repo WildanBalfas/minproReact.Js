@@ -7,17 +7,14 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-export default ({ deleteCompany,handleChange, handleClose,handleDelete, company: {code, name, email, phone,address}}) => {
+export default ({ viewCompany, handleView, handleClose, company: {code, name, email, phone,address}}) => {
     return <Fragment>
         <Dialog
-            open={deleteCompany}
+            open={viewCompany}
             onClose={handleClose}
         >
-            <DialogTitle id="alert-dialog-title">{"Delete Company"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{"View Company"}</DialogTitle>
             <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                   Delete Data ?
-            </DialogContentText>
             <form>
                 <TextField label='Company Code' value={code} margin='normal' disabled={true}/>
                 &nbsp;
@@ -27,16 +24,12 @@ export default ({ deleteCompany,handleChange, handleClose,handleDelete, company:
                 &nbsp;
                 <TextField label='Phone' value={phone} margin='normal' disabled={true}/>
                 &nbsp;
-                <TextField label='Address' value={address} fullWidth={true} multiline={true} margin='normal' disabled={true}/>
-                &nbsp;
+                <TextField label='Address' value={address} margin='normal' fullWidth={true} multiline={true} disabled={true}/>
             </form>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">
                     Cancel
-            </Button>
-                <Button onClick={handleDelete} color="primary" autoFocus>
-                    Delete
             </Button>
             </DialogActions>
         </Dialog>
