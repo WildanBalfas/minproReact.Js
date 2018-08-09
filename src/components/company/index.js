@@ -48,7 +48,7 @@ class Companies extends React.Component  {
     }
 
     reloadCompanyData = () => {
-        axios.get(config.url + '/m_company')
+        axios.get(config.url + '/m-company')
         .then(res => {
             this.setState({
                 companies : res.data,
@@ -64,23 +64,23 @@ class Companies extends React.Component  {
         })
     }
 
-    componentDidMout(){
+    componentDidMount(){
         this.reloadCompanyData();
     }
 
-    //API connect to cloud
-    componentDidMount() {
-        axios.get(config.url + '/m_company')
-            .then(res => {
-                this.setState({
-                    companies: res.data,
-                    loading: false
-                })
-            })
-            .catch((error) => {
-                alert(error)
-            })
-    }
+    // //API connect to cloud
+    // componentDidMount() {
+    //     axios.get(config.url + '/m-company')
+    //         .then(res => {
+    //             this.setState({
+    //                 companies: res.data,
+    //                 loading: false
+    //             })
+    //         })
+    //         .catch((error) => {
+    //             alert(error)
+    //         })
+    // }
 
     handleToggle = () => {
         this.setState({
@@ -127,12 +127,11 @@ class Companies extends React.Component  {
             email: company.email,
             address: company.address,
             createDate: company.createDate,
-            createBy: company.createBy,
-            is_delete: 0
+            createBy: company.createBy
         }
 
         if(createNew){
-            axios.post(config.url + '/m_company', newCompany)
+            axios.post(config.url + '/m-company', newCompany)
                 .then(res => {
                     this.reloadCompanyData();
                     alert('Company has been saved');
@@ -141,7 +140,7 @@ class Companies extends React.Component  {
                     alert(error)
                 })
         }else{
-            axios.put(config.url + '/m_company/' +company._id , newCompany)
+            axios.put(config.url + '/m-company/' +company._id , newCompany)
             .then(res => {
                 this.reloadCompanyData();
                 alert('Company has been updated');
@@ -206,18 +205,17 @@ class Companies extends React.Component  {
         let delProp = {
             is_delete: company.is_delete + 1,
         }
-        
-        axios.put(config.url + '/m_company/' + company._id, delProp)
+        axios.put(config.url + '/m-company/' + company._id, delProp)
         .then(res =>{
             this.reloadCompanyData();
-            alert('has been deleted');
+            alert('Company has been deleted');
         })
         .catch((error) => {
             alert(error);
         })
         
+        
     }
-
 
     render() {
         const {companies, loading} = this.state;
@@ -239,7 +237,6 @@ class Companies extends React.Component  {
                             <TableCell style={{fontWeight:900}}>Company Name</TableCell>
                             <TableCell style={{fontWeight:900}}>Create Date</TableCell>
                             <TableCell style={{fontWeight:900}}>Create By</TableCell>
-                            <TableCell style={{fontWeight:900}}>is_delete</TableCell>
                             <TableCell style={{fontWeight:900, textAlign:'center'}}>Action</TableCell>
                         </TableRow>
                     </TableHead>
@@ -252,10 +249,10 @@ class Companies extends React.Component  {
                                     <TableCell>{n.name}</TableCell>
                                     <TableCell>{n.createDate}</TableCell>
                                     <TableCell>{n.createBy}</TableCell>
-                                    <TableCell>{n.is_delete}</TableCell>
-                                    <TableCell style={{textAlign:'center'}}><IconButton><EditIcon onClick={() => this.handleEdit(n._id)}/></IconButton>
+                                    <TableCell style={{textAlign:'center'}}> <IconButton><SearchIcon onClick={() => this.handleView(n._id)} /></IconButton>
+                                    <IconButton><EditIcon onClick={() => this.handleEdit(n._id)}/></IconButton>
                                     <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} /></IconButton>
-                                    <IconButton><SearchIcon onClick={() => this.handleView(n._id)} /></IconButton> </TableCell>
+                                    </TableCell>
                                 </TableRow>
                             );
                         })}

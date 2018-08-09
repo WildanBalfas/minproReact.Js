@@ -7,7 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-export default ({ deleteCompany,handleChange, handleClose,handleDelete, company: {code, name, email, phone,address}}) => {
+export default ({ deleteCompany, handleClose,handleDelete, company: {code, name, email, phone,address}}) => {
     return <Fragment>
         <Dialog
             open={deleteCompany}
@@ -15,9 +15,6 @@ export default ({ deleteCompany,handleChange, handleClose,handleDelete, company:
         >
             <DialogTitle id="alert-dialog-title">{"Delete Company"}</DialogTitle>
             <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                   Delete Data ?
-            </DialogContentText>
             <form>
                 <TextField label='Company Code' value={code} margin='normal' disabled={true}/>
                 &nbsp;

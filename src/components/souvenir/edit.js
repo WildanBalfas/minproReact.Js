@@ -6,30 +6,51 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 import Switch from '@material-ui/core/Switch';
+import Input from '@material-ui/core/Input';
 
-export default ({editSouvenir,handleChange,handleClose,handleEdit,handleSubmit, souvenir: {code, name, m_unit_id, description }}) => {
+export default ({ editSouvenir, handleToggle, handleChange, handleClose, handleSubmit, souvenir: { code, name, m_unit_id, unitName, description }, unit }) => {
     return <Fragment>
         <Dialog
             open={editSouvenir}
             onClose={handleClose}
         >
-            <DialogTitle id="alert-dialog-title">{"Update souvenir"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{"Update Souvenir"}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                   Please edit data
-            </DialogContentText>
-            <form>
-                <TextField label='Souvenir Code' value={code} onChange={handleChange('code')} margin='normal'/>
-                &nbsp;
-                <TextField label='Souvenir Name' value={name} onChange={handleChange('name')} margin='normal'/>
-                &nbsp;
-                <TextField label='Unit Name' value={m_unit_id} onChange={handleChange('m_unit_id')} margin='normal'/>
-                &nbsp;
-                <TextField label='Description' value={description} onChange={handleChange('description')} margin='normal'/>
-                &nbsp;
-            </form>
+                   <form>
+                        <TextField label="Souvenir Code" value={code} onChange={handleChange('code')} margin="normal" required />&nbsp;
+                    <br />
+                        <TextField label="Souvenir Name" value={name} onChange={handleChange('name')} margin="normal" required />
+                        <FormControl fullWidth='true' required>
+                            <InputLabel shrink htmlFor="unit-simple">Unit Name</InputLabel>
+                            <Select
+                                value={m_unit_id}
+                                onChange={handleChange('m_unit_id')}
+                                inputProps={{
+                                    name: 'm_unit_id',
+                                    id: 'unit-simple',
+                                }}
+                                displayEmpty
+                            >
+                                <MenuItem value=''>
+                                    {unitName}
+                                </MenuItem>
+                                {unit.map(u => {
+                                    return (
+                                        <MenuItem value={u._id}>{u.name}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+                        <br />
+                        <TextField label="Description" value={description} onChange={handleChange('description')} margin="normal" />&nbsp;
+                </form>
+                </DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">

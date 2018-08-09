@@ -6,8 +6,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
-export default ({ deleteSouvenir, handleClose,handleDelete,souvenir: {code, name, m_unit_id, description}}) => {
+
+export default ({ deleteSouvenir,handleClose, handleDelete,  souvenir: {code, name, unitName, description}}) => {
     return <Fragment>
         <Dialog
             open={deleteSouvenir}
@@ -15,25 +20,24 @@ export default ({ deleteSouvenir, handleClose,handleDelete,souvenir: {code, name
         >
             <DialogTitle id="alert-dialog-title">{"Delete Souvenir"}</DialogTitle>
             <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+            <DialogContentText id="alert-dialog-description">
                    Delete Data ?
             </DialogContentText>
-            <form>
-                <TextField label='Souvenir Code' value={code} margin='normal' disabled={true}/>
-                &nbsp;
-                <TextField label='Souvenir Name' value={name} margin='normal' disabled={true}/>
-                &nbsp;
-                <TextField label='Unit Name' value={m_unit_id} margin='normal' disabled={true}/>
-                &nbsp;
-                <TextField label='Description' value={description} margin='normal' disabled={true}/>
-                &nbsp;
-            </form>
+                   <form>
+                    <TextField label="Souvenir Code" value={code}  margin="normal"  disabled={true}/>&nbsp;
+                    <br/>
+                    <TextField label="Souvenir Name" value={name}  margin="normal"  disabled={true}/>
+                    <br />
+                    <TextField label="Unit Name" value={unitName} margin="normal"  disabled={true}/> 
+                    <br />
+                    <TextField label="Description" value={description} margin="normal"  disabled={true}/>                   
+                </form>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">
                     Cancel
             </Button>
-                <Button onClick={handleDelete} color="primary" autoFocus>
+            <Button onClick={handleDelete} color="primary"> 
                     Delete
             </Button>
             </DialogActions>

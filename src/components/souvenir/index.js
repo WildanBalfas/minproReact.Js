@@ -30,13 +30,14 @@ class Souvenirs extends React.Component  {
         description: '',
         m_unit_id: '',
         createDate: '',
-        createBy: ''
+        createBy: '',
+        is_delete: ''
     }
     constructor(props) {
         super(props);
         this.state = {
             souvenirs: [],
-            souvenirdata: [],
+            unit: [],
             createNew: false,
             editSouvenir: false,
             deleteSouvenir: false,
@@ -47,10 +48,10 @@ class Souvenirs extends React.Component  {
     }
 
     reloadSouvenirData = () => {
-        axios.get(config.url + '/m_souvenir')
+        axios.get(config.url + '/m_souvenir_unit')
         .then(res => {
             this.setState({
-                souvenir : res.data,
+                souvenirs : res.data,
                 createNew: false,
                 editSouvenir: false,
                 deleteSouvenir: false,
@@ -63,28 +64,27 @@ class Souvenirs extends React.Component  {
         })
     }
 
-    componentDidMout(){
-        this.reloadSouvenirData();
-    }
-
-    //API connect to cloud
-    componentDidMount() {
-        axios.get(config.url + '/m_souvenir_unit')
+    reloadUnitData = () => {
+        axios.get(config.url + '/m-unit')
             .then(res => {
                 this.setState({
-                    souvenirdata: res.data,
-                    loading: false
+                    unit: res.data
                 })
             })
             .catch((error) => {
-                alert(error)
+                alert(error);
             })
+    }
+    componentDidMount() {
+        this.reloadSouvenirData();
+        this.reloadUnitData();
     }
 
     handleToggle = () => {
         this.setState({
             createNew: true,
-        });
+            souvenir: this.souvenirModel
+        })
     }
 
     handleClose = () => {
@@ -106,15 +106,6 @@ class Souvenirs extends React.Component  {
         })
     }
 
-    handleChangeCheckBox =  name => event => {
-        this.setState({
-            souvenir: {
-                ...this.state.souvenir,
-                [name]: event.target.checked
-            }
-        })
-    }
-
     handleSubmit = () => {
         const { souvenir, createNew } = this.state;
 
@@ -122,14 +113,14 @@ class Souvenirs extends React.Component  {
         {
             code: souvenir.code,
             name: souvenir.name,
-            m_unit_id:souvenir.m_unit_id,
+            m_unit_id: souvenir.m_unit_id,
             description: souvenir.description,
             createDate: souvenir.createDate,
             createBy: souvenir.createBy
         }
 
         if(createNew){
-            axios.post(config.url + '/m_souvenir', newSouvenir)
+            axios.post(config.url + '/m-souvenir', newSouvenir)
                 .then(res => {
                     this.reloadSouvenirData();
                     alert('Souvenir has been saved');
@@ -138,7 +129,7 @@ class Souvenirs extends React.Component  {
                     alert(error)
                 })
         }else{
-            axios.put(config.url + '/m_souvenir/' +souvenir._id , newSouvenir)
+            axios.put(config.url + '/m-souvenir/' +souvenir._id , newSouvenir)
             .then(res => {
                 this.reloadSouvenirData();
                 alert('Souvenir has been updated');
@@ -158,11 +149,13 @@ class Souvenirs extends React.Component  {
                 _id: souvenir._id,
                 code: souvenir.code,
                 name: souvenir.name,
-                m_unit_id:souvenir.m_unit_id,
+                m_unit_id: souvenir.m_unit_id,
+                unitName: souvenir.unitName,
                 description: souvenir.description,
                 createDate: souvenir.createDate,
                 createBy: souvenir.createBy
             }
+           
         })
     }
 
@@ -175,7 +168,8 @@ class Souvenirs extends React.Component  {
                 _id: souvenir._id,
                 code: souvenir.code,
                 name: souvenir.name,
-                m_unit_id:souvenir.m_unit_id,
+                m_unit_id: souvenir.m_unit_id,
+                unitName: souvenir.unitName,
                 description: souvenir.description,
                 createDate: souvenir.createDate,
                 createBy: souvenir.createBy
@@ -183,7 +177,7 @@ class Souvenirs extends React.Component  {
         })
     }
 
-    handleDelete = (_id) => {
+    handleView = (_id) => {
         const { souvenirs } = this.state;
         const souvenir = souvenirs.find(u => u._id === _id);
         this.setState({
@@ -192,7 +186,8 @@ class Souvenirs extends React.Component  {
                 _id: souvenir._id,
                 code: souvenir.code,
                 name: souvenir.name,
-                m_unit_id:souvenir.m_unit_id,
+                m_unit_id: souvenir.m_unit_id,
+                unitName: souvenir.unitName,
                 description: souvenir.description,
                 createDate: souvenir.createDate,
                 createBy: souvenir.createBy
@@ -204,7 +199,7 @@ class Souvenirs extends React.Component  {
     handleDeleteConfirm = () => {
         const { souvenir } = this.state;
 
-        axios.delete(config.url + '/m_souvenir/' + souvenir._id)
+        axios.delete(config.url + '/m-souvenir/' + souvenir._id)
         .then(res => {
             this.reloadSouvenirData();
             alert('Souvenir has been deleted');
@@ -216,16 +211,17 @@ class Souvenirs extends React.Component  {
     }
 
     render() {
-        const {souvenirs, souvenirdata, loading} = this.state;
+        const {souvenirs,souvenir, loading} = this.state;
         const {classes} = this.props;
         let i=1;
+       
         return (
             <div>
-                <h3><center>List Company</center></h3>
-                <CreateSouvenir createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} souvenir={this.state.souvenir} />
-                <EditSouvenir editSouvenir={this.state.editCompany} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} souvenir={this.state.souvenir} />
-                <DeleteSouvenir deleteSouvenir={this.state.deleteCompany} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} souvenir={this.state.souvenir} />
-                <ViewSouvenir viewSouvenir={this.state.viewCompany} handleView={this.handleView} handleClose={this.handleClose} souvenir={this.state.souvenir} />
+                <h3><center>List Souvenirs</center></h3>
+                <CreateSouvenir createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} souvenir={this.state.souvenir} unit={this.state.unit} />
+                <EditSouvenir editSouvenir={this.state.editSouvenir} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} souvenir={this.state.souvenir} unit={this.state.unit}/>
+                <DeleteSouvenir deleteSouvenir={this.state.deleteSouvenir} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} souvenir={this.state.souvenir} />
+                <ViewSouvenir viewSouvenir={this.state.viewSouvenir} handleView={this.handleView} handleClose={this.handleClose} souvenir={this.state.souvenir} unit={this.state.unit} />
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
                 <Table>
                     <TableHead >
@@ -240,19 +236,19 @@ class Souvenirs extends React.Component  {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {souvenirdata.map(n => {
-
+                        {souvenirs.map(n => {
                             return (
                                 <TableRow>
                                     <TableCell component="th" scope="row">{i++}</TableCell>
                                     <TableCell component="th" scope="row">{n.code}</TableCell>
                                     <TableCell>{n.name}</TableCell>
-                                    <TableCell>{n.unit}</TableCell>
+                                    <TableCell>{n.unitName}</TableCell>
                                     <TableCell>{n.createDate}</TableCell>
                                     <TableCell>{n.createBy}</TableCell>
-                                    <TableCell style={{textAlign:'center'}}><IconButton><EditIcon onClick={() => this.handleEdit(n._id)}/></IconButton>
+                                    <TableCell style={{textAlign:'center'}}> <IconButton><SearchIcon onClick={() => this.handleView(n._id)} /></IconButton>
+                                    <IconButton><EditIcon onClick={() => this.handleEdit(n._id)}/></IconButton>
                                     <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} /></IconButton>
-                                    <IconButton><SearchIcon onClick={() => this.handleView(n._id)} /></IconButton> </TableCell>
+                                    </TableCell>
                                 </TableRow>
                             );
                         })}
