@@ -15,6 +15,7 @@ import Divider from '@material-ui/core/Divider';
 import Company from '../company';
 import Menu from '../menu';
 import Role from '../role';
+import Souvenir from '../souvenir';
 
 export default class SideBar extends React.Component {
     render() {
@@ -32,6 +33,7 @@ export default class SideBar extends React.Component {
                     <List onClick={() => onSelected()}>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/" className={classes.MenuList}>Home</Link></ListItem>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/company" className={classes.MenuList}>Company</Link></ListItem>
+                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/souvenir" className={classes.MenuList}>Souvenir</Link></ListItem>
                         <ListItem className={classes.ListItem}><MenuIcon className={classes.MenuIcon} color="primary"/><Link to="/menu" className={classes.MenuList}>Menu</Link></ListItem>
                         <ListItem className={classes.ListItem}><RoleIcon className={classes.MenuIcon} color="primary"/><Link to="/role" className={classes.MenuList}>Role</Link></ListItem>
                         <ListItem className={classes.ListItem}><HelpIcon className={classes.MenuIcon} /><Link to="/help" className={classes.MenuList}>Help</Link></ListItem>
@@ -39,6 +41,7 @@ export default class SideBar extends React.Component {
                 </Drawer>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/company" component={Company} />
+                <Route exact path="/souvenir" component={Souvenir} />
                 <Route exact path="/menu" component={Menu} />
                 <Route exact path="/role" component={Role} />
                 <Route exact path="/help" component={Help} />
