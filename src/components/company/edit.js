@@ -17,9 +17,6 @@ export default ({editCompany,handleChange,handleClose,handleEdit,handleSubmit, c
         >
             <DialogTitle id="alert-dialog-title">{"Update company"}</DialogTitle>
             <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                   Please edit data
-            </DialogContentText>
             <form>
                 <TextField label='Company Code' value={code} onChange={handleChange('code')} margin='normal'/>
                 &nbsp;
@@ -29,7 +26,7 @@ export default ({editCompany,handleChange,handleClose,handleEdit,handleSubmit, c
                 &nbsp;
                 <TextField label='Phone' value={phone} onChange={handleChange('phone')} margin='normal'/>
                 &nbsp;
-                <TextField label='Address' value={address} onChange={handleChange('address')} margin='normal'/>
+                <TextField label='Address' value={address} onChange={handleChange('address')} fullWidth={true} multiline={true} margin='normal'/>
                 &nbsp;
             </form>
             </DialogContent>

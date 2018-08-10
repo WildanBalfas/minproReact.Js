@@ -9,30 +9,28 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
-export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, company: {code, name, email, phone,address}}) => {
+export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, company: {code, name, email, phone, address}}) => {
     return <Fragment>
-        <Button onClick={handleToggle} variant="contained" color="primary">Add</Button>
+        <Button onClick={handleToggle} variant="contained" color="primary" style={{float: 'right'}}>Add</Button>
         <Dialog
             open={createNew}
             onClose={handleClose}
         >
-            <DialogTitle id="alert-dialog-title">{"Create new Company"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{"Add Company"}</DialogTitle>
             <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                   Please fill out the form below!
+                
             <form>
-                <TextField label='Company Code' value={code} onChange={handleChange('code')} margin='normal'/>
+                <TextField label='Company Code'  value={code} onChange={handleChange('code')} margin='normal' InputLabelProps={{shrink: true}} placeholder="Auto Generated"/>
                 &nbsp;
-                <TextField label='Company Name' value={name} onChange={handleChange('name')} margin='normal'/>
+                <TextField label='Company Name' value={name} onChange={handleChange('name')} margin='normal' InputLabelProps={{shrink: true}} placeholder="Type Company Name" required/>
                 &nbsp;
-                <TextField label='Email' value={email} onChange={handleChange('email')} margin='normal'/>
+                <TextField label='Email' value={email} onChange={handleChange('email')} margin='normal' InputLabelProps={{shrink: true}} placeholder="Type Email"/>
                 &nbsp;
-                <TextField label='Phone' value={phone} onChange={handleChange('phone')} margin='normal'/>
+                <TextField label='Phone' value={phone} onChange={handleChange('phone')} margin='normal' InputLabelProps={{shrink: true}} placeholder="Type Phone"/>
                 &nbsp;
-                <TextField label='Address' value={address} onChange={handleChange('address')} margin='normal'/>
+                <TextField label='Address' value={address} onChange={handleChange('address')} margin='normal' multiline fullWidth InputLabelProps={{shrink: true}} placeholder="Type Address"/>
                 &nbsp;
             </form>
-            </DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">

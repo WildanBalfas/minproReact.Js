@@ -7,9 +7,11 @@ import TableRow from '@material-ui/core/TableRow';
 import CreateCompany from './create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import EditCompany from './edit';
 import DeleteCompany from './delete';
+import ViewCompany from './view';
 import { Button } from '../../../node_modules/@material-ui/core';
 import { config } from '../configuration/config';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -28,7 +30,9 @@ class Companies extends React.Component  {
         phone: '',
         email: '',
         address: '',
-        CreateDate: ''
+        createDate: '',
+        createBy: '',
+        is_delete: ''
     }
     constructor(props) {
         super(props);
@@ -44,7 +48,7 @@ class Companies extends React.Component  {
     }
 
     reloadCompanyData = () => {
-        axios.get(config.url + '/m_company')
+        axios.get(config.url + '/m-company')
         .then(res => {
             this.setState({
                 companies : res.data,
@@ -60,25 +64,23 @@ class Companies extends React.Component  {
         })
     }
 
-    componentDidMout(){
+    componentDidMount(){
         this.reloadCompanyData();
     }
 
-    //API connect to cloud
-    componentDidMount() {
-        axios.get(config.url + '/m_company')
-            .then(res => {
-                this.setState({
-                    companies: res.data,
-                    loading: false
-                })
-            })
-            .catch((error) => {
-                this.setState({
-                    CreateCompany: true,
-                })
-            })
-    }
+    // //API connect to cloud
+    // componentDidMount() {
+    //     axios.get(config.url + '/m-company')
+    //         .then(res => {
+    //             this.setState({
+    //                 companies: res.data,
+    //                 loading: false
+    //             })
+    //         })
+    //         .catch((error) => {
+    //             alert(error)
+    //         })
+    // }
 
     handleToggle = () => {
         this.setState({
@@ -91,6 +93,7 @@ class Companies extends React.Component  {
             createNew: false,
             editCompany: false,
             deleteCompany: false,
+            viewCompany: false,
             company: this.companyModel
         });
     }
@@ -115,7 +118,6 @@ class Companies extends React.Component  {
 
     handleSubmit = () => {
         const { company, createNew } = this.state;
-        // const newId = parseInt(users[users.length -1]._id) + 1;
 
         let newCompany =
         {
@@ -123,40 +125,30 @@ class Companies extends React.Component  {
             name: company.name,
             phone: company.phone,
             email: company.email,
-            address: company.address
+            address: company.address,
+            createDate: company.createDate,
+            createBy: company.createBy
         }
 
         if(createNew){
-            // users.push(newCompany)
-            axios.post(config.url + '/m_company', newCompany)
+            axios.post(config.url + '/m-company', newCompany)
                 .then(res => {
                     this.reloadCompanyData();
-                    alert('Companies has been saved');
+                    alert('Company has been saved');
                 })
                 .catch((error) => {
                     alert(error)
                 })
         }else{
-            // let idx = users.findIndex( u => u._id === newCompany._id);
-            // users[idx] = newCompany;
-            axios.put(config.url + '/m_company/' +company._id , newCompany)
+            axios.put(config.url + '/m-company/' +company._id , newCompany)
             .then(res => {
                 this.reloadCompanyData();
-                alert('Companies has been updated');
+                alert('Company has been updated');
             })
             .catch((error) => {
                 alert(error)
             })
-        }
-        
-        // this.setState({
-        //     createNew: false,
-        //     editCompany : false,
-        //     user: { _id: 0, userName: '', first: '', middle: '', last: '', email: '', phone: '', activate: '' },
-        //     users: users
-        // })
-
-        
+        }    
     }
     
     handleEdit = (_id) => {
@@ -191,53 +183,76 @@ class Companies extends React.Component  {
         })
     }
 
+    handleView = (_id) => {
+        const { companies } = this.state;
+        const company = companies.find(u => u._id === _id);
+        this.setState({
+            viewCompany: true,
+             company: {
+                _id: company._id,
+                code: company.code,
+                name: company.name,
+                phone: company.phone,
+                email: company.email,
+                address: company.address
+            }
+        })
+    }
+
+
     handleDeleteConfirm = () => {
         const { company } = this.state;
-
-        axios.delete(config.url + '/m_company/' + company._id)
-        .then(res => {
+        let delProp = {
+            is_delete: company.is_delete + 1,
+        }
+        axios.put(config.url + '/m-company/' + company._id, delProp)
+        .then(res =>{
             this.reloadCompanyData();
             alert('Company has been deleted');
         })
         .catch((error) => {
             alert(error);
         })
-
+        
+        
     }
-
 
     render() {
         const {companies, loading} = this.state;
         const {classes} = this.props;
+        let i=1;
         return (
             <div>
                 <h3><center>List Company</center></h3>
                 <CreateCompany createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} company={this.state.company} />
                 <EditCompany editCompany={this.state.editCompany} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} company={this.state.company} />
                 <DeleteCompany deleteCompany={this.state.deleteCompany} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} company={this.state.company} />
+                <ViewCompany viewCompany={this.state.viewCompany} handleView={this.handleView} handleClose={this.handleClose} company={this.state.company} />
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
                 <Table>
-                    <TableHead>
+                    <TableHead >
                         <TableRow>
-                            <TableCell>Company Code</TableCell>
-                            <TableCell>Company Name</TableCell>
-                            <TableCell>Create Date</TableCell>
-                            <TableCell>Create By</TableCell>
-                            <TableCell>Action</TableCell>
+                            <TableCell style={{fontWeight:900}}>No</TableCell>
+                            <TableCell style={{fontWeight:900}}>Company Code</TableCell>
+                            <TableCell style={{fontWeight:900}}>Company Name</TableCell>
+                            <TableCell style={{fontWeight:900}}>Create Date</TableCell>
+                            <TableCell style={{fontWeight:900}}>Create By</TableCell>
+                            <TableCell style={{fontWeight:900, textAlign:'center'}}>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {companies.map(n => {
                             return (
                                 <TableRow>
-                                    <TableCell component="th" scope="row">
-                                        {n.code}
-                                    </TableCell>
+                                    <TableCell component="th" scope="row">{i++}</TableCell>
+                                    <TableCell component="th" scope="row">{n.code}</TableCell>
                                     <TableCell>{n.name}</TableCell>
-                                    <TableCell>{n.CreateDate}</TableCell>
-                                    <TableCell>{n.phone}</TableCell>
-                                    <TableCell><IconButton><EditIcon onClick={() => this.handleEdit(n._id)}/></IconButton>
-                                    <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} /></IconButton> </TableCell>
+                                    <TableCell>{n.createDate}</TableCell>
+                                    <TableCell>{n.createBy}</TableCell>
+                                    <TableCell style={{textAlign:'center'}}> <IconButton><SearchIcon onClick={() => this.handleView(n._id)} /></IconButton>
+                                    <IconButton><EditIcon onClick={() => this.handleEdit(n._id)}/></IconButton>
+                                    <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} /></IconButton>
+                                    </TableCell>
                                 </TableRow>
                             );
                         })}
