@@ -1,6 +1,16 @@
 {
   "main.css": "static/css/main.d46fab87.css",
   "main.css.map": "static/css/main.d46fab87.css.map",
+<<<<<<< HEAD
   "main.js": "static/js/main.ecb07e7d.js",
   "main.js.map": "static/js/main.ecb07e7d.js.map"
+=======
+<<<<<<< HEAD
+  "main.js": "static/js/main.f9766468.js",
+  "main.js.map": "static/js/main.f9766468.js.map"
+=======
+  "main.js": "static/js/main.ee6f4ac2.js",
+  "main.js.map": "static/js/main.ee6f4ac2.js.map"
+>>>>>>> 89e070e45557873a456e18ffce8b34e0c065f350
+>>>>>>> d14ddc4d93d7ceec06773ec6bd8171e03e0182d4
 }
