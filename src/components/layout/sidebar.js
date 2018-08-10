@@ -16,6 +16,7 @@ import Company from '../company';
 import Souvenir from '../souvenir';
 import Menu from '../menu';
 import Role from '../role';
+import Events from '../event';
 
 export default class SideBar extends React.Component {
     render() {
@@ -36,6 +37,7 @@ export default class SideBar extends React.Component {
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/souvenir" className={classes.MenuList}>Souvenir</Link></ListItem>
                         <ListItem className={classes.ListItem}><MenuIcon className={classes.MenuIcon} color="primary" /><Link to="/menu" className={classes.MenuList}>Menu</Link></ListItem>
                         <ListItem className={classes.ListItem}><RoleIcon className={classes.MenuIcon} color="primary" /><Link to="/role" className={classes.MenuList}>Role</Link></ListItem>
+                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} color="primary" /><Link to="/event" className={classes.MenuList}>Event</Link></ListItem>
                         <ListItem className={classes.ListItem}><HelpIcon className={classes.MenuIcon} /><Link to="/help" className={classes.MenuList}>Help</Link></ListItem>
                     </List>
                 </Drawer>
@@ -44,6 +46,7 @@ export default class SideBar extends React.Component {
                 <Route exact path="/souvenir" component={Souvenir} />
                 <Route exact path="/menu" component={Menu} />
                 <Route exact path="/role" component={Role} />
+                <Route exact path="/event" component={Events} />
             </div>
         )
     }
