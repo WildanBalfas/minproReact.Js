@@ -37,9 +37,6 @@ export default ({ editSouvenir, handleToggle, handleChange, handleClose, handleS
                                 }}
                                 displayEmpty
                             >
-                                <MenuItem value=''>
-                                    {unitName}
-                                </MenuItem>
                                 {unit.map(u => {
                                     return (
                                         <MenuItem value={u._id}>{u.name}</MenuItem>

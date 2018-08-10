@@ -12,7 +12,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 
-export default ({ viewSouvenir,handleClose, souvenir: {code, name, m_unit_id, unitName, description},unit}) => {
+export default ({ viewSouvenir,handleClose, souvenir: {code, name, m_unit_id, unitName, description}}) => {
     return <Fragment>
         <Dialog
             open={viewSouvenir}

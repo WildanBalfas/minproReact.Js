@@ -221,7 +221,7 @@ class Souvenirs extends React.Component  {
                 <CreateSouvenir createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} souvenir={this.state.souvenir} unit={this.state.unit} />
                 <EditSouvenir editSouvenir={this.state.editSouvenir} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} souvenir={this.state.souvenir} unit={this.state.unit}/>
                 <DeleteSouvenir deleteSouvenir={this.state.deleteSouvenir} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} souvenir={this.state.souvenir} />
-                <ViewSouvenir viewSouvenir={this.state.viewSouvenir} handleView={this.handleView} handleClose={this.handleClose} souvenir={this.state.souvenir} unit={this.state.unit} />
+                <ViewSouvenir viewSouvenir={this.state.viewSouvenir} handleView={this.handleView} handleClose={this.handleClose} souvenir={this.state.souvenir} />
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
                 <Table>
                     <TableHead >
