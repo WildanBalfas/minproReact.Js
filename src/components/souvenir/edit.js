@@ -23,7 +23,7 @@ export default ({ editSouvenir, handleToggle, handleChange, handleClose, handleS
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                    <form>
-                        <TextField label="Souvenir Code" value={code} onChange={handleChange('code')} margin="normal" required />&nbsp;
+                        <TextField label="Souvenir Code" value={code} margin="normal" required disabled />&nbsp;
                     <br />
                         <TextField label="Souvenir Name" value={name} onChange={handleChange('name')} margin="normal" required />
                         <FormControl fullWidth='true' required>

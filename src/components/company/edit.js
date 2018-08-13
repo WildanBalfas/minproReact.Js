@@ -15,7 +15,7 @@ export default ({editCompany,handleChange,handleClose,handleEdit,handleSubmit, c
             <DialogTitle id="alert-dialog-title">{"Update company"}</DialogTitle>
             <DialogContent>
             <form>
-                <TextField label='Company Code' value={code} onChange={handleChange('code')} margin='normal'/>
+                <TextField label='Company Code' value={code} onChange={handleChange('code')} margin='normal' disabled/>
                 &nbsp;
                 <TextField label='Company Name' value={name} onChange={handleChange('name')} margin='normal'/>
                 &nbsp;

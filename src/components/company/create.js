@@ -17,7 +17,7 @@ export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, 
             <DialogContent>
                 
             <form>
-                <TextField label='Company Code'  value={code} onChange={handleChange('code')} margin='normal' InputLabelProps={{shrink: true}} placeholder="Auto Generated"/>
+                <TextField label='Company Code'  value={code} margin='normal' InputLabelProps={{shrink: true}} placeholder="Auto Generated" disabled/>
                 &nbsp;
                 <TextField label='Company Name' value={name} onChange={handleChange('name')} margin='normal' InputLabelProps={{shrink: true}} placeholder="Type Company Name" required/>
                 &nbsp;

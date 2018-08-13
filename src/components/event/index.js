@@ -12,11 +12,12 @@ import { withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios';
 import CreateEvent from './create';
-// import DeleteEvent from './delete';
-// import EditEvent from './edit';
-// import ViewEvent from './view';
+import DeleteEvent from './delete';
+import EditEvent from './edit';
+import ViewEvent from './view';
 
 class Events extends React.Component {
     eventModel = {
@@ -28,6 +29,7 @@ class Events extends React.Component {
         place: '',
         budget: '',
         request_by: '',
+        requestName: '',
         request_date: '',
         approved_by: '',
         approved_date: '',
@@ -40,7 +42,7 @@ class Events extends React.Component {
         createBy: '',
         createDate: '',
         updateBy: '',
-        updateDate: '',
+        updateDate: ''
         
     }
 
@@ -51,6 +53,10 @@ class Events extends React.Component {
             employess: [],
             roles: [],
             users: [],
+            createNew: false,
+            editEvent: false,
+            viewEvent: false,
+            deleteEvent: false,
             loading: true,
             event: this.eventModel,
         }
@@ -62,8 +68,10 @@ class Events extends React.Component {
             this.setState({
                 events : res.data,
                 createNew: false,
-                loading: false,
-                event: this.eventModel
+                ediEvent: false,
+                deleteEvent: false,
+                event: this.eventModel,
+                loading: false
             })
         })
         .catch((error) => {
@@ -77,7 +85,6 @@ class Events extends React.Component {
             this.setState({
                 employess: res.data
             })
-            console.log(res.data);
         })
         .catch((error) => {
             alert(error);
@@ -90,7 +97,6 @@ class Events extends React.Component {
             this.setState({
                 users: res.data
             })
-            console.log(res.data);
         })
         .catch((error) => {
             alert(error);
@@ -103,7 +109,6 @@ class Events extends React.Component {
             this.setState({
                 roles: res.data
             })
-            console.log(res.data);
         })
         .catch((error) => {
             alert(error);
@@ -111,9 +116,9 @@ class Events extends React.Component {
     }
     componentDidMount() {
         this.reloadEventData();
-        this.reloadEmployeeData();
-        this.reloadUserData();
-        this.reloadRoleData();
+        // this.reloadEmployeeData();
+        // this.reloadUserData();
+        // this.reloadRoleData();
     }
 
     handleToggle = () => {
@@ -125,6 +130,9 @@ class Events extends React.Component {
     handleClose = () => {
         this.setState({
             createNew: false,
+            editEvent: false,
+            deleteEvent: false,
+            viewEvent: false,
             event: this.eventModel
         });
     }
@@ -143,27 +151,14 @@ class Events extends React.Component {
 
         let newEvent =
         {
-            _id: event._id,
-            code: event.code,
-            event_name: event.event_name,
-            start_date: event.start_date,
-            end_date: event.end_date,
             place: event.place,
             budget: event.budget,
-            request_by: event.request_by,
             request_date: event.request_date,
-            approved_by: event.approved_by,
             approved_date: event.approved_date,
-            assign_to: event.assign_to,
             closed_date: event.closed_date,
             note: event.note,
             status: event.status,
-            reject_reason: event.reject_reason,
-            is_delete: event.is_delete,
-            createBy: event.createBy,
-            createDate: event.createDate,
-            updateBy: event.updateBy,
-            updateDate: event.updateDate,
+            request_by: event.request_by
         }
 
         if(createNew){
@@ -203,7 +198,9 @@ class Events extends React.Component {
                 approved_by: event.approved_by,
                 closed_date: event.closed_date,
                 note: event.note,
-                status: event.status
+                status: event.status,
+                request_by: event.request_by,
+                requestName: event.requestName
             }
            
         })
@@ -275,9 +272,9 @@ class Events extends React.Component {
             <div>
                 <h3><center>List Events</center></h3>
                 <CreateEvent createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} event={this.state.event} />
-                {/* <EditEvent editSouvenir={this.state.editSouvenir} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} souvenir={this.state.souvenir} unit={this.state.unit}/>
-                <DeleteEvent deleteSouvenir={this.state.deleteSouvenir} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} souvenir={this.state.souvenir} />
-                <ViewEvent viewSouvenir={this.state.viewSouvenir} handleView={this.handleView} handleClose={this.handleClose} souvenir={this.state.souvenir} /> */}
+                <EditEvent editEvent={this.state.editEvent} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit}  event={this.state.event}/>
+                <DeleteEvent deleteEvent={this.state.deleteEvent} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} event={this.state.event} />
+                <ViewEvent viewEvent={this.state.viewEvent} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event} /> 
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
                 <Table>
                     <TableHead >
@@ -298,13 +295,15 @@ class Events extends React.Component {
                                 <TableRow>
                                     <TableCell component="th" scope="row">{i++}</TableCell>
                                     <TableCell component="th" scope="row">{e.code}</TableCell>
-                                    <TableCell>{e.request_by}</TableCell>
+                                    <TableCell>{e.requestName}</TableCell>
                                     <TableCell>{e.request_date}</TableCell>
                                     <TableCell>{e.status}</TableCell>
                                     <TableCell>{e.createDate}</TableCell>
                                     <TableCell>{e.createBy}</TableCell>
                                     <TableCell style={{textAlign:'center'}}> <IconButton><SearchIcon onClick={() => this.handleView(e._id)} /></IconButton>
                                     <IconButton><EditIcon onClick={() => this.handleEdit(e._id)}/></IconButton>
+                                    <IconButton><DeleteIcon onClick={() => this.handleDelete(e._id)} />
+                                    </IconButton>
                                     </TableCell>
                                 </TableRow>
                             );

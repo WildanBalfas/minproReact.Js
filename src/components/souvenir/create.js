@@ -22,7 +22,7 @@ export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, 
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                    <form>
-                    <TextField label="Souvenir Code" value={code} onChange={handleChange('code')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Auto Generated" required/>
+                    <TextField label="Souvenir Code" value={code} onChange={handleChange('code')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Auto Generated" required disabled/>
                     <br/>
                     <TextField label="Souvenir Name" value={name} onChange={handleChange('name')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Souvenir Name" required />
                     <FormControl fullWidth='true' required>
