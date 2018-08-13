@@ -21,7 +21,7 @@ export default ({editRole,handleChange,handleClose,handleSubmit, role: {code, na
   Please edit data
   </DialogContentText>
   <form>
-  <TextField label='*Role Code' value={code} onChange={handleChange('code')} margin='normal'/>
+  <TextField label='*Role Code' value={code} onChange={handleChange('code')} margin='normal' disabled={true}/>
   <br/>
   <TextField label='*Role Name' value={name} onChange={handleChange('name')} margin='normal'/>
   <br/>

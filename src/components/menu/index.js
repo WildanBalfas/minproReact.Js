@@ -26,7 +26,8 @@ class Menus extends React.Component {
     name:'',
     controller:'',
     createDate: '',
-    is_delete: ''
+    is_delete: '',
+    parent_id:''
   }
   
   constructor(props){
@@ -42,7 +43,7 @@ class Menus extends React.Component {
   }
   
   reloadMenuData = () => {
-    axios.get(config.url + '/m-menu')
+    axios.get(config.url + '/m_menu_view')
     .then(res => {
       this.setState({
         menus: res.data,
@@ -93,7 +94,8 @@ class Menus extends React.Component {
     let newMenu = {
       code: menu.code,
       name: menu.name,
-      controller: menu.controller
+      controller: menu.controller,
+      parent_id:menu.parent_id
     }
     
     if (createNew) {
@@ -154,7 +156,8 @@ class Menus extends React.Component {
         _id: menu._id,
         code: menu.code,
         name: menu.name,
-        controller: menu.controller
+        controller: menu.controller,
+        parent:menu.parent
       }
     })
   }
@@ -179,7 +182,7 @@ class Menus extends React.Component {
     return(
       <div>
       <h3 style={{color:'blue'}}><center>List Menu</center></h3>
-      <CreateMenu createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} menu={this.state.menu} />
+      <CreateMenu createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} menu={this.state.menu} menus={this.state.menus} />
       <DeleteMenu deleteMenu={this.state.deleteMenu} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} menu={this.state.menu}/>
       <ViewMenu viewMenu={this.state.viewMenu} handleClose={this.handleClose} menu={this.state.menu}/>
       <EditMenu editMenu={this.state.editMenu} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} menu={this.state.menu} />
@@ -191,7 +194,7 @@ class Menus extends React.Component {
       <TableCell style={{fontWeight:"bold", color:"black"}}>Menu Name</TableCell>
       <TableCell style={{fontWeight:"bold", color:"black"}}>Create Date</TableCell>
       <TableCell style={{fontWeight:"bold", color:"black"}}>Create By</TableCell>
-      <TableCell style={{fontWeight:"bold", color:"black"}}>is_delete</TableCell>
+      <TableCell style={{textAlign:"center",fontWeight:"bold", color:"black"}}>is_delete</TableCell>
       <TableCell style={{textAlign:"center",fontWeight:"bold", color:"black"}}>Action</TableCell>
       </TableRow>
       </TableHead>
@@ -206,11 +209,11 @@ class Menus extends React.Component {
           <TableCell>{n.name}</TableCell>
           <TableCell>{n.createDate}</TableCell>
           <TableCell>createBy</TableCell>
-          <TableCell>{n.is_delete}</TableCell>
+          <TableCell style={{textAlign:"center"}}>{n.is_delete}</TableCell>
           <TableCell style={{textAlign:"center"}}>
-          <IconButton><SearchIcon onClick={() => this.handleView(n._id)} color="primary" /></IconButton>
-          <IconButton><EditIcon onClick={() => this.handleEdit(n._id)} color="primary" /></IconButton>
-          <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} color="secondary" /></IconButton> 
+          <IconButton onClick={() => this.handleView(n._id)}><SearchIcon color="primary" /></IconButton>
+          <IconButton onClick={() => this.handleEdit(n._id)}><EditIcon color="primary" /></IconButton>
+          <IconButton onClick={() => this.handleDelete(n._id)}><DeleteIcon color="secondary" /></IconButton> 
           </TableCell>
           </TableRow>
         );

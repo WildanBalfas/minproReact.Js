@@ -7,7 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-export default ({ viewMenu, handleClose, menu:{code, name, controller}}) => {
+export default ({ viewMenu, handleClose, menu:{code, name, controller,parent}}) => {
   return <Fragment>
   <Dialog
   open={viewMenu}
@@ -25,6 +25,7 @@ export default ({ viewMenu, handleClose, menu:{code, name, controller}}) => {
   <br/>
   <TextField label='Controller Name' value={controller} margin='normal' disabled={true}/>
   <br/>
+  <TextField label='Parent' value={parent ? parent : 'tidak ada'} margin='normal' disabled={true}/>
   </form>
   </DialogContent>
   <DialogActions>

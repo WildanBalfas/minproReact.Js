@@ -21,7 +21,7 @@ export default ({editMenu,handleChange,handleClose,handleEdit,handleSubmit, menu
   Please edit data
   </DialogContentText>
   <form>
-  <TextField label='*Menu Code' value={code} onChange={handleChange('code')} margin='normal'/>
+  <TextField label='*Menu Code' value={code} onChange={handleChange('code')} margin='normal' disabled={true} />
   <br/>
   <TextField label='*Menu Name' value={name} onChange={handleChange('name')} margin='normal'/>
   <br/>

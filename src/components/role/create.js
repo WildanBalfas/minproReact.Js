@@ -18,8 +18,6 @@ export default ({createNew,handleToggle,handleChange,handleClose,handleSubmit, r
                 <DialogContentText id="alert-dialog-description">
                    Please fill out the form below!
             <form>
-                <TextField label='*Role Code' value={code} onChange={handleChange('code')} margin='normal'/>
-                <br/>
                 <TextField label='*Role Name' value={name} onChange={handleChange('name')} margin='normal'/>
                 <br/>
                 <TextField label='*Description Name' value={description} onChange={handleChange('description')} margin='normal'/>
