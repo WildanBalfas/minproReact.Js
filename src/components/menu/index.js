@@ -95,9 +95,10 @@ class Menus extends React.Component {
       code: menu.code,
       name: menu.name,
       controller: menu.controller,
-      parent_id:menu.parent_id
     }
-    
+    if(menu.parent_id){
+      newMenu.parent_id=menu.parent_id
+    }
     if (createNew) {
       axios.post(config.url + '/m-menu', newMenu)
       .then(res => {

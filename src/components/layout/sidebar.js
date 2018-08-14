@@ -11,12 +11,13 @@ import RoleIcon from '@material-ui/icons/MeetingRoomRounded'
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Divider from '@material-ui/core/Divider';
-
 import Company from '../company';
 import Souvenir from '../souvenir';
 import Menu from '../menu';
 import Role from '../role';
 import Events from '../event';
+import Unit from '../unit';
+import MenuAccess from '../menuaccess'
 
 export default class SideBar extends React.Component {
     render() {
@@ -38,6 +39,8 @@ export default class SideBar extends React.Component {
                         <ListItem className={classes.ListItem}><MenuIcon className={classes.MenuIcon} color="primary" /><Link to="/menu" className={classes.MenuList}>Menu</Link></ListItem>
                         <ListItem className={classes.ListItem}><RoleIcon className={classes.MenuIcon} color="primary" /><Link to="/role" className={classes.MenuList}>Role</Link></ListItem>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} color="primary" /><Link to="/event" className={classes.MenuList}>Event</Link></ListItem>
+                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} color="primary" /><Link to="/unit" className={classes.MenuList}>Unit</Link></ListItem>
+                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} color="primary" /><Link to="/menuaccess" className={classes.MenuList}>Menu Access</Link></ListItem>
                         <ListItem className={classes.ListItem}><HelpIcon className={classes.MenuIcon} /><Link to="/help" className={classes.MenuList}>Help</Link></ListItem>
                     </List>
                 </Drawer>
@@ -47,6 +50,8 @@ export default class SideBar extends React.Component {
                 <Route exact path="/menu" component={Menu} />
                 <Route exact path="/role" component={Role} />
                 <Route exact path="/event" component={Events} />
+                <Route exact path="/unit" component={Unit} />
+                <Route exact path="/menuaccess" component={MenuAccess} />
             </div>
         )
     }

@@ -25,7 +25,7 @@ export default ({ viewMenu, handleClose, menu:{code, name, controller,parent}}) 
   <br/>
   <TextField label='Controller Name' value={controller} margin='normal' disabled={true}/>
   <br/>
-  <TextField label='Parent' value={parent ? parent : 'tidak ada'} margin='normal' disabled={true}/>
+  <TextField label='Parent' value={parent ? parent : 'None'} margin='normal' disabled={true}/>
   </form>
   </DialogContent>
   <DialogActions>
