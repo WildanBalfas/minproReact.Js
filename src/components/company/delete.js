@@ -28,11 +28,11 @@ export default ({ deleteCompany, handleClose,handleDelete, company: {code, name,
             </form>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                    Cancel
-            </Button>
-                <Button onClick={handleDelete} color="primary" autoFocus>
+            <Button onClick={handleDelete} variant="contained" color="primary" autoFocus>
                     Delete
+            </Button>
+                <Button onClick={handleClose} variant="contained" color="secondary">
+                    Cancel
             </Button>
             </DialogActions>
         </Dialog>

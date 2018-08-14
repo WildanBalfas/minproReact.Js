@@ -35,7 +35,6 @@ export default ({ editSouvenir, handleToggle, handleChange, handleClose, handleS
                                     name: 'm_unit_id',
                                     id: 'unit-simple',
                                 }}
-                                displayEmpty
                             >
                                 {unit.map(u => {
                                     return (
@@ -50,12 +49,12 @@ export default ({ editSouvenir, handleToggle, handleChange, handleClose, handleS
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+            <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>
+                    Update
+            </Button>
+                <Button onClick={handleClose} variant="contained" color="secondary">
                     Cancel
-            </Button>
-                <Button onClick={handleSubmit} color="primary" autoFocus>
-                    Save
-            </Button>
+            </Button> 
             </DialogActions>
         </Dialog>
     </Fragment>

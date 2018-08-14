@@ -52,12 +52,13 @@ export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, 
             </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                    Cancel
-            </Button>
-                <Button onClick={handleSubmit} color="primary" autoFocus>
+            <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>
                     Save
             </Button>
+                <Button onClick={handleClose} variant="contained" color="secondary">
+                    Cancel
+            </Button>
+                
             </DialogActions>
         </Dialog>
     </Fragment>

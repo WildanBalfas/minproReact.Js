@@ -13,7 +13,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Switch from '@material-ui/core/Switch';
 import Input from '@material-ui/core/Input';
 
-export default ({ editEvent, handleToggle, handleChange, handleClose, handleSubmit,  event: {code, event_name, place, start_date, end_date, budget, requestName, request_date, note }}) => {
+export default ({ editEvent, handleToggle, handleChange, handleClose, handleSubmit,  event: {code, event_name, place, start_date, end_date, budget, requestName, request_date, note,status }}) => {
     return <Fragment>
         <Dialog
             open={editEvent}
@@ -29,25 +29,30 @@ export default ({ editEvent, handleToggle, handleChange, handleClose, handleSubm
                     &nbsp;
                     <TextField label="Event Place" value={place} onChange={handleChange('place')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Event Name" required />
                     &nbsp;
-                    <TextField label="Event Start Date" value={start_date} onChange={handleChange('start_date')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Date"/>
+                    <TextField type='date' label="Event Start Date" value={start_date} onChange={handleChange('start_date')} margin="normal" InputLabelProps={{shrink: true}} placeholder={start_date}/>
                     &nbsp;
-                    <TextField label="Event End Date" value={end_date} onChange={handleChange('end_date')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Date"/>
+                    <TextField type='date' label="Event End Date" value={end_date} onChange={handleChange('end_date')} margin="normal" InputLabelProps={{shrink: true}} placeholder={start_date}/>
                     &nbsp;
                     <TextField label="Budget (Rp.)" value={budget} onChange={handleChange('budget')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Budget"/>   
                     &nbsp;
-                    <TextField label="Request By" value={requestName} margin='normal' disabled/>             
+                    <TextField label="Request By" value={requestName} margin='normal' disabled InputLabelProps={{shrink: true}} />             
                     &nbsp;
-                    <TextField label="Note" value={note} onChange={handleChange('note')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Note"/>              
+                    <TextField label="Request Date" value={request_date} margin='normal' disabled InputLabelProps={{shrink: true}} disabled />             
+                    &nbsp;
+                    <TextField label="Note" value={note} onChange={handleChange('note')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Note" /> 
+                    &nbsp;
+                    <TextField label="Status" value={status == 1 ? 'Submitted' : status== 2 ? 'In Progress' : 'Done'} onChange={handleChange('status')} margin="normal" InputLabelProps={{shrink: true}} disabled />                  
                 </form>
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+            <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>
+                    Update
+            </Button>
+                <Button onClick={handleClose} variant="contained" color="secondary">
                     Cancel
             </Button>
-                <Button onClick={handleSubmit} color="primary" autoFocus>
-                    Save
-            </Button>
+                
             </DialogActions>
         </Dialog>
     </Fragment>

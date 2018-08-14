@@ -50,7 +50,7 @@ class Events extends React.Component {
         super(props);
         this.state ={ 
             events: [],
-            employess: [],
+            employes: [],
             roles: [],
             users: [],
             createNew: false,
@@ -59,6 +59,7 @@ class Events extends React.Component {
             deleteEvent: false,
             loading: true,
             event: this.eventModel,
+            rejectEvent: false
         }
     }
 
@@ -68,7 +69,7 @@ class Events extends React.Component {
             this.setState({
                 events : res.data,
                 createNew: false,
-                ediEvent: false,
+                editEvent: false,
                 deleteEvent: false,
                 event: this.eventModel,
                 loading: false
@@ -80,10 +81,10 @@ class Events extends React.Component {
     }
 
     reloadEmployeeData = () => {
-        axios.get(config.url + '/m-employee')
+        axios.get(config.url + '/m_employee_role')
         .then(res => {
             this.setState({
-                employess: res.data
+                employes: res.data
             })
         })
         .catch((error) => {
@@ -116,7 +117,7 @@ class Events extends React.Component {
     }
     componentDidMount() {
         this.reloadEventData();
-        // this.reloadEmployeeData();
+        this.reloadEmployeeData();
         // this.reloadUserData();
         // this.reloadRoleData();
     }
@@ -158,7 +159,12 @@ class Events extends React.Component {
             closed_date: event.closed_date,
             note: event.note,
             status: event.status,
-            request_by: event.request_by
+            request_by: event.request_by,
+            start_date: event.start_date,
+            end_date: event.end_date,
+            createDate: event.createDate,
+            status: 1,
+            request_date: new Date().toLocaleDateString()
         }
 
         if(createNew){
@@ -198,9 +204,10 @@ class Events extends React.Component {
                 approved_by: event.approved_by,
                 closed_date: event.closed_date,
                 note: event.note,
-                status: event.status,
                 request_by: event.request_by,
-                requestName: event.requestName
+                requestName: event.requestName,
+                request_date: event.request_date,
+                status: event.status
             }
            
         })
@@ -232,6 +239,7 @@ class Events extends React.Component {
         const event = events.find(u => u._id === _id);
         this.setState({
             viewEvent: true,
+            rejectEvent:false,
             event: {
                 _id: event._id,
                 code: event.code,
@@ -243,8 +251,17 @@ class Events extends React.Component {
                 approved_by: event.approved_by,
                 closed_date: event.closed_date,
                 note: event.note,
-                status: event.status
+                status: event.status,
+                request_date: event.request_date
             }
+        })
+    }
+
+    handleReject = (_id) => {
+        const { events } = this.state;
+        const event = events.find(u => u._id === _id);
+        this.setState({
+            rejectEvent: true
         })
     }
 
@@ -264,7 +281,7 @@ class Events extends React.Component {
     }
 
     render() {
-        const {events, loading} = this.state;
+        const {events, loading, employes} = this.state;
         const {classes} = this.props;
         let i=1;
        
@@ -272,9 +289,8 @@ class Events extends React.Component {
             <div>
                 <h3><center>List Events</center></h3>
                 <CreateEvent createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} event={this.state.event} />
-                <EditEvent editEvent={this.state.editEvent} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit}  event={this.state.event}/>
-                <DeleteEvent deleteEvent={this.state.deleteEvent} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} event={this.state.event} />
-                <ViewEvent viewEvent={this.state.viewEvent} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event} /> 
+                <EditEvent editEvent={this.state.editEvent} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} event={this.state.event}/>
+                <ViewEvent viewEvent={this.state.viewEvent} rejectEvent={this.state.rejectEvent} handleReject={this.handleReject} handleDelete={this.handleDeleteConfirm} handleChange={this.handleChange} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event} employes={this.state.employes}/> 
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
                 <Table>
                     <TableHead >
@@ -297,13 +313,11 @@ class Events extends React.Component {
                                     <TableCell component="th" scope="row">{e.code}</TableCell>
                                     <TableCell>{e.requestName}</TableCell>
                                     <TableCell>{e.request_date}</TableCell>
-                                    <TableCell>{e.status}</TableCell>
+                                    <TableCell>{e.status == 1 ? 'Submitted' : e.status== 2 ? 'In Progress' : 'Done'}</TableCell>
                                     <TableCell>{e.createDate}</TableCell>
                                     <TableCell>{e.createBy}</TableCell>
                                     <TableCell style={{textAlign:'center'}}> <IconButton><SearchIcon onClick={() => this.handleView(e._id)} /></IconButton>
                                     <IconButton><EditIcon onClick={() => this.handleEdit(e._id)}/></IconButton>
-                                    <IconButton><DeleteIcon onClick={() => this.handleDelete(e._id)} />
-                                    </IconButton>
                                     </TableCell>
                                 </TableRow>
                             );

@@ -164,7 +164,8 @@ class Companies extends React.Component  {
                 name: company.name,
                 phone: company.phone,
                 email: company.email,
-                address: company.address
+                address: company.address,
+                is_delete: company.is_delete
             }
         })
     }
@@ -199,9 +200,8 @@ class Companies extends React.Component  {
         .catch((error) => {
             alert(error);
         })
-        
-        
     }
+ 
 
     render() {
         const {companies, loading} = this.state;

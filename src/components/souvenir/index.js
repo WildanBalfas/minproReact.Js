@@ -18,7 +18,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import Checkbox from '@material-ui/core/Checkbox';  
 
 class Souvenirs extends React.Component  {
 
@@ -116,7 +115,7 @@ class Souvenirs extends React.Component  {
             m_unit_id: souvenir.m_unit_id,
             description: souvenir.description,
             createDate: souvenir.createDate,
-            createBy: souvenir.createBy
+            createBy: souvenir.createBy,
         }
 
         if(createNew){
@@ -172,7 +171,8 @@ class Souvenirs extends React.Component  {
                 unitName: souvenir.unitName,
                 description: souvenir.description,
                 createDate: souvenir.createDate,
-                createBy: souvenir.createBy
+                createBy: souvenir.createBy,
+                is_delete: souvenir.is_delete
             }
         })
     }
@@ -198,8 +198,11 @@ class Souvenirs extends React.Component  {
 
     handleDeleteConfirm = () => {
         const { souvenir } = this.state;
+        let delProp = {
+            is_delete: souvenir.is_delete + 1,
+        }
 
-        axios.delete(config.url + '/m-souvenir/' + souvenir._id)
+        axios.delete(config.url + '/m-souvenir/' + souvenir._id, delProp)
         .then(res => {
             this.reloadSouvenirData();
             alert('Souvenir has been deleted');

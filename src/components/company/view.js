@@ -27,7 +27,7 @@ export default ({ viewCompany, handleView, handleClose, company: {code, name, em
             </form>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={handleClose} variant="contained" color="secondary">
                     Cancel
             </Button>
             </DialogActions>

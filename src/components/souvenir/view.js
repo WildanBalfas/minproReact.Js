@@ -32,7 +32,7 @@ export default ({ viewSouvenir,handleClose, souvenir: {code, name, m_unit_id, un
                 </form>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={handleClose} variant="contained" color="secondary">
                     Cancel
             </Button>
             </DialogActions>

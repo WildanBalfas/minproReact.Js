@@ -30,12 +30,13 @@ export default ({ deleteSouvenir,handleClose, handleDelete,  souvenir: {code, na
                 </form>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                    Cancel
-            </Button>
-            <Button onClick={handleDelete} color="primary"> 
+            <Button onClick={handleDelete} variant="contained" color="primary"> 
                     Delete
             </Button>
+                <Button onClick={handleClose} variant="contained" color="secondary">
+                    Cancel
+            </Button>
+            
             </DialogActions>
         </Dialog>
     </Fragment>

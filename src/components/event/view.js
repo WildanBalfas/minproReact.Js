@@ -12,39 +12,87 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 
-export default ({ viewEvent,handleClose, event: {code, event_name, place, start_date, end_date, budget, request_by, request_date, note }}) => {
+export default ({ viewEvent, rejectEvent, handleClose, handleReject, handleChange, handleDelete, handleSubmit, event: { code, event_name, place, start_date, end_date, budget, request_by, request_date, assign_to, note }, employes }) => {
     return <Fragment>
         <Dialog
             open={viewEvent}
             onClose={handleClose}
         >
-            <DialogTitle id="alert-dialog-title">{"View Souvenir"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{"Approval Event Request"}</DialogTitle>
             <DialogContent>
-            <form>
-                    <TextField label="Event Code" value={code} margin="normal" disabled/>
+                <form>
+                    <TextField label="Event Code" value={code} margin="normal" disabled />
                     &nbsp;
                     <TextField label="Event Name" value={event_name} margin="normal" disabled />
                     &nbsp;
                     <TextField label="Event Place" value={place} margin="normal" disabled />
                     &nbsp;
-                    <TextField label="Event Start Date" value={start_date} margin="normal" disabled/>
+                    <TextField label="Event Start Date" value={start_date} margin="normal" disabled />
                     &nbsp;
-                    <TextField label="Event End Date" value={end_date} margin="normal" disabled/>
+                    <TextField label="Event End Date" value={end_date} margin="normal" disabled />
                     &nbsp;
-                    <TextField label="Budget (Rp.)" value={budget} margin="normal" disabled/>   
+                    <TextField label="Budget (Rp.)" value={budget} margin="normal" disabled />
                     &nbsp;
-                    <TextField label="Request By" value={request_by} margin="normal" disabled/>             
+                    <FormControl fullWidth='true' required>
+                        <InputLabel shrink htmlFor="unit-simple"  >Assign To </InputLabel>
+                        <Select
+                            value={assign_to}
+                            onChange={handleChange('assign_to')}
+                            inputProps={{
+                                name: 'assign_to',
+                                id: 'unit-simple'
+                            }}
+                        >
+                            <MenuItem value=''>
+                                -Select Name-
+                            </MenuItem>
+                            {employes.map(c => {
+                                return (
+                                    <MenuItem value={c._id}>{c.name}</MenuItem>
+                                )
+                            })}
+                        </Select>
+                    </FormControl>
                     &nbsp;
-                    <TextField label="Request Date" value={request_date} margin="normal" disabled/>               
+                    <TextField label="Request By" value={request_by} margin="normal" disabled />
                     &nbsp;
-                    <TextField label="Note" value={note} margin="normal" />              
+                    <TextField label="Request Date" value={request_date} margin="normal" disabled />
+                    &nbsp;
+                    <TextField label="Note" value={note} margin="normal" disabled />
                 </form>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={handleSubmit} variant="contained" color="primary">
+                    Approved
+            </Button>
+                <Button onClick={handleReject} variant="contained" color="secondary">
+                    Reject
+            </Button>
+                <Button onClick={handleClose} variant="contained" color='orange'>
                     Cancel
             </Button>
             </DialogActions>
+            <Dialog
+                open={rejectEvent}
+                onClose={handleClose}
+            >
+                <DialogTitle id="alert-dialog-title">{"Reject Reason"}</DialogTitle>
+                <DialogContent>
+                    <form>
+                        <TextField margin='normal' InputLabelProps={{ shrink: 'true' }} placeholder='Input Reject Reason' />
+                    </form>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} variant="contained" color="secondary">
+                        Reject
+                    </Button>
+                    <Button onClick={handleClose} variant="contained" color='orange'>
+                        Cancel
+                    </Button>
+                </DialogActions>
+
+            </Dialog>
         </Dialog>
+
     </Fragment>
 }

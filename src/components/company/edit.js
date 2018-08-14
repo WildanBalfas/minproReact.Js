@@ -28,11 +28,11 @@ export default ({editCompany,handleChange,handleClose,handleEdit,handleSubmit, c
             </form>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                    Cancel
+            <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>
+                  Update
             </Button>
-                <Button onClick={handleSubmit} color="primary" autoFocus>
-                    Save
+                <Button onClick={handleClose} variant="contained" color="secondary">
+                    Cancel
             </Button>
             </DialogActions>
         </Dialog>
