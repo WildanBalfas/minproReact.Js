@@ -93,21 +93,12 @@ class Companies extends React.Component  {
         })
     }
 
-    // handleChangeCheckBox =  name => event => {
-    //     this.setState({
-    //         company: {
-    //             ...this.state.company,
-    //             [name]: event.target.checked
-    //         }
-    //     })
-    // }
 
     handleSubmit = () => {
         const { company, createNew } = this.state;
 
         let newCompany =
         {
-            // code: company.code,
             name: company.name,
             phone: company.phone,
             email: company.email,

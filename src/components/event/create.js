@@ -6,12 +6,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import DatePicker from 'react-datepicker';
-import moment from 'moment';
 
 export default ({ createNew, handleToggle, handleChange, handleClose, handleSubmit, event: { code, event_name, place, start_date, end_date, budget, request_by, request_date, note } }) => {
     return <Fragment>
@@ -39,7 +33,7 @@ export default ({ createNew, handleToggle, handleChange, handleClose, handleSubm
                         &nbsp;
                     <TextField label="Request By" value={request_by} onChange={handleChange('request_by')} margin="normal" InputLabelProps={{ shrink: true }} placeholder="Type Request by" required/>
                         &nbsp;
-                    <TextField label="Request Date" value={request_date} onChange={handleChange('request_date')} margin="normal" InputLabelProps={{ shrink: true }} placeholder={request_date} disabled />
+                    <TextField label="Request Date" value={request_date} onChange={handleChange('request_date')} margin="normal" InputLabelProps={{ shrink: true }} placeholder={request_date} type='date' />
                         &nbsp;
                     <TextField label="Note" value={note} onChange={handleChange('note')} margin="normal" InputLabelProps={{ shrink: true }} placeholder="Type Note" />
                     </form>

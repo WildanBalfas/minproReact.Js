@@ -6,12 +6,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Switch from '@material-ui/core/Switch';
-import Input from '@material-ui/core/Input';
 
 export default ({ editEvent, handleToggle, handleChange, handleClose, handleSubmit,  event: {code, event_name, place, start_date, end_date, budget, requestName, request_date, note,status }}) => {
     return <Fragment>
@@ -33,11 +27,11 @@ export default ({ editEvent, handleToggle, handleChange, handleClose, handleSubm
                     &nbsp;
                     <TextField type='date' label="Event End Date" value={end_date} onChange={handleChange('end_date')} margin="normal" InputLabelProps={{shrink: true}} placeholder={start_date}/>
                     &nbsp;
-                    <TextField label="Budget (Rp.)" value={budget} onChange={handleChange('budget')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Budget"/>   
+                    <TextField label="Budget (Rp.)" value={budget} onChange={handleChange('budget')} margin="normal" InputLabelProps={{shrink: true}} required/>   
                     &nbsp;
-                    <TextField label="Request By" value={requestName} margin='normal' disabled InputLabelProps={{shrink: true}} />             
+                    <TextField label="Request By" value={requestName.first} margin='normal' disabled InputLabelProps={{shrink: true}} required/>             
                     &nbsp;
-                    <TextField label="Request Date" value={request_date} margin='normal' disabled InputLabelProps={{shrink: true}} disabled />             
+                    <TextField label="Request Date" value={request_date} margin='normal' disabled InputLabelProps={{shrink: true}} disabled required />             
                     &nbsp;
                     <TextField label="Note" value={note} onChange={handleChange('note')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Note" /> 
                     &nbsp;

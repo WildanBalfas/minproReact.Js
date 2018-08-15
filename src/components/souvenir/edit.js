@@ -10,8 +10,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import Switch from '@material-ui/core/Switch';
-import Input from '@material-ui/core/Input';
 
 export default ({ editSouvenir, handleToggle, handleChange, handleClose, handleSubmit, souvenir: { code, name, m_unit_id, unitName, description }, unit }) => {
     return <Fragment>
