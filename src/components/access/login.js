@@ -5,6 +5,7 @@ import axios from 'axios';
 import DialogActions from '@material-ui/core/DialogActions';
 import { Redirect } from 'react-router-dom';
 import '../style.css';
+import { config } from '../configuration/config';
 
 // import Validation from '../base/validation';
 // import { PostData } from '../service/postData';
@@ -40,7 +41,7 @@ class Login extends React.Component {
             username: user.username,
             password: user.password
         }
-        axios.post('http://localhost:8888/api/login', newUser)
+        axios.post(config.url + '/login', newUser)
             .then(res => {
                 objUserData = JSON.stringify(res.data)
                 localStorage.setItem('userData', objUserData);
