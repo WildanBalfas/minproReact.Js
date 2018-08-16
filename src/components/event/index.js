@@ -185,7 +185,7 @@ class Events extends React.Component {
                 closed_date: event.closed_date,
                 note: event.note,
                 request_by: event.request_by,
-                requestName: event.requestName,
+                requestName: event.requestName.first + ' ' + event.requestName.last,
                 request_date: event.request_date,
                 status: event.status
             }
@@ -213,8 +213,9 @@ class Events extends React.Component {
                     note: event.note,
                     status: event.status,
                     request_date: event.request_date,
-                    request_by: event.requestName,
-                    assign_to: event.assign_to
+                    requestName: event.requestName.first + ' ' + event.requestName.last,
+                    assign_to: event.assign_to,
+                    
                 }
             })
         } else if(status == 2){

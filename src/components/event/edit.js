@@ -7,7 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-export default ({ editEvent, handleToggle, handleChange, handleClose, handleSubmit,  event: {code, event_name, place, start_date, end_date, budget, request_by, request_date, note,status }}) => {
+export default ({ editEvent, handleToggle, handleChange, handleClose, handleSubmit,  event: {code, event_name, place, start_date, end_date, budget, requestName, request_by, request_date, note,status }}) => {
     return <Fragment>
         <Dialog
             open={editEvent}
@@ -29,7 +29,7 @@ export default ({ editEvent, handleToggle, handleChange, handleClose, handleSubm
                     &nbsp;
                     <TextField label="Budget (Rp.)" value={budget} onChange={handleChange('budget')} margin="normal" InputLabelProps={{shrink: true}} required/>   
                     &nbsp;
-                    <TextField label="Request By" value={request_by} margin='normal' disabled InputLabelProps={{shrink: true}} required/>             
+                    <TextField label="Request By" value={requestName} margin='normal' disabled InputLabelProps={{shrink: true}} required/>             
                     &nbsp;
                     <TextField label="Request Date" value={request_date} margin='normal' disabled InputLabelProps={{shrink: true}} disabled required />             
                     &nbsp;
