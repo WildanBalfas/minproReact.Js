@@ -213,6 +213,7 @@ class Events extends React.Component {
                     note: event.note,
                     status: event.status,
                     request_date: event.request_date,
+                    request_by: event.requestName,
                     assign_to: event.assign_to
                 }
             })

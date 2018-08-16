@@ -17,7 +17,12 @@ import Menu from '../menu';
 import Role from '../role';
 import Events from '../event';
 import Unit from '../unit';
-import MenuAccess from '../menuaccess'
+import MenuAccess from '../menuaccess';
+import Users from '../users';
+import Employee from '../employees';
+import Design from '../design';
+import Promotion from '../promotion';
+import LoginPage from '../access/login';
 
 export default class SideBar extends React.Component {
     render() {
@@ -34,6 +39,10 @@ export default class SideBar extends React.Component {
                     <Divider />
                     <List onClick={() => onSelected()}>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/" className={classes.MenuList}>Home</Link></ListItem>
+                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/users" className={classes.MenuList}>Users</Link></ListItem>
+                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/employees" className={classes.MenuList}>Employees</Link></ListItem>
+                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/design" className={classes.MenuList}>Design</Link></ListItem>
+                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/promotion" className={classes.MenuList}>Promotion</Link></ListItem>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/company" className={classes.MenuList}>Company</Link></ListItem>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/souvenir" className={classes.MenuList}>Souvenir</Link></ListItem>
                         <ListItem className={classes.ListItem}><MenuIcon className={classes.MenuIcon} color="primary" /><Link to="/menu" className={classes.MenuList}>Menu</Link></ListItem>
@@ -42,9 +51,14 @@ export default class SideBar extends React.Component {
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} color="primary" /><Link to="/unit" className={classes.MenuList}>Unit</Link></ListItem>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} color="primary" /><Link to="/menuaccess" className={classes.MenuList}>Menu Access</Link></ListItem>
                         <ListItem className={classes.ListItem}><HelpIcon className={classes.MenuIcon} /><Link to="/help" className={classes.MenuList}>Help</Link></ListItem>
+                        <ListItem className={classes.ListItem}><HelpIcon className={classes.MenuIcon} /><Link to="/login" className={classes.MenuList}>Login</Link></ListItem>
                     </List>
                 </Drawer>
                 <Route exact path="/" component={Home} />
+                <Route exact path="/users" component={Users} />
+                <Route exact path="/employees" component={Employee} />
+                <Route exact path="/design" component={Design} />
+                <Route exact path="/promotion" component={Promotion} />
                 <Route exact path="/company" component={Company} />
                 <Route exact path="/souvenir" component={Souvenir} />
                 <Route exact path="/menu" component={Menu} />
@@ -52,6 +66,7 @@ export default class SideBar extends React.Component {
                 <Route exact path="/event" component={Events} />
                 <Route exact path="/unit" component={Unit} />
                 <Route exact path="/menuaccess" component={MenuAccess} />
+                <Route exact path="/login" component={LoginPage} />
             </div>
         )
     }
