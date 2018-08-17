@@ -13,12 +13,11 @@ export default ({ viewRole, handleClose, role:{code, name, description}}) => {
   open={viewRole}
   onClose={handleClose}
   >
-  <DialogTitle id="alert-dialog-title">{"View Role"}</DialogTitle>
   <DialogContent>
-  <DialogContentText id="alert-dialog-description" style={{fontWeight:'bold'}}>
-  Detail Role
+  <DialogContentText id="alert-dialog-description">
+  <div class="title">Role Information</div>
   </DialogContentText>
-  <form>
+  <form class="martop">
   <TextField label='Role Code' value={code} margin='normal' disabled={true}/>
   <br/>
   <TextField label='Role Name' value={name} margin='normal' disabled={true}/>

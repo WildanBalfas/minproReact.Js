@@ -13,10 +13,10 @@ export default ({ deleteMenu,handleChange, handleClose,handleDelete, menu:{code,
   open={deleteMenu}
   onClose={handleClose}
   >
-  <DialogTitle id="alert-dialog-title">{"Delete Menu"}</DialogTitle>
   <DialogContent>
-  <DialogContentText id="alert-dialog-description" style={{fontWeight:'bold'}}>
-  Are you sure to delete ?
+  <DialogContentText id="alert-dialog-description">
+  <div class="title">Delete Menu</div>
+  <div class="subtitle">Are you sure to delete ?</div>
   </DialogContentText>
   <form>
   <TextField label='Menu Code' value={code} margin='normal' disabled={true}/>

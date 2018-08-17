@@ -182,7 +182,7 @@ class Roles extends React.Component {
     let i=1;
     return(
       <div>
-      <h3 style={{color:'blue'}}><center>List Role</center></h3>
+      <h3 style={{color:'#3f51b5'}}><center>List Role</center></h3>
       <CreateRole createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} role={this.state.role} />
       <DeleteRole deleteRole={this.state.deleteRole} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} role={this.state.role}/>
       <ViewRole viewRole={this.state.viewRole} handleClose={this.handleClose} role={this.state.role}/>
@@ -195,14 +195,14 @@ class Roles extends React.Component {
       <TableCell style={{fontWeight:"bold", color:"black"}}>Role Name</TableCell>
       <TableCell style={{fontWeight:"bold", color:"black"}}>Create Date</TableCell>
       <TableCell style={{fontWeight:"bold", color:"black"}}>Create By</TableCell>
-      <TableCell style={{fontWeight:"bold", color:"black"}}>Is delete</TableCell>
+      {/* <TableCell style={{fontWeight:"bold", color:"black"}}>Is delete</TableCell> */}
       <TableCell style={{textAlign:"center",fontWeight:"bold", color:"black"}}>Action</TableCell>
       </TableRow>
       </TableHead>
       <TableBody>
       {roles.map(n => {
         return (
-          <TableRow>
+          <TableRow key={n._id}>
           <TableCell>{i++}</TableCell>
           <TableCell component="th" scope="row">
           {n.code}
@@ -210,11 +210,11 @@ class Roles extends React.Component {
           <TableCell>{n.name}</TableCell>
           <TableCell>{n.createDate}</TableCell>
           <TableCell>createBy</TableCell>
-          <TableCell>{n.is_delete}</TableCell>
+          {/* <TableCell>{n.is_delete}</TableCell> */}
           <TableCell style={{textAlign:"center"}}>
-          <IconButton><SearchIcon onClick={() => this.handleView(n._id)} color="primary" /></IconButton>
-          <IconButton><EditIcon onClick={() => this.handleEdit(n._id)} color="primary" /></IconButton>
-          <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} color="secondary" /></IconButton> 
+          <IconButton onClick={() => this.handleView(n._id)}><SearchIcon color="primary" /></IconButton>
+          <IconButton onClick={() => this.handleEdit(n._id)}><EditIcon color="primary" /></IconButton>
+          <IconButton onClick={() => this.handleDelete(n._id)}><DeleteIcon color="secondary" /></IconButton> 
           </TableCell>
           </TableRow>
         );

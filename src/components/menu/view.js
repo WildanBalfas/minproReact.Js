@@ -13,12 +13,11 @@ export default ({ viewMenu, handleClose, menu:{code, name, controller,parent}}) 
   open={viewMenu}
   onClose={handleClose}
   >
-  <DialogTitle id="alert-dialog-title">{"View Menu"}</DialogTitle>
   <DialogContent>
-  <DialogContentText id="alert-dialog-description" style={{fontWeight:'bold'}}>
-  Detail menu
+  <DialogContentText id="alert-dialog-description">
+  <div class="title">Menu Information</div>
   </DialogContentText>
-  <form>
+  <form class="martop">
   <TextField label='Menu Code' value={code} margin='normal' disabled={true}/>
   <br/>
   <TextField label='Menu Name' value={name} margin='normal' disabled={true}/>

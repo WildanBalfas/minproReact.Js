@@ -15,12 +15,11 @@ export default ({editRole,handleChange,handleClose,handleSubmit, role: {code, na
   open={editRole}
   onClose={handleClose}
   >
-  <DialogTitle id="alert-dialog-title">{"Update Role"}</DialogTitle>
   <DialogContent>
   <DialogContentText id="alert-dialog-description">
-  Please edit data
+  <div class="title">Edit Role</div>
   </DialogContentText>
-  <form>
+  <form class="martop">
   <TextField label='*Role Code' value={code} onChange={handleChange('code')} margin='normal' disabled={true}/>
   <br/>
   <TextField label='*Role Name' value={name} onChange={handleChange('name')} margin='normal'/>

@@ -13,11 +13,12 @@ export default ({createNew,handleToggle,handleChange,handleClose,handleSubmit, r
   return <Fragment>
     <Button onClick={handleToggle} variant="contained" color="primary" style={{ float:'right' }}>Add</Button>
     <Dialog open={createNew} onClose={handleClose} >
-    <DialogTitle id="alert-dialog-title">{"Add Role"}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                   Please fill out the form below!
-            <form>
+                <div class="title">Add Role</div>
+    <form class="martop">
+                <TextField label='Role Code' value={code} onChange={handleChange('code')} margin='normal' InputLabelProps={{shrink:true}} placeholder="Auto Generated" disabled/>
+                <br/>
                 <TextField label='*Role Name' value={name} onChange={handleChange('name')} margin='normal'/>
                 <br/>
                 <TextField label='*Description Name' value={description} onChange={handleChange('description')} margin='normal'/>

@@ -13,10 +13,10 @@ export default ({ deleteRole, handleClose,handleDelete, role:{code, name, descri
   open={deleteRole}
   onClose={handleClose}
   >
-  <DialogTitle id="alert-dialog-title">{"Delete Role"}</DialogTitle>
   <DialogContent>
-  <DialogContentText id="alert-dialog-description" style={{fontWeight:'bold'}}>
-  Are you sure to delete ?
+  <DialogContentText id="alert-dialog-description">
+  <div class="title">Delete Role</div>
+  <div class="subtitle">Are you sure to delete ?</div>
   </DialogContentText>
   <form>
   <TextField label='Role Code' value={code} margin='normal' disabled={true}/>

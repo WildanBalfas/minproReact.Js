@@ -1,1 +1,0 @@
-{"version":3,"sources":["components/App.css"],"names":[],"mappings":"AAAA,KACI,SACA,kBACA,6CAAwD","file":"static/css/main.d46fab87.css","sourcesContent":["body {\r\n    margin: 0;\r\n    padding: 60px 15px;\r\n    font-family: \"Roboto\", \"Helvetica\", \"Arial\", sans-serif;\r\n}\n\n\n// WEBPACK FOOTER //\n// ./src/components/App.css"],"sourceRoot":""}

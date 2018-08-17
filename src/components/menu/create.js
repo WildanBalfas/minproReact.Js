@@ -11,53 +11,54 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
-export default ({ createNew, handleToggle, handleChange, handleClose, handleSubmit, menu: { code, name, controller, parent_id }, menus }) => {
-
+export default ({createNew,handleToggle,handleChange,handleClose,handleSubmit, menu: {code, name, controller, parent_id}, menus}) =>{
+    
     return <Fragment>
-        <Button onClick={handleToggle} variant="contained" color="primary" style={{ float: 'right' }}>Add</Button>
-        <Dialog open={createNew} onClose={handleClose} >
-            <DialogTitle id="alert-dialog-title">{"Add Menu"}</DialogTitle>
-            <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    Please fill out the form below!
-                <form>
-                        <TextField label='*Menu Name' value={name} onChange={handleChange('name')} margin='normal' />
-                        <br />
-                        <TextField label='*Controller Name' value={controller} onChange={handleChange('controller')} margin='normal' />
-                        <br />
-                        <FormControl fullWidth='true'>
-                            <InputLabel shrink htmlFor="menu-simple" >Parent </InputLabel>
-                            <Select
-                                value={parent_id}
-                                onChange={handleChange('parent_id')}
-                                inputProps={{
-                                    name: 'parent_id',
-                                    id: 'menu-simple'
-                                }}
-                                displayEmpty
-                            >
-                                <MenuItem value='' style={{ color: 'grey' }}>
-                                    -Select Menu Name-
+    <Button onClick={handleToggle} variant="contained" color="primary" style={{ float:'right' }}>Add</Button>
+    <Dialog open={createNew} onClose={handleClose} >
+    <DialogContent>
+    <DialogContentText id="alert-dialog-description">
+    <div class="title">Add Menu</div>
+    <form class="martop">
+    <TextField label='Menu Code' value={code} margin='normal' disabled={true} InputLabelProps={{shrink: true}} placeholder="Auto Generated"/>
+    <br/>
+    <TextField label='*Menu Name' value={name} onChange={handleChange('name')} margin='normal'/>
+    <br/>
+    <TextField label='*Controller Name' value={controller} onChange={handleChange('controller')} margin='normal'/>
+    <br/>
+    <FormControl fullWidth='true'>
+    <InputLabel shrink htmlFor="menu-simple" >Parent </InputLabel>
+    <Select
+    value={parent_id}
+    onChange={handleChange('parent_id')}
+    inputProps={{
+        name: 'parent_id',
+        id: 'menu-simple'
+    }}
+    displayEmpty
+    >
+    <MenuItem value='' style={{color:'grey', fontFamily:'Helvetica'}}>
+    -Select Menu Name-
     </MenuItem>
-                                {menus.map(x => {
-                                    return (
-                                        <MenuItem value={x._id}>{x.name}</MenuItem>
-                                    )
-                                })}
-                            </Select>
-                        </FormControl>
-
-                    </form>
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} color="secondary" variant="contained">
-                    Cancel
+    {menus.map(x => {
+        return(
+            <MenuItem key={x._id} value={x._id}>{x.name}</MenuItem>
+        )
+    })}
+    </Select>
+    </FormControl>
+    
+    </form>
+    </DialogContentText>
+    </DialogContent>
+    <DialogActions>
+    <Button onClick={handleClose} color="secondary" variant="contained">
+    Cancel
     </Button>
-                <Button onClick={handleSubmit} color="primary" variant="contained" autoFocus>
-                    Save
+    <Button onClick={handleSubmit} color="primary" variant="contained" autoFocus>
+    Save
     </Button>
-            </DialogActions>
-        </Dialog>
+    </DialogActions>
+    </Dialog>
     </Fragment>
 }

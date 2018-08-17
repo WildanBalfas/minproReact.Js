@@ -98,7 +98,11 @@ class Menus extends React.Component {
     }
     if(menu.parent_id){
       newMenu.parent_id=menu.parent_id
+    }else{
+      newMenu.parent_id=null
     }
+    console.log(newMenu);
+
     if (createNew) {
       axios.post(config.url + '/m-menu', newMenu)
       .then(res => {
@@ -129,7 +133,8 @@ class Menus extends React.Component {
         _id: menu._id,
         code: menu.code,
         name: menu.name,
-        controller: menu.controller
+        controller: menu.controller,
+        parent_id:menu.parent_id
       }
     })
   }
@@ -143,7 +148,8 @@ class Menus extends React.Component {
         _id: menu._id,
         code: menu.code,
         name: menu.name,
-        controller: menu.controller
+        controller: menu.controller,
+        is_delete:menu.is_delete
       }
     })
   }
@@ -165,8 +171,10 @@ class Menus extends React.Component {
 
   handleDeleteConfirm = () => {
     const { menu } = this.state;
-    console.log(menu._id);
-    axios.delete(config.url + '/m-menu/' + menu._id)
+    let delMenu = {
+      is_delete: menu.is_delete+1,
+    }
+    axios.put(config.url + '/m-menu/' + menu._id, delMenu)
         .then(res => {
             this.reloadMenuData();
             alert('Data Deleted! Menu has been deleted. \n');
@@ -182,11 +190,11 @@ class Menus extends React.Component {
     let i=1;
     return(
       <div>
-      <h3 style={{color:'blue'}}><center>List Menu</center></h3>
+      <h3 style={{color:'#3f51b5'}}><center>List Menu</center></h3>
       <CreateMenu createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} menu={this.state.menu} menus={this.state.menus} />
       <DeleteMenu deleteMenu={this.state.deleteMenu} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} menu={this.state.menu}/>
       <ViewMenu viewMenu={this.state.viewMenu} handleClose={this.handleClose} menu={this.state.menu}/>
-      <EditMenu editMenu={this.state.editMenu} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} menu={this.state.menu} />
+      <EditMenu editMenu={this.state.editMenu} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} menu={this.state.menu} menus={this.state.menus}/>
       <Table>
       <TableHead>
       <TableRow>
@@ -195,14 +203,14 @@ class Menus extends React.Component {
       <TableCell style={{fontWeight:"bold", color:"black"}}>Menu Name</TableCell>
       <TableCell style={{fontWeight:"bold", color:"black"}}>Create Date</TableCell>
       <TableCell style={{fontWeight:"bold", color:"black"}}>Create By</TableCell>
-      <TableCell style={{textAlign:"center",fontWeight:"bold", color:"black"}}>is_delete</TableCell>
+      {/* <TableCell style={{textAlign:"center",fontWeight:"bold", color:"black"}}>is_delete</TableCell> */}
       <TableCell style={{textAlign:"center",fontWeight:"bold", color:"black"}}>Action</TableCell>
       </TableRow>
       </TableHead>
       <TableBody>
       {menus.map(n => {
         return (
-          <TableRow>
+          <TableRow key={n._id}>
           <TableCell>{i++}</TableCell>
           <TableCell component="th" scope="row">
           {n.code}
@@ -210,7 +218,7 @@ class Menus extends React.Component {
           <TableCell>{n.name}</TableCell>
           <TableCell>{n.createDate}</TableCell>
           <TableCell>createBy</TableCell>
-          <TableCell style={{textAlign:"center"}}>{n.is_delete}</TableCell>
+          {/* <TableCell style={{textAlign:"center"}}>{n.is_delete}</TableCell> */}
           <TableCell style={{textAlign:"center"}}>
           <IconButton onClick={() => this.handleView(n._id)}><SearchIcon color="primary" /></IconButton>
           <IconButton onClick={() => this.handleEdit(n._id)}><EditIcon color="primary" /></IconButton>
