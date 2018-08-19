@@ -18,6 +18,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
+import LSData from '../base/base.localstorage';
 
 class Souvenirs extends React.Component  {
 
@@ -29,8 +30,8 @@ class Souvenirs extends React.Component  {
         description: '',
         m_unit_id: '',
         createDate: '',
-        createBy: '',
-        is_delete: ''
+        created_by: LSData.loginRoleId(),
+        is_delete: '',
     }
     constructor(props) {
         super(props);
@@ -115,7 +116,7 @@ class Souvenirs extends React.Component  {
             m_unit_id: souvenir.m_unit_id,
             description: souvenir.description,
             createDate: souvenir.createDate,
-            createBy: souvenir.createBy,
+            created_by: souvenir.created_by,
         }
 
         if(createNew){
@@ -152,7 +153,6 @@ class Souvenirs extends React.Component  {
                 unitName: souvenir.unitName,
                 description: souvenir.description,
                 createDate: souvenir.createDate,
-                createBy: souvenir.createBy
             }
            
         })
@@ -190,7 +190,7 @@ class Souvenirs extends React.Component  {
                 unitName: souvenir.unitName,
                 description: souvenir.description,
                 createDate: souvenir.createDate,
-                createBy: souvenir.createBy
+                created_by: souvenir.created_by
             }
         })
     }
@@ -247,7 +247,7 @@ class Souvenirs extends React.Component  {
                                     <TableCell>{n.name}</TableCell>
                                     <TableCell>{n.unitName}</TableCell>
                                     <TableCell>{n.createDate}</TableCell>
-                                    <TableCell>{n.createBy}</TableCell>
+                                    <TableCell>{n.created_by}</TableCell>
                                     <TableCell style={{textAlign:'center'}}> <IconButton><SearchIcon onClick={() => this.handleView(n._id)} /></IconButton>
                                     <IconButton><EditIcon onClick={() => this.handleEdit(n._id)}/></IconButton>
                                     <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} /></IconButton>

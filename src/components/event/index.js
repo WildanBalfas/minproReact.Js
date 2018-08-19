@@ -17,6 +17,7 @@ import EditEvent from './edit';
 import ViewEventSubmitted from './viewSubmitted';
 import ViewEventInProgress from './viewInProgress';
 // import ViewEvent from './view';
+import LSData from '../base/base.localstorage';
 
 class Events extends React.Component {
     eventModel = {
@@ -27,7 +28,7 @@ class Events extends React.Component {
         end_date: '',
         place: '',
         budget: '',
-        request_by: '',
+        request_by: LSData.loginId(),
         requestName: '',
         request_date: '',
         approved_by: '',
@@ -38,7 +39,7 @@ class Events extends React.Component {
         status: '',
         reject_reason: '',
         is_delete: '',
-        createBy: '',
+        created_by: LSData.loginId(),
         createDate: '',
         updateBy: '',
         updateDate: ''
@@ -147,6 +148,7 @@ class Events extends React.Component {
             start_date: event.start_date,
             end_date: event.end_date,
             createDate: event.createDate,
+            created_by: event.created_by,
             status: 1,
         }
 

@@ -7,7 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
 export default ({editCompany,updateCompany,handleUpdateCompany,handleChange,handleClose,handleEdit,handleSubmit, company: {code, name, email, phone,address}}) => {
-    return <Fragment>
+   return <Fragment>
         <Dialog
             open={editCompany}
             onClose={handleClose}

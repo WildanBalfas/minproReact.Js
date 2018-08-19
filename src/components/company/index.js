@@ -17,6 +17,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
+import LSData from '../base/base.localstorage';
 
 class Companies extends React.Component  {
 
@@ -29,7 +30,8 @@ class Companies extends React.Component  {
         email: '',
         address: '',
         createDate: '',
-        created_by: '',
+        created_by: LSData.loginRoleId(),
+        updated_by: '',
         is_delete: ''
     }
     constructor(props) {
@@ -93,6 +95,7 @@ class Companies extends React.Component  {
 
 
     handleSubmit = () => {
+        
         const { company, createNew } = this.state;
 
         let newCompany =
@@ -102,11 +105,13 @@ class Companies extends React.Component  {
             email: company.email,
             address: company.address,
             createDate: company.createDate,
-            createdBy: company.created_by
+            created_by: company.created_by,
+            // updated_by: company.updated_by,
+            // updateDate: company.updateDate
         }
-
+     
         if(createNew){
-             
+           
             axios.post(config.url + '/m-company', newCompany)
                 .then(res => {
                     this.reloadCompanyData();
@@ -116,6 +121,7 @@ class Companies extends React.Component  {
                     alert(error)
                 })
         }else{
+            console.log('apa');
             axios.put(config.url + '/m-company/' +company._id , newCompany)
             .then(res => {
                 this.reloadCompanyData();
@@ -138,7 +144,8 @@ class Companies extends React.Component  {
                 name: company.name,
                 phone: company.phone,
                 email: company.email,
-                address: company.address
+                address: company.address,
+                // updated_by: LSData.loginRoleId()
             }
         })
     }
@@ -211,7 +218,7 @@ class Companies extends React.Component  {
                             <TableCell style={{fontWeight:900}}>No</TableCell>
                             <TableCell style={{fontWeight:900}}>Company Code</TableCell>
                             <TableCell style={{fontWeight:900}}>Company Name</TableCell>
-                            <TableCell style={{fontWeight:900}}>Create Date</TableCell>
+                            <TableCell style={{fontWeight:900}}>Created Date</TableCell>
                             <TableCell style={{fontWeight:900}}>Create By</TableCell>
                             <TableCell style={{fontWeight:900, textAlign:'center'}}>Action</TableCell>
                         </TableRow>
@@ -224,7 +231,7 @@ class Companies extends React.Component  {
                                     <TableCell component="th" scope="row">{n.code}</TableCell>
                                     <TableCell>{n.name}</TableCell>
                                     <TableCell>{n.createDate}</TableCell>
-                                    <TableCell>{n.createdBy}</TableCell>
+                                    <TableCell>{n.created_by}</TableCell>
                                     <TableCell style={{textAlign:'center'}}> <IconButton><SearchIcon onClick={() => this.handleView(n._id)} /></IconButton>
                                     <IconButton><EditIcon onClick={() => this.handleEdit(n._id)}/></IconButton>
                                     <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} /></IconButton>
