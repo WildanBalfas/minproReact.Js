@@ -22,6 +22,8 @@ import Users from '../users';
 import Employee from '../employees';
 import Design from '../design';
 import Promotion from '../promotion';
+import Product from '../product';
+import TSouvenir from '../t_souvenir';
 import LoginPage from '../access/login';
 
 export default class SideBar extends React.Component {
@@ -45,6 +47,8 @@ export default class SideBar extends React.Component {
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/promotion" className={classes.MenuList}>Promotion</Link></ListItem>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/company" className={classes.MenuList}>Company</Link></ListItem>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/souvenir" className={classes.MenuList}>Souvenir</Link></ListItem>
+                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/product" className={classes.MenuList}>Master Product</Link></ListItem>
+                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/tsouveniradd" className={classes.MenuList}>Transaksi Add Souvenir</Link></ListItem>
                         <ListItem className={classes.ListItem}><MenuIcon className={classes.MenuIcon} color="primary" /><Link to="/menu" className={classes.MenuList}>Menu</Link></ListItem>
                         <ListItem className={classes.ListItem}><RoleIcon className={classes.MenuIcon} color="primary" /><Link to="/role" className={classes.MenuList}>Role</Link></ListItem>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} color="primary" /><Link to="/event" className={classes.MenuList}>Event</Link></ListItem>
@@ -61,6 +65,8 @@ export default class SideBar extends React.Component {
                 <Route exact path="/promotion" component={Promotion} />
                 <Route exact path="/company" component={Company} />
                 <Route exact path="/souvenir" component={Souvenir} />
+                <Route exact path="/product" component={Product} />
+                <Route exact path="/tsouveniradd" component={TSouvenir} />
                 <Route exact path="/menu" component={Menu} />
                 <Route exact path="/role" component={Role} />
                 <Route exact path="/event" component={Events} />
