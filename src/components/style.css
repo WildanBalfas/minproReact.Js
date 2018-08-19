@@ -5,8 +5,6 @@ body{
 .input{
     width: 95%;
 }
-
-
 .outer-wrapper{
     background: #03A9F4;
     margin: 0;
@@ -16,4 +14,145 @@ body{
     left: 0;
     right: 0;
     bottom: 0;
+}
+
+.div-dialog-header{
+    background: #337ab7;
+    color: #ffffff;   
+    padding: 16px 25px;
+    margin-bottom: 10px;
+}
+
+.dialog-border{
+
+}
+
+div.dialog-content-kiri{
+    width: 50%;
+    float: left;
+    padding: 0px 10px 0 0;
+}
+
+
+
+div.dialog-content-kanan.pdt16{
+    padding: 16px 10px 0 0;
+}
+
+div.dialog-content-kanan{
+    width: 50%;
+    float: left;
+    padding: 0 0 0 10px;
+}
+
+.input-text{
+    width: 100%
+}
+
+.border{
+    overflow: hidden;
+    display: block;
+    border: 1px solid#f0f0f0;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+div.div50{
+    width: 50%;
+}
+
+div.clear{
+    margin: 5px 0;
+}
+
+div.clear-selected{
+    margin-top: 16px;
+}
+
+.hiddens{
+    display: none
+}
+
+
+/**
+/* Div Table
+/*
+*/
+
+div.div-table{
+    display: block;
+    margin: 10px 0;
+}
+
+div.div-table div.div-table-row{
+   display: block;
+   width: 100%;
+   height: auto;
+}
+
+div.div-table div.div-table-column.center{
+    text-align: center
+}
+
+div.div-table div.div-table-column.title{
+    font-weight: bold;
+    font-size: 12px;
+    background: #f8f8f8;
+    height: 32px;
+    line-height: 32px;
+}
+
+
+
+div.div-table div.div-table-column{
+    display: inline-block;
+    width: 10%;
+    padding: 0 4px;
+    overflow: hidden;
+}
+
+div.div-table div.div-table-column.wdth15{
+    width: 15%;
+}
+
+
+div.div-table div.div-table-column.wdth14{
+    width: 14%;
+}
+
+
+div.div-table div.div-table-column.wdth12{
+    width: 12%;
+}
+
+div.div-table div.div-table-column.wdth20{
+    width: 20%;
+}
+
+div.div-table div.div-table-column.wdth25{
+    width: 25%;
+}
+
+div.div-table div.div-table-column.wdth30{
+    width: 30%;
+}
+
+div.div-table div.div-table-column.wdth35{
+    width: 35%;
+}
+
+div.div-table div.div-table-column.wdth40{
+    width: 40%;
+}
+
+div.div-table div.div-table-column.wdth50{
+    width: 50%;
+}
+
+div.div-table div.div-table-column.wdth5{
+    width: 9%;
+}
+
+div.mgpd{
+    margin-bottom: 8px;
 }

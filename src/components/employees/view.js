@@ -1,44 +1,75 @@
 import React, { Fragment } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { TextField } from '../../../node_modules/@material-ui/core';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 
-export default ({ viewEmployee, handleClose, handleDelete, employee: { code, firstName, lastName, mCompanyName, email, mCompanyId }, }) => {
-    return <Fragment>
-        <Dialog
-            open={viewEmployee}
-            onClose={handleClose} fullWidth={true}       >
-            <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    <div className='div-header'>View Employee</div>
-                    <div className='clear' />
-                    <form>
-                        <TextField label="Employee Id Number" value={code} fullWidth margin='normal' disabled />
-                        <br />
-                        <TextField label="First Name" value={firstName} fullWidth margin='normal' disabled />
-                        <br />
-                        <TextField label="Last Name" value={lastName} fullWidth margin='normal' disabled />
-                        <br />
-                        <TextField label="Last Name" value={lastName} fullWidth margin='normal' disabled />
-                        <br />
-                        <TextField label="Email" value={email} fullWidth margin='normal' disabled />
-                        <br />
-                    </form>
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} color="primary" style={{ background: '#f0ad4e', color: 'white' }} color="primary">
-                    Cancel
-            </Button>
-            </DialogActions>
-        </Dialog>
-    </Fragment>
+// Material UI
+import {
+    Dialog,
+    DialogActions,
+    Button,
+    TextField,
+    DialogContent,
+    InputLabel,
+    DialogContentText,
+    Select, MenuItem,
+    FormControl
+} from '@material-ui/core';
+
+
+export default (
+    {
+        viewEmployee,
+        handleClose,
+        handleSubmit,
+        employee: {
+            _id,
+            employee_number,
+            firstName,
+            lastName,
+            mCompanyId,
+            email
+        },
+        companies }) => {
+    return (
+        <Fragment>
+            <Dialog open={viewEmployee} onClose={handleClose} fullWidth>
+                <div className="div-dialog-header">Add User</div>
+                <DialogContent>
+                    <DialogContentText className="border">
+                        <form>
+                            <div className="dialog-content-kiri">
+                                <TextField className="input-text" label="EMP ID Number" value={employee_number} margin='normal' disabled required />
+                                <TextField className="input-text" label="First Name" value={firstName} margin='normal' disabled required />
+                                <TextField className="input-text" label="Last Name" value={lastName} margin='normal' disabled required />
+                            </div>
+                            <div className="dialog-content-kanan pdt16">
+                                <FormControl fullWidth="true">
+                                    <InputLabel shrink htmlFor="unit-simple" required>Company Name</InputLabel>
+                                    <Select
+                                        value={mCompanyId}
+                                        inputProps={{
+                                            name: 'mCompanyId',
+                                            id: 'unit-simple',
+                                        }}
+                                        disabled
+                                    >
+                                        <MenuItem value={mCompanyId}><em>-Select Role Name-</em> </MenuItem>
+                                        {companies.map(company => {
+                                            return (
+                                                <MenuItem value={company._id}>{company.name}</MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                </FormControl>
+                                <br />
+                                <TextField className="input-text" label="Email" value={email} margin='normal' disabled required />
+                            </div>
+                        </form>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} variant="contained" color="secondary" >Cancel</Button>
+                    <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>Save</Button>
+                </DialogActions>
+            </Dialog>
+        </Fragment>
+    )
 }
-
-

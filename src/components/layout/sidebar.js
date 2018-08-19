@@ -25,6 +25,7 @@ import Promotion from '../promotion';
 import Product from '../product';
 import TSouvenir from '../t_souvenir';
 import LoginPage from '../access/login';
+import TDesign from '../tdesign';
 
 export default class SideBar extends React.Component {
     render() {
@@ -44,6 +45,7 @@ export default class SideBar extends React.Component {
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/users" className={classes.MenuList}>Users</Link></ListItem>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/employees" className={classes.MenuList}>Employees</Link></ListItem>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/design" className={classes.MenuList}>Design</Link></ListItem>
+                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/tdesign" className={classes.MenuList}>TDesign</Link></ListItem>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/promotion" className={classes.MenuList}>Promotion</Link></ListItem>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/company" className={classes.MenuList}>Company</Link></ListItem>
                         <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/souvenir" className={classes.MenuList}>Souvenir</Link></ListItem>
@@ -62,6 +64,7 @@ export default class SideBar extends React.Component {
                 <Route exact path="/users" component={Users} />
                 <Route exact path="/employees" component={Employee} />
                 <Route exact path="/design" component={Design} />
+                <Route exact path="/tdesign" component={TDesign} />
                 <Route exact path="/promotion" component={Promotion} />
                 <Route exact path="/company" component={Company} />
                 <Route exact path="/souvenir" component={Souvenir} />

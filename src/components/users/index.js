@@ -1,157 +1,102 @@
+
 import React from 'react';
+import axios from 'axios';
+import { config } from '../configuration/config';
+
+// Material UI
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import CreateUser from './create';
-import EditUser from './edit';
-import DeleteUser from './delete';
-import ViewUser from './view';
-import { Button } from '../../../node_modules/@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import axios from 'axios';
-import { config } from '../configuration/config';
-import { Redirect } from 'react-router-dom';
 import EditIcon from '@material-ui/icons/Edit';
 import SearchIcon from '@material-ui/icons/Search'
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import {
+    Dialog,
+    DialogActions,
+    Button,
+    TextField,
+    DialogContent,
+    InputLabel,
+    DialogContentText,
+    Select, MenuItem,
+    FormControl
+} from '@material-ui/core';
+
+// From Local Dir
+import CreateUser from './create';
+import EditUser from './edit';
+import ViewUser from './view';
 
 class Users extends React.Component {
 
     userModel = {
-        _id: '', username: '', password: '', re_password: '', m_role_id: '', m_employee_id: '',
-        mRoleCode: '', mRoleName: '', mRoleDescription: '', mEmployeeFirstName: '', mEmployeeLastName: '', mEmployeeEmail: '',
-        mEmployeemCompanyId: '', mEmployeemCompanyName: ''
+        _id: '',
+        username: '',
+        password: '',
+        m_role_id: '',
+        m_employee_id: '',
+        is_delete: '',
+        created_by: '',
+        created_date: '',
+        update_by: '',
+        update_date: '',
+        re_password: ''
     };
+
     constructor(props) {
         super(props);
         this.state = {
             users: [],
-            roles: [],
             employees: [],
-            createNew: false,
-            editUser: false,
-            selectData: 'user-aggregation',
-            load: true,
+            roles: [],
             user: this.userModel,
-            redirect: false
+            createNew: false,
+            editUser: false
         }
     }
 
-    reloadEmployeData = () => {
-        axios.get(config.url + '/m-employee')
-            .then(res => {
-                this.setState({
-                    employees: res.data
-                })
-            })
-            .catch((error) => {
-                alert(error);
-            })
-    }
-
-    reloadRoleData = () => {
-        axios.get(config.url + '/m-role')
-            .then(res => {
-                this.setState({
-                    roles: res.data
-                })
-            })
-            .catch((error) => {
-                alert(error);
-            })
-    }
     componentDidMount() {
-        this.reloadUserData();
-        this.reloadEmployeData();
-        this.reloadRoleData();
+        this.reloadData('users', '/user-aggregation');
+        this.reloadData('employees', '/m-employee');
+        this.reloadData('roles', '/m-role');
     }
 
-    componentWillMount() {
-        if (localStorage.getItem('userData')) {
-            console.log("call user feed");
-        } else {
-            this.setState({ redirect: true })
-        }
-    }
-
-    reloadUserData = () => {
-        axios.get(config.url + '/user-aggregation')
+    reloadData = (state, url) => {
+        axios.get(config.url + url)
             .then(res => {
                 this.setState({
-                    users: res.data,
+                    [state]: res.data,
                     createNew: false,
                     editUser: false,
                     deleteUser: false,
+                    viewUser: false,
                     user: this.userModel,
-                    load: false
+                    load: false,
                 })
             })
             .catch((error) => {
                 alert(error);
-            })
+            });
     }
 
     handleToggle = () => {
         this.setState({
             createNew: true,
-            updateUser: true,
             user: this.userModel
-        });
+        })
     }
-
-
 
     handleClose = () => {
         this.setState({
             createNew: false,
             editUser: false,
+            viewUser: false,
             deleteUser: false,
-            ViewUser: false,
-        });
-    }
-
-    handleChange = name => ({ target: { value } }) => {
-        console.log(name);
-        this.setState({
-            user: {
-                ...this.state.user,
-                [name]: value
-            }
         })
-    };
-
-    handleChangeCheckBox = name => event => {
-        this.setState({
-            user: {
-                ...this.state.user,
-                [name]: event.target.checked
-            }
-        });
-    }
-
-    handleEdit = (n) => {
-        const { users } = this.state;
-        const user = users.find(u => u._id === n);
-        this.setState({
-            editUser: true,
-            user: {
-                _id: user._id,
-                username: user.username,
-                password: user.password,
-                mRoleId: user.m_role_id,
-                mRoleName: user.mRoleName,
-                mEmployeeId: user.m_employee_id,
-                mEmployeeFirstName: user.mEmployeeFirstName,
-                mEmployeeLastName: user.mEmployeeLastName,
-                re_password: user.password
-            }
-        });
     }
 
     handleSubmit = () => {
@@ -159,15 +104,13 @@ class Users extends React.Component {
         let newUser = {
             username: user.username,
             password: user.password,
-            m_role_id: user.mRoleId,
-            m_employee_id: user.mEmployeeId,
+            m_role_id: user.m_role_id,
+            m_employee_id: user.m_employee_id,
         }
-
         if (createNew) {
             axios.post(config.url + '/m-user', newUser)
                 .then(res => {
-                    this.reloadUserData();
-                    alert('User has been saved.\n');
+                    this.reloadData('users', '/user-aggregation');
                 })
                 .catch((error) => {
                     alert(error);
@@ -175,76 +118,108 @@ class Users extends React.Component {
         } else {
             axios.put(config.url + '/m-user/' + user._id, newUser)
                 .then(res => {
-                    this.reloadUserData();
+                    this.reloadData('users', '/user-aggregation');
                 });
         }
     }
 
-    handleView = (n) => {
-        const { users } = this.state;
-        const user = users.find(u => u._id === n);
+    handleChange = name => ({ target: { value } }) => {
         this.setState({
-            ViewUser: true,
+            user: {
+                ...this.state.user,
+                [name]: value
+            }
+        })
+    }
+
+    handleEdit = (_id) => {
+        const { users } = this.state;
+        const user = users.find(u => u._id === _id);
+        this.setState({
+            editUser: true,
             user: {
                 _id: user._id,
                 username: user.username,
                 password: user.password,
-                mRoleId: user.m_role_id,
-                mRoleName: user.mRoleName,
-                mEmployeeId: user.m_employee_id,
-                mEmployeeFirstName: user.mEmployeeFirstName,
-                mEmployeeLastName: user.mEmployeeLastName,
-                re_password: user.password
+                re_password: user.password,
+                m_role_id: user.m_role_id,
+                m_employee_id: user.m_employee_id
             }
-        });
-      }
+        })
+    }
 
-    handleDelete = (n) => {
+    handleDelete = (_id) => {
         const { users } = this.state;
-        console.log(users);
-        const user = users.find(u => u._id === n);
-        // console.log(user);
+        const user = users.find(u => u._id === _id);
         this.setState({
             deleteUser: true,
             user: {
+                _id: user._id
+            }
+        })
+    }
+
+    handleView = (_id) => {
+        const { users } = this.state;
+        const user = users.find(u => u._id === _id);
+        this.setState({
+            viewUser: true,
+            user: {
                 _id: user._id,
                 username: user.username,
                 password: user.password,
-                mEmployeeFirstName: user.mEmployeeFirstName,
-                mEmployeeLastName: user.mEmployeeLastName,
-                mRoleName: user.mRoleName,
+                re_password: user.password,
+                m_role_id: user.m_role_id,
+                m_employee_id: user.m_employee_id
             }
-        });
+        })
     }
 
-    handleDeleteConfirm = () => {
-        const { user } = this.state;
-        axios.delete(config.url + '/m-user/' + user._id)
+    handleDeleteConfirm = (_id) => {
+        axios.delete(config.url + '/m-user/' + _id)
             .then(res => {
-                this.reloadUserData();
-                alert('Data Berhasil Dihapus!')
+                this.reloadData('users', '/user-aggregation');
             })
             .catch((error) => {
                 alert('Error');
             })
     }
 
-    render() {
-        if (this.state.redirect) {
-            return (<Redirect to={'/login'} />)
-        }
 
-        const { users, load, employeess } = this.state;
-        const { classes } = this.props;
+    render() {
+        const { users } = this.state;
+        const deleteUser = this.state.user;
         let i = 1;
         return (
             <div>
-                <h3></h3>
-                <CreateUser createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleChangeCheckBox={this.handleChangeCheckBox} user={this.state.user} employees={this.state.employees} roles={this.state.roles} />
-                <EditUser editUser={this.state.editUser} handleToggle={this.handleToggle} handleChangeCheckBox={this.handleChangeCheckBox} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} user={this.state.user} employees={this.state.employees} roles={this.state.roles} />
-                <ViewUser ViewUser={this.state.ViewUser} handleClose={this.handleClose} user={this.state.user}/>
-                <DeleteUser deleteUser={this.state.deleteUser} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} user={this.state.user} />
-                <CircularProgress className={classes.progress} style={{ visibility: (load ? 'visible' : 'hidden') }} color="secondary" />
+                <CreateUser
+                    createNew={this.state.createNew}
+                    handleToggle={this.handleToggle}
+                    handleClose={this.handleClose}
+                    handleSubmit={this.handleSubmit}
+                    handleChange={this.handleChange}
+                    user={this.state.user}
+                    employees={this.state.employees}
+                    roles={this.state.roles}
+                />
+                <EditUser
+                    editUser={this.state.editUser}
+                    handleClose={this.handleClose}
+                    handleSubmit={this.handleSubmit}
+                    handleChange={this.handleChange}
+                    user={this.state.user}
+                    employees={this.state.employees}
+                    roles={this.state.roles}
+                />
+                <ViewUser
+                    viewUser={this.state.viewUser}
+                    handleClose={this.handleClose}
+                    handleSubmit={this.handleSubmit}
+                    handleChange={this.handleChange}
+                    user={this.state.user}
+                    employees={this.state.employees}
+                    roles={this.state.roles}
+                />
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -259,43 +234,41 @@ class Users extends React.Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {users.map(n => {
+                        {users.map(user => {
                             return (
-                                <TableRow key={n._id}>
+                                <TableRow key={user._id}>
                                     <TableCell>{i++}</TableCell>
-                                    <TableCell>{n.mEmployeeFirstName + ' ' + n.mEmployeeLastName}</TableCell>
-                                    <TableCell component="th" scope="row">{n.mRoleName}</TableCell>
-                                    <TableCell>{n.mEmployeemCompanyName}</TableCell>
-                                    <TableCell>{n.username}</TableCell>
-                                    <TableCell>{n.createDate}</TableCell>
-                                    <TableCell>{n.mRoleName}</TableCell>
+                                    <TableCell>{user.mEmployeeFirstName + ' ' + user.mEmployeeLastName}</TableCell>
+                                    <TableCell component="th" scope="row">{user.mRoleName}</TableCell>
+                                    <TableCell>{user.mEmployeemCompanyName}</TableCell>
+                                    <TableCell>{user.username}</TableCell>
+                                    <TableCell>{user.createDate}</TableCell>
+                                    <TableCell>{user.mRoleName}</TableCell>
                                     <TableCell style={{ textAlign: "center" }}>
-                                        <IconButton onClick={() => this.handleView(n._id)}><SearchIcon color="primary" /></IconButton>
-                                        <IconButton onClick={() => this.handleEdit(n._id)}><EditIcon color="primary" /></IconButton>
-                                        <IconButton onClick={() => this.handleDelete(n._id)}><DeleteIcon color="secondary" /></IconButton>
+                                        <IconButton onClick={() => this.handleView(user._id)}><SearchIcon color="primary" /></IconButton>
+                                        <IconButton onClick={() => this.handleEdit(user._id)}><EditIcon color="primary" /></IconButton>
+                                        <IconButton onClick={() => this.handleDelete(user._id)}><DeleteIcon color="secondary" /></IconButton>
                                     </TableCell>
                                 </TableRow>
                             );
                         })}
                     </TableBody>
                 </Table>
+
+                <Dialog open={this.state.deleteUser} onClose={this.handleClose} style={{textAlign:'center'}}>
+                <DialogContent>
+                    <DialogContentText>
+                        Delete Data?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={this.handleClose} variant="contained" color="secondary" >Cancel</Button>
+                    <Button onClick={() => this.handleDeleteConfirm(deleteUser._id)} variant="contained" color="primary" autoFocus>Save</Button>
+                </DialogActions>
+            </Dialog>
             </div>
         )
     }
 }
 
-const styles = theme => ({
-    progress: {
-        position: 'absolute',
-        alignSelf: 'center',
-        top: '50%',
-        left: '50%',
-        alignItem: 'center'
-    },
-});
-
-Users.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(Users);
+export default Users;

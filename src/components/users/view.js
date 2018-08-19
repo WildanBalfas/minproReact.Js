@@ -1,45 +1,84 @@
 import React, { Fragment } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { TextField } from '@material-ui/core';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+
+// Material UI
+import {
+    Dialog,
+    DialogActions,
+    Button,
+    TextField,
+    DialogContent,
+    InputLabel,
+    DialogContentText,
+    Select, MenuItem,
+    FormControl
+} from '@material-ui/core';
 
 
-export default ({ViewUser, handleClose, user: {username,mRoleName, mEmployeeFirstName, password} }) => {
-    // shrink
-    return <Fragment>
-        <Dialog
-            open={ViewUser}
-            onClose={handleClose}        >
-            <DialogTitle id="alert-dialog-title">{"View User"}</DialogTitle>
-            <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    <form>
-                        <TextField label="Role Name" value={mRoleName} margin='normal' disabled/>
-                        <br />
-                        <TextField label="Employee Name" value={mEmployeeFirstName} margin='normal' disabled/>
-                        <br />
-                        <TextField label="Username" value={username} margin='normal' disabled/>
-                        <br />
-                        <TextField label="Password" value={password} margin='normal' type="password" disabled/>
-                        <br />
-                        <TextField label="Re-password" value={password} margin='normal' type="password" disabled/>
-                        <br />
-                    </form>
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                    Cancel
-            </Button>
-            </DialogActions>
-        </Dialog>
-    </Fragment>
+export default ({ viewUser, handleClose, handleSubmit, handleChange, user: { username, password, re_password, m_employee_id, m_role_id }, employees, roles }) => {
+    return (
+        <Fragment>
+            <Dialog open={viewUser} onClose={handleClose} fullWidth>
+                <div className="div-dialog-header">Add User</div>
+                <DialogContent>
+                    <DialogContentText className="border">
+                        <form>
+                            <div className="dialog-content-kiri pdt16">
+                                <FormControl fullWidth="true">
+                                    <InputLabel shrink htmlFor="unit-simple" required>Employee Name</InputLabel>
+                                    <Select
+                                        value={m_role_id}
+                                        inputProps={{
+                                            name: 'm_role_id',
+                                            id: 'unit-simple',
+                                        }}
+                                        disabled
+                                    >
+                                        <MenuItem value=""><em>-Select Role Name-</em> </MenuItem>
+                                        {roles.map(role =>{
+                                            return(
+                                                <MenuItem value={role._id}>{role.name}</MenuItem>
+                                            )   
+                                        })}
+                                    </Select>
+                                </FormControl>
+                                <br />
+                                <br />
+                                <FormControl fullWidth="true">
+                                    <InputLabel shrink htmlFor="unit-simple" required>Employee Name</InputLabel>
+                                    <Select
+                                        value={m_employee_id}
+                                        inputProps={{
+                                            name: 'm_employee_id',
+                                            id: 'unit-simple',
+                                        }}
+                                        disabled
+                                    >
+                                        <MenuItem value=""><em>-Select Role Name-</em> </MenuItem>
+                                        {employees.map(employee => {
+                                            return(
+                                                <MenuItem value={employee._id}>{employee.first_name + ' ' + employee.last_name}</MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                </FormControl>
+                            </div>
+
+                            <div className="dialog-content-kanan">
+
+                                <TextField className="input-text" label="Username" value={username} margin='normal' disabled required />
+                                <br />
+                                <TextField className="input-text" label="Password" value={password} margin='normal' type="password" disabled required />
+                                <br />
+                                <TextField className="input-text" label="Re-Type Password" value={re_password} margin='normal' type="password" disabled required />
+                            </div>
+                        </form>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} variant="contained" color="secondary" >Cancel</Button>
+                    <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>Save</Button>
+                </DialogActions>
+            </Dialog>
+        </Fragment>
+    )
 }

@@ -1,94 +1,126 @@
+
 import React from 'react';
+import axios from 'axios';
+import { config } from '../configuration/config';
+
+// Material UI
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import CreateUser from './create';
-import EditUser from './edit';
-import DeleteUser from './delete';
-import ViewEmployee from './view';
-import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import SearchIcon from '@material-ui/icons/Search'
 import IconButton from '@material-ui/core/IconButton';
-import { Button } from '../../../node_modules/@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import axios from 'axios';
-import { config } from '../configuration/config';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-class Employees extends React.Component {
+import {
+    Dialog,
+    DialogActions,
+    Button,
+    TextField,
+    DialogContent,
+    InputLabel,
+    DialogContentText,
+    Select, MenuItem,
+    FormControl
+} from '@material-ui/core';
+
+// From Local Dir
+import CreateEmployee from './create';
+import EditEmployee from './edit';
+import ViewUser from './view';
+
+class Users extends React.Component {
 
     employeeModel = {
-        _id: '', employee_number: '', firstName: '', lastName: '', email: '', createdDate: '', createdBy: '',
-        mCompanyCode: '', mCompanyName: ''
+        _id: '',
+        employee_number: '',
+        firstName: '',
+        lastName: '',
+        mCompanyId: '',
+        mCompanyName: '',
+        createdBy: '',
+        createdDate: '',
+        email: '',
+        updateDate: '',
+        updateBy: ''
     };
+
     constructor(props) {
         super(props);
         this.state = {
-            employees: [],
             companies: [],
+            employees: [],
+            employee: this.employeeModel,
             createNew: false,
-            editUser: false,
-            selectData: 'user-aggregation',
-            load: true,
-            employee: this.employeeModel
+            editEmployee: false
         }
     }
 
     componentDidMount() {
-        this.reloadEmployeeData();
-        this.reloadCompanyData();
+        this.reloadData('employees', '/employee-aggregation');
+        this.reloadData('companies', '/m-company');
     }
 
-    reloadCompanyData = () => {
-        axios.get(config.url + '/m-company')
+    reloadData = (state, url) => {
+        axios.get(config.url + url)
             .then(res => {
                 this.setState({
-                    companies: res.data
-                })
-            })
-            .catch((error) => {
-                alert(error);
-            })
-    }
-
-    reloadEmployeeData = () => {
-        axios.get(config.url + '/employee-aggregation')
-            .then(res => {
-                this.setState({
-                    employees: res.data,
+                    [state]: res.data,
                     createNew: false,
                     editEmployee: false,
                     deleteEmployee: false,
-                    user: this.userModel,
-                    load: false
+                    viewEmployee: false,
+                    employee: this.employeeModel,
+                    load: false,
                 })
             })
             .catch((error) => {
                 alert(error);
-            })
+            });
     }
 
     handleToggle = () => {
         this.setState({
             createNew: true,
-            updateEmployee: true,
             employee: this.employeeModel
-        });
+        })
     }
-
-
 
     handleClose = () => {
         this.setState({
             createNew: false,
             editEmployee: false,
             viewEmployee: false,
-            deleteEmployee: false
-        });
+            deleteEmployee: false,
+        })
+    }
+
+    handleSubmit = () => {
+        const { employee, createNew } = this.state;
+
+        let newEmployee = {
+            employee_number: employee.employee_number,
+            first_name: employee.firstName,
+            last_name: employee.lastName,
+            m_company_id: employee.mCompanyId,
+            email: employee.email
+        }
+        if (createNew) {
+            axios.post(config.url + '/m-employee', newEmployee)
+                .then(res => {
+                    this.reloadData('employees', '/employee-aggregation');
+                })
+                .catch((error) => {
+                    alert(error);
+                })
+        } else {
+            axios.put(config.url + '/m-employee/' + employee._id, newEmployee)
+                .then(res => {
+                    this.reloadData('employees', '/employee-aggregation');
+                });
+        }
     }
 
     handleChange = name => ({ target: { value } }) => {
@@ -98,179 +130,140 @@ class Employees extends React.Component {
                 [name]: value
             }
         })
-    };
-
-    handleChangeCheckBox = name => event => {
-        this.setState({
-            employee: {
-                ...this.state.employee,
-                [name]: event.target.checked
-            }
-        });
     }
 
-    handleEdit = (n) => {
+    handleEdit = (_id) => {
         const { employees } = this.state;
-        const employee = employees.find(u => u._id === n);
+        const employee = employees.find(u => u._id === _id);
         this.setState({
             editEmployee: true,
             employee: {
-                _id: employee._id,
-                code: employee.code,
+                _id : employee._id,
+                employee_number: employee.employee_number,
                 firstName: employee.firstName,
                 lastName: employee.lastName,
+                mCompanyId: employee.mCompanyId,
                 email: employee.email,
-                mCompanyCode: employee.mCompanyCode,
-                mCompanyName: employee.mCompanyName,
-                m_company_id: employee.m_company_id,
             }
-
-        });
+        })
     }
 
-    handleSubmit = () => {
-        const { employee, createNew } = this.state;
-
-        let newEmployee = {
-            employee_number: employee.code,
-            first_name: employee.firstName,
-            last_name: employee.lastName,
-            email: employee.email,
-            m_company_id: employee.mCompanyId,
-        }
-        if (createNew) {
-            axios.post(config.url + '/m-employee', newEmployee)
-                .then(res => {
-                    this.reloadEmployeeData();
-                    alert('User has been saved.\n');
-                })
-                .catch((error) => {
-                    alert(error);
-                })
-        } else {
-            axios.put(config.url + '/m-employee/' + employee._id, newEmployee)
-                .then(res => {
-                    this.reloadEmployeeData();
-                });
-        }
-    }
-
-    handleDelete = (n) => {
+    handleDelete = (_id) => {
         const { employees } = this.state;
-        const employee = employees.find(u => u._id === n);
+        const employee = employees.find(u => u._id === _id);
         this.setState({
             deleteEmployee: true,
             employee: {
-                _id: employee._id,
-                code: employee.code,
-                firstName: employee.firstName,
-                lastName: employee.lastName,
-                email: employee.email,
-                createdDate: employee.createdDate,
-                createdBy: employee.createdBy,
-                mCompanyCode: employee.mCompanyCode,
-                mCompanyName: employee.mCompanyName,
-                updateDate: employee.updateDate,
-                updatedBy: employee.updatedBy
+                _id: employee._id
             }
-        });
+        })
     }
 
-    handleView = (n) => {
+    handleView = (_id) => {
         const { employees } = this.state;
-        const employee = employees.find(u => u._id === n);
+        const employee = employees.find(u => u._id === _id);
         this.setState({
             viewEmployee: true,
             employee: {
-                _id: employee._id,
-                code: employee.code,
+                _id : employee._id,
+                employee_number: employee.employee_number,
                 firstName: employee.firstName,
                 lastName: employee.lastName,
+                mCompanyId: employee.mCompanyId,
                 email: employee.email,
-                createdDate: employee.createdDate,
-                createdBy: employee.createdBy,
-                mCompanyCode: employee.mCompanyCode,
-                mCompanyName: employee.mCompanyName,
-                updateDate: employee.updateDate,
-                updatedBy: employee.updatedBy
             }
-        });
+        })
     }
 
-    
-
-    handleDeleteConfirm = () => {
-        const { employee } = this.state;
-        axios.delete(config.url + '/m-employee/' + employee._id)
+    handleDeleteConfirm = (_id) => {
+        axios.delete(config.url + '/m-employee/' + _id)
             .then(res => {
-                this.reloadEmployeeData();
-                alert('Data Berhasil Dihapus!')
+                this.reloadData('employees', '/employee-aggregation');
             })
             .catch((error) => {
                 alert('Error');
             })
     }
 
+
     render() {
-        const { load, employees, companies } = this.state;
-        const { classes } = this.props;
-        console.log(companies);
+        const { employees } = this.state;
+        const deleteEmployee = this.state.employee;
         let i = 1;
+        console.log(employees);
         return (
             <div>
-                <h3></h3>
-                <CreateUser createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleChangeCheckBox={this.handleChangeCheckBox} employee={this.state.employee} companies={this.state.companies} />
-                <EditUser editEmployee={this.state.editEmployee} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleChangeCheckBox={this.handleChangeCheckBox} employee={this.state.employee} companies={this.state.companies} />
-                <DeleteUser deleteEmployee={this.state.deleteEmployee} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} employee={this.state.employee} />
-                <ViewEmployee viewEmployee={this.state.viewEmployee} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} employee={this.state.employee} />
-                <CircularProgress className={classes.progress} style={{ visibility: (load ? 'visible' : 'hidden') }} color="secondary" />
+                <CreateEmployee
+                    createNew={this.state.createNew}
+                    handleToggle={this.handleToggle}
+                    handleClose={this.handleClose}
+                    handleSubmit={this.handleSubmit}
+                    handleChange={this.handleChange}
+                    employee={this.state.employee}
+                    companies={this.state.companies}
+                />
+                <EditEmployee
+                    editEmployee={this.state.editEmployee}
+                    handleClose={this.handleClose}
+                    handleSubmit={this.handleSubmit}
+                    handleChange={this.handleChange}
+                    employee={this.state.employee}
+                    companies={this.state.companies}
+                />
+                <ViewUser
+                    viewEmployee={this.state.viewEmployee}
+                    handleClose={this.handleClose}
+                    handleSubmit={this.handleSubmit}
+                    employee={this.state.employee}
+                    companies={this.state.companies}
+                />
                 <Table>
                     <TableHead>
                         <TableRow>
                             <TableCell style={{ fontWeight: "bold", color: "black" }}>No</TableCell>
                             <TableCell style={{ fontWeight: "bold", color: "black" }}>Employee ID Number</TableCell>
                             <TableCell style={{ fontWeight: "bold", color: "black" }}>Employee Name</TableCell>
-                            <TableCell style={{ fontWeight: "bold", color: "black" }}>Company Name</TableCell>
+                            <TableCell style={{ fontWeight: "bold", color: "black" }}>Company name</TableCell>
+                            <TableCell style={{ fontWeight: "bold", color: "black" }}>Created Date</TableCell>
                             <TableCell style={{ fontWeight: "bold", color: "black" }}>Create By</TableCell>
                             <TableCell style={{ textAlign: "center", fontWeight: "bold", color: "black" }}>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {employees.map(n => {
+                        {employees.map(employee => {
                             return (
-                                <TableRow key={n._id}>
+                                <TableRow key={employee._id}>
                                     <TableCell>{i++}</TableCell>
-                                    <TableCell>{n.code}</TableCell>
-                                    <TableCell>{n.firstName + ' ' + n.lastName}</TableCell>
-                                    <TableCell>{n.mCompanyName}</TableCell>
-                                    <TableCell>{n.createdBy}</TableCell>
+                                    <TableCell>{employee.employee_number}</TableCell>
+                                    <TableCell component="th" scope="row">{employee.firstName + ' ' + employee.lastName}</TableCell>
+                                    <TableCell>{employee.mCompanyName}</TableCell>
+                                    <TableCell>{employee.createdDate}</TableCell>
+                                    <TableCell>{employee.createdBy}</TableCell>
                                     <TableCell style={{ textAlign: "center" }}>
-                                        <IconButton onClick={() => this.handleView(n._id)}><SearchIcon color="primary" /></IconButton>
-                                        <IconButton onClick={() => this.handleEdit(n._id)}><EditIcon color="primary" /></IconButton>
-                                        <IconButton onClick={() => this.handleDelete(n._id)}><DeleteIcon color="secondary" /></IconButton>
+                                        <IconButton onClick={() => this.handleView(employee._id)}><SearchIcon color="primary" /></IconButton>
+                                        <IconButton onClick={() => this.handleEdit(employee._id)}><EditIcon color="primary" /></IconButton>
+                                        <IconButton onClick={() => this.handleDelete(employee._id)}><DeleteIcon color="secondary" /></IconButton>
                                     </TableCell>
                                 </TableRow>
                             );
                         })}
                     </TableBody>
                 </Table>
+
+                <Dialog open={this.state.deleteEmployee} onClose={this.handleClose} style={{textAlign:'center'}}>
+                <DialogContent>
+                    <DialogContentText>
+                        Delete Data?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={this.handleClose} variant="contained" color="secondary" >Cancel</Button>
+                    <Button onClick={() => this.handleDeleteConfirm(deleteEmployee._id)} variant="contained" color="primary" autoFocus>Save</Button>
+                </DialogActions>
+            </Dialog>
             </div>
         )
     }
 }
 
-const styles = theme => ({
-    progress: {
-        position: 'absolute',
-        alignSelf: 'center',
-        top: '50%',
-        left: '50%',
-        alignItem: 'center'
-    },
-});
-
-Employees.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(Employees);
+export default Users;
