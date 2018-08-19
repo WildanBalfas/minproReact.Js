@@ -6,18 +6,17 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { config } from '../configuration/config';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios';
 import CreateEvent from './create';
-import DeleteEvent from './delete';
 import EditEvent from './edit';
 import ViewEventSubmitted from './viewSubmitted';
 import ViewEventInProgress from './viewInProgress';
+// import ViewEvent from './view';
 
 class Events extends React.Component {
     eventModel = {
@@ -62,6 +61,7 @@ class Events extends React.Component {
             event: this.eventModel,
             rejectEvent: false,
             closeEvent: false,
+            viewEvent: false
         }
     }
 
@@ -77,7 +77,8 @@ class Events extends React.Component {
                 viewEventSubmitted: false,
                 viewEventInProgress: false,
                 event: this.eventModel,
-                loading: false
+                loading: false,
+                viewEvent: false
             })
         })
         .catch((error) => {
@@ -116,7 +117,8 @@ class Events extends React.Component {
             viewEventSubmitted: false,
             viewEventInProgress: false,
             rejectEvent:false,
-            event: this.eventModel
+            event: this.eventModel,
+            viewEvent: false
         });
     }
 
@@ -134,6 +136,7 @@ class Events extends React.Component {
         
         let newEvent =
         {
+            event_name: event.event_name,
             place: event.place,
             budget: event.budget,
             request_date: event.request_date,
@@ -151,7 +154,7 @@ class Events extends React.Component {
             axios.post(config.url + '/t-event', newEvent)
                 .then(res => {
                     this.reloadEventData();
-                    alert('Event has been saved');
+                    alert('Data Saved! Transaction event request has been add with the code '+ res.data.ops[0].code);
                 })
                 .catch((error) => {
                     alert(error)
@@ -160,7 +163,7 @@ class Events extends React.Component {
             axios.put(config.url + '/t-event/' +event._id , newEvent)
             .then(res => {
                 this.reloadEventData();
-                alert('Event has been updated');
+                alert('Data Updated! Transaction event request with code '+ res.data.ops[0].code + ' has been updated');
             })
             .catch((error) => {
                 alert(error)
@@ -235,7 +238,28 @@ class Events extends React.Component {
                     note: event.note,
                     status: event.status,
                     request_date: event.request_date,
-                    assign_to: event.assign_to
+                    assign_to: event.assign_to,
+                    requestName: event.requestName.first + ' ' + event.requestName.last,
+                }
+            })
+        } else if(status == 0 || status == 3){
+            this.setState({
+                viewEvent: true,
+                event: {
+                    _id: event._id,
+                    code: event.code,
+                    event_name: event.event_name,
+                    start_date: event.start_date,
+                    end_date: event.end_date,
+                    place: event.place,
+                    budget: event.budget,
+                    approved_by: event.approved_by,
+                    closed_date: event.closed_date,
+                    note: event.note,
+                    status: event.status,
+                    request_date: event.request_date,
+                    assign_to: event.assign_to,
+                    reject_reason:event.reject_reason
                 }
             })
         }
@@ -257,7 +281,7 @@ class Events extends React.Component {
         axios.put(config.url + '/t-event/' + event._id, RejectReq)
         .then(res =>{
             this.reloadEventData();
-            alert('Request Rejected');
+            alert('Data Rejected ! Transaction event request with code '+ res.data.ops[0].code+ ' has been rejected');
         })
         .catch((error) => {
             alert(error);
@@ -279,7 +303,7 @@ class Events extends React.Component {
         axios.put(config.url + '/t-event/' + event._id, closeReq)
         .then(res =>{
             this.reloadEventData();
-            alert('Close Request');
+            alert('Data Closed ! Transaction event request with code '+ res.data.ops[0].code+ ' has been close request !');
         })
         .catch((error) => {
             alert(error);
@@ -296,7 +320,7 @@ class Events extends React.Component {
         axios.put(config.url + '/t-event/' + event._id, approvedReq)
         .then(res =>{
             this.reloadEventData();
-            alert('Request Approved');
+            alert('Data Approved ! Transaction event request with code '+ res.data.ops[0].code+ ' has been approved');
         })
         .catch((error) => {
             alert(error);
@@ -315,6 +339,7 @@ class Events extends React.Component {
                 <EditEvent editEvent={this.state.editEvent} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} event={this.state.event}/>
                 <ViewEventSubmitted viewEventSubmitted={this.state.viewEventSubmitted} handleRejectConfirm={this.handleRejectConfirm} handleApproved={this.handleApproved} rejectEvent={this.state.rejectEvent} handleReject={this.handleReject} handleChange={this.handleChange} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event} employes={this.state.employes}/>
                 <ViewEventInProgress viewEventInProgress={this.state.viewEventInProgress} handleCloseRequestConfirm={this.handleCloseRequestConfirm} closeEvent={this.state.closeEvent} handleCloseRequest={this.handleCloseRequest} handleChange={this.handleChange} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event} employes={this.state.employes}/>  
+                {/* <ViewEvent viewEvent={this.state.viewEvent} handleChange={this.handleChange} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event}/> */}
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
                 <Table>
                     <TableHead >
@@ -365,7 +390,7 @@ const styles = theme => ({
     },
 });
 
-Events.PropTypes = {
-    classes: PropTypes.object.isRequired
+Events.propTypes = {
+    classes: propTypes.object.isRequired
 };
 export default withStyles(styles)(Events);

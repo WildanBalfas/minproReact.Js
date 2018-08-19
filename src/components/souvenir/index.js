@@ -122,7 +122,7 @@ class Souvenirs extends React.Component  {
             axios.post(config.url + '/m-souvenir', newSouvenir)
                 .then(res => {
                     this.reloadSouvenirData();
-                    alert('Souvenir has been saved');
+                    alert('Data Saved! New Souvenir has been add with the code '+ res.data.ops[0].code);
                 })
                 .catch((error) => {
                     alert(error)
@@ -131,7 +131,7 @@ class Souvenirs extends React.Component  {
             axios.put(config.url + '/m-souvenir/' +souvenir._id , newSouvenir)
             .then(res => {
                 this.reloadSouvenirData();
-                alert('Souvenir has been updated');
+                alert('Data Updated! Data Souvenir has been updated');
             })
             .catch((error) => {
                 alert(error)
@@ -205,7 +205,7 @@ class Souvenirs extends React.Component  {
         axios.delete(config.url + '/m-souvenir/' + souvenir._id, delProp)
         .then(res => {
             this.reloadSouvenirData();
-            alert('Souvenir has been deleted');
+            alert('Data Deleted! Data Souvenir with code '+ res.data.ops[0].code + ' has been deleted');
         })
         .catch((error) => {
             alert(error);

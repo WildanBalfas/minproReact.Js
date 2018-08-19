@@ -20,9 +20,9 @@ export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, 
                 <TextField label='Company Code'  value={code} margin='normal' InputLabelProps={{shrink: true}} placeholder="Auto Generated" disabled/>
                 &nbsp;
                 <TextField label='Company Name' value={name} onChange={handleChange('name')} margin='normal' InputLabelProps={{shrink: true}} placeholder="Type Company Name" required/>
-                &nbsp;
+                <br/>
                 <TextField label='Email' value={email} onChange={handleChange('email')} margin='normal' InputLabelProps={{shrink: true}} placeholder="Type Email"/>
-                &nbsp;
+                <br/>
                 <TextField label='Phone' value={phone} onChange={handleChange('phone')} margin='normal' InputLabelProps={{shrink: true}} placeholder="Type Phone"/>
                 &nbsp;
                 <TextField label='Address' value={address} onChange={handleChange('address')} margin='normal' multiline fullWidth InputLabelProps={{shrink: true}} placeholder="Type Address"/>

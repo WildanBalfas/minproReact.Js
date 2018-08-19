@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-export default ({editCompany,handleChange,handleClose,handleEdit,handleSubmit, company: {code, name, email, phone,address}}) => {
+export default ({editCompany,updateCompany,handleUpdateCompany,handleChange,handleClose,handleEdit,handleSubmit, company: {code, name, email, phone,address}}) => {
     return <Fragment>
         <Dialog
             open={editCompany}
@@ -28,13 +28,28 @@ export default ({editCompany,handleChange,handleClose,handleEdit,handleSubmit, c
             </form>
             </DialogContent>
             <DialogActions>
-            <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>
+            <Button onClick={handleUpdateCompany} variant="contained" color="primary" autoFocus>
                   Update
             </Button>
                 <Button onClick={handleClose} variant="contained" color="secondary">
                     Cancel
             </Button>
             </DialogActions>
+            <Dialog
+                open={updateCompany}
+                onClose={handleClose}
+            >
+                <DialogTitle id="alert-dialog-title">{"Update Data?"}</DialogTitle>
+                <DialogActions>
+                    <Button onClick={handleSubmit} variant="contained" color="primary">
+                        Update
+                    </Button>
+                    <Button onClick={handleClose} variant="contained" color='secondary'>
+                        Cancel
+                    </Button>
+                </DialogActions>
+
+            </Dialog>
         </Dialog>
     </Fragment>
 }

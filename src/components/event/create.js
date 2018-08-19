@@ -22,7 +22,7 @@ export default ({ createNew, handleToggle, handleChange, handleClose, handleSubm
                         &nbsp;
                     <TextField label="Event Name" value={event_name} onChange={handleChange('event_name')} margin="normal" InputLabelProps={{ shrink: true }} placeholder="Type Event Name" required />
                         &nbsp;
-                    <TextField label="Event Place" value={place} onChange={handleChange('place')} margin="normal" InputLabelProps={{ shrink: true }} placeholder="Type Event Name" required />
+                    <TextField label="Event Place" value={place} onChange={handleChange('place')} margin="normal" InputLabelProps={{ shrink: true }} placeholder="Type Event Place" required />
                         &nbsp;
                     <TextField type='date' label="Event Start Date" value={start_date} onChange={handleChange('start_date')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Date" required/>
                     &nbsp;

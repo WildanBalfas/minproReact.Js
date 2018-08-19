@@ -12,13 +12,11 @@ import IconButton from '@material-ui/core/IconButton';
 import EditCompany from './edit';
 import DeleteCompany from './delete';
 import ViewCompany from './view';
-import { Button } from '../../../node_modules/@material-ui/core';
 import { config } from '../configuration/config';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import Checkbox from '@material-ui/core/Checkbox';  
 
 class Companies extends React.Component  {
 
@@ -31,7 +29,7 @@ class Companies extends React.Component  {
         email: '',
         address: '',
         createDate: '',
-        createBy: '',
+        created_by: '',
         is_delete: ''
     }
     constructor(props) {
@@ -48,7 +46,7 @@ class Companies extends React.Component  {
     }
 
     reloadCompanyData = () => {
-        axios.get(config.url + '/m-company')
+        axios.get(config.url + '/m_company_aggregation')
         .then(res => {
             this.setState({
                 companies : res.data,
@@ -104,14 +102,15 @@ class Companies extends React.Component  {
             email: company.email,
             address: company.address,
             createDate: company.createDate,
-            createBy: company.createBy
+            createdBy: company.created_by
         }
 
         if(createNew){
+             
             axios.post(config.url + '/m-company', newCompany)
                 .then(res => {
                     this.reloadCompanyData();
-                    alert('Company has been saved');
+                    alert('Data Saved! New Company has been add with the code '+ res.data.ops[0].code);
                 })
                 .catch((error) => {
                     alert(error)
@@ -120,7 +119,7 @@ class Companies extends React.Component  {
             axios.put(config.url + '/m-company/' +company._id , newCompany)
             .then(res => {
                 this.reloadCompanyData();
-                alert('Company has been updated');
+                alert('Data Updated! Data Company has been updated');
             })
             .catch((error) => {
                 alert(error)
@@ -186,7 +185,7 @@ class Companies extends React.Component  {
         axios.put(config.url + '/m-company/' + company._id, delProp)
         .then(res =>{
             this.reloadCompanyData();
-            alert('Company has been deleted');
+            alert('Data Deleted! Data Company with code '+ res.data.ops[0].code + ' has been deleted');
         })
         .catch((error) => {
             alert(error);
@@ -225,7 +224,7 @@ class Companies extends React.Component  {
                                     <TableCell component="th" scope="row">{n.code}</TableCell>
                                     <TableCell>{n.name}</TableCell>
                                     <TableCell>{n.createDate}</TableCell>
-                                    <TableCell>{n.createBy}</TableCell>
+                                    <TableCell>{n.createdBy}</TableCell>
                                     <TableCell style={{textAlign:'center'}}> <IconButton><SearchIcon onClick={() => this.handleView(n._id)} /></IconButton>
                                     <IconButton><EditIcon onClick={() => this.handleEdit(n._id)}/></IconButton>
                                     <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} /></IconButton>
