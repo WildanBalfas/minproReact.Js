@@ -113,8 +113,15 @@ class Promotions extends React.Component {
   handleToggle = () => {
     this.setState({
       createNew: true,
-      subSelect: false,
       promo: this.promoModel
+    })
+  }
+
+  handleToggleNext = () => {
+    this.setState({
+      createNew: false,
+      promo: this.promoModel,
+      nextPromo:true
     })
   }
 
@@ -221,7 +228,7 @@ class Promotions extends React.Component {
       <div>
         <h3 style={{ color: '#3f51b5' }}><center>List Promotions</center></h3>
         <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
-        <CreatePromo createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} promo={this.state.promo} events={this.state.events} designs={this.state.designs} />
+        <CreatePromo createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} promo={this.state.promo} events={this.state.events} designs={this.state.designs} handleToggleNext={this.handleToggleNext} nextPromo={this.state.nextPromo} />
         {/* <DeletePromo deletePromo={this.state.deletePromo} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} promo={this.state.promo}/>
       <ViewPromo viewPromo={this.state.viewPromo} handleClose={this.handleClose} promo={this.state.promo}/>
       <EditPromo editPromo={this.state.editPromo} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} promo={this.state.promo} /> */}

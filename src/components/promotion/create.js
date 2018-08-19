@@ -8,8 +8,9 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
 
-export default ({createNew,handleToggle,handleChange,handleClose,handleSubmit, promo: {t_event_id, flag_design, t_design_id}, events, designs}) =>{
+export default ({handleToggleNext,nextPromo,createNew,handleToggle,handleChange,handleClose,handleSubmit, promo: {code, t_event_id, flag_design, t_design_id}, events, designs}) =>{
     return <Fragment>
     <Button onClick={handleToggle} variant="contained" color="primary" style={{ float:'right' }}>Add</Button>
     <Dialog open={createNew} onClose={handleClose}  >
@@ -89,10 +90,21 @@ export default ({createNew,handleToggle,handleChange,handleClose,handleSubmit, p
     <Button onClick={handleClose} color="secondary" variant="contained">
     Cancel
     </Button>
-    <Button onClick={handleSubmit} color="primary" variant="contained" autoFocus>
-    Save
+    <Button onClick={handleToggleNext} color="primary" variant="contained" autoFocus>
+    Next
     </Button>
     </DialogActions>
+    </Dialog>
+    <Dialog open={nextPromo} onClose={handleClose} >
+    <DialogContent style={{paddimngLeft:25, paddingRight:25}}>
+    <DialogContentText id="alert-dialog-description">
+    <div class="title">Add Marketing Promotion</div>
+    <form class="martop">
+    <TextField label='Transaction Code' value={code} margin='normal' disabled={true} InputLabelProps={{shrink: true}} placeholder="Auto Generated"/>
+    </form>
+    <br/>
+    </DialogContentText>
+    </DialogContent>
     </Dialog>
     </Fragment>
 }
