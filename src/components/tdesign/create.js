@@ -34,6 +34,7 @@ export default (
         handleChange,
         handleChangeSelectItems,
         addNewItem,
+        getProductDescription,
         tDesign: {
             code,
             tEventId,
@@ -62,6 +63,7 @@ export default (
         events
     }) => {
     return (
+        
         <Fragment>
             <Button onClick={handleToggle} variant="contained" color="primary" style={{ float: 'right' }}>Add</Button>
             <Dialog open={createNew} onClose={handleClose} fullScreen>
@@ -147,7 +149,7 @@ export default (
                                             </div>
                                         </div>
                                         <div className="div-table-column">
-                                            <TextField value='' margin="normal"  disabled />
+                                            <TextField value={getProductDescription(n.mProductId)} margin="normal"  disabled />
                                         </div>
                                         <div className="div-table-column">
                                             <TextField value={n.titleItem} onChange={handleChangeSelectItems('titleItem', n.id)} margin="normal" />

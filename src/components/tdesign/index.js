@@ -61,12 +61,14 @@ class Users extends React.Component {
         assignToLastName: '',
         createdByUserName: '',
         mProductId: '',
+        mProductDescription:'',
         tEventCode:''
     };
 
     tDesignItemModel = {
         tDesignId: '',
         mProductId: '',
+        mProductDescription:'',
         titleItem: '',
         requestPic: '',
         startDate: '',
@@ -109,7 +111,7 @@ class Users extends React.Component {
 
     componentDidMount(objID = null) {
         this.reloadData('tDesigns', '/t-design-aggregation');
-        this.reloadData('tItems', '/t-design-item');
+        this.reloadData('tItems', '/t-design-items');
         this.reloadData('products', '/m-product');
         this.reloadData('events', '/t-event');
         this.reloadData('employees', '/m-employee');
@@ -306,17 +308,21 @@ class Users extends React.Component {
         // this.componentDidMount(_id);
         const { tDesigns, tItems } = this.state;
         const design = tDesigns.find(u => u._id === _id);
+        console.log(tItems);
         
         for(let key in tItems){
             if(tItems[key].t_design_id == _id){
                 newTitems.push(tItems[key]);
             }
         }
+
+        console.log(newTitems);
         for (let key in newTitems) {
             let objTITems = {
                 id:newTitems[key]._id,
                 tDesignId: newTitems[key].t_design_id,
                 mProductId:newTitems[key].m_product_id,
+                mProductDescription:newTitems[key].mProductDescription,
                 titleItem: newTitems[key].title_item,
                 requestPic: newTitems[key].request_pic,
                 startDate: newTitems[key].start_date,
@@ -367,6 +373,7 @@ class Users extends React.Component {
             id: _id,
             tDesignId: '',
             mProductId: '',
+            mProductDescription:'',
             titleItem: '',
             requestPic: '',
             startDate: '',
@@ -394,6 +401,14 @@ class Users extends React.Component {
         })
     }
 
+    getProductDescription = (_id) => {
+        const { products } = this.state;
+        if(_id){
+            const index = products.findIndex(i => i._id === _id);
+            return products[index].description;
+        }
+    }
+
 
     render() {
         const { tDesigns } = this.state;
@@ -413,6 +428,7 @@ class Users extends React.Component {
                     items={this.state.items}
                     products={this.state.products}
                     events={this.state.events}
+                    getProductDescription={this.getProductDescription}
                 />
                 <EditTDesign
                     editTDesign={this.state.editTDesign}
