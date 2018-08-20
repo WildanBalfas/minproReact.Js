@@ -13,14 +13,16 @@ import IconEdit from '@material-ui/icons/Edit';
 import IconSeacrh from '@material-ui/icons/Search';
 
 import AddSouvenir from './create';
+import ViewSouvenir from './view';
+import EditSouvenir from './edit';
 
 import { config } from '../configuration/config';
 import axios from 'axios';
 
 class T_Souvenir extends React.Component {
 
-    transactionModel = { code: "", received_by: "", received_date: "", note: "", EmployeeFirstName: "", EmployeeLastName: "", items:[] }
-    idx=0
+    transactionModel = { _id:"", code: "", received_by: "", received_date: "", note: "", EmployeeFirstName: "", EmployeeLastName: "", items: [] }
+    idx = 0
     constructor(props) {
         super(props);
         this.state = {
@@ -29,9 +31,13 @@ class T_Souvenir extends React.Component {
             item: {},
             t_souvenir_stock: {},
             m_souvenirs: [],
-            m_employee:[],
+            m_employee: [],
+            tItems: [],
+            t_souvenir: this.transactionModel,
             m_souvenir: {},
             createNew: false,
+            editTSouvenir:false,
+            viewTSouvenir: false,
             load: true
 
         }
@@ -50,11 +56,26 @@ class T_Souvenir extends React.Component {
                 alert(error);
             })
     }
+
+    reloadTSouvenirDataItems = () => {
+        axios.get(config.url + '/t_souvenir_item')
+            .then(res => {
+                this.setState({
+                    tItems: res.data,
+                    createNew: false,
+                    viewTSouvenir: false,
+                    load: false,
+                })
+            })
+            .catch((error) => {
+                alert(error);
+            })
+    }
     reloadMSouvenirData = () => {
         axios.get(config.url + '/m-souvenir')
             .then(res => {
                 this.setState({
-                   m_souvenirs: res.data,
+                    m_souvenirs: res.data,
                 })
             })
             .catch((error) => {
@@ -80,11 +101,13 @@ class T_Souvenir extends React.Component {
         this.reloadTSouvenirData();
         this.reloadMEmployeeData();
         this.reloadMSouvenirData();
-       
+        this.reloadTSouvenirDataItems();
+
     }
     handleToggle = () => {
         this.setState({
             createNew: true,
+            
             t_souvenir_stock: this.transactionModel,
 
         })
@@ -99,9 +122,9 @@ class T_Souvenir extends React.Component {
         })
     }
 
-    handleChangeItem = (shit, id) => ({ target: { value } }) => {
+    handleChangeItem = (shit, _id) => ({ target: { value } }) => {
         const { items } = this.state;
-        var item = items.find(o => o._id === id);
+        var item = items.find(o => o._id === _id);
         item[shit] = value;
         this.setState({
             items: items
@@ -113,6 +136,9 @@ class T_Souvenir extends React.Component {
     handleClose = () => {
         this.setState({
             createNew: false,
+            viewTSouvenir:false,
+            editTSouvenir:false,
+            items : [],
             // editProduct: false,
             // viewProduct: false,
             // deleteProduct: false,
@@ -124,51 +150,156 @@ class T_Souvenir extends React.Component {
     handleAddItem = () => {
         let items = this.state.items;
         let _id = this.idx + 1;
-      
+
         this.idx = this.idx + 1;
         var newItems = {
             _id: _id,
             m_souvenir_id: '',
             qty: 0,
             note: '',
-            
+
         };
         //newOrder._id = _id;
-       
+
         items.push(newItems);
         this.setState({
             items: items
-           
+
 
         });
-        
-        
+
+
     }
 
-    handleSubmit = () =>{
-      const {items, t_souvenir_stock, createNew} = this.state
-      let arr = [];
-      let newStock = {
-          received_by:t_souvenir_stock.received_by, 
-          received_date:t_souvenir_stock.received_date,
-          note:t_souvenir_stock.note
-      }
+    handleSubmit = () => {
+        const { items, t_souvenir_stock, createNew } = this.state
+        let arr = [];
+        let newStock = {
 
-      arr.push(newStock, items)
+            received_by: t_souvenir_stock.received_by,
+            received_date: t_souvenir_stock.received_date,
+            note: t_souvenir_stock.note,
+            type:'addtional'
+        }
 
-      if (createNew){
-        axios.post(config.url + '/add_souvenir_stock', arr)
-        // .then(res => {
-        //     this.reloadProductData();
-        //     alert('has been saved ' + res.data.ops[0].code);
-        //     console.log(res.data);
-            
+        arr.push(newStock, items)
 
-        // })
-        // .catch((error) => {
-        //     alert(error);
-        // })
-      }
+        if (createNew) {
+            axios.post(config.url + '/add_souvenir_stock', arr)
+                .then(res => {
+                    this.reloadTSouvenirData();
+                    alert('has been saved ' + res.data.ops[0].code);
+                    // console.log(res.data);
+
+
+                })
+                .catch((error) => {
+                    alert(error);
+                })
+        } else {
+            axios.put(config.url + '/update_souvenir_stock/' + t_souvenir_stock._id, arr)
+            // console.log(config.url + '/update_souvenir_stock/' + t_souvenir_stock._id, arr)
+            .then(res => {
+                // this.reloadTSouvenirData();
+                // alert('has been saved ' + res.data.ops[0].code);
+                // console.log(res.data);
+
+
+            })
+            // .catch((error) => {
+            //     alert(error);
+            // })
+        }
+
+    }
+    handleEdit = (_id) => {
+        let newTitems = [];
+        let dataTitems = [];
+        // this.componentDidMount(_id);
+        const { t_souvenirs_stock, tItems } = this.state;
+        const t_souvenir_stock = t_souvenirs_stock.find(u => u._id === _id);
+        // console.log(t_souvenir_stock);
+        // console.log(_id);
+
+        for (let key in tItems) {
+            if (tItems[key].t_souvenir_id == _id) {
+                // console.log(tItems[key]);
+                newTitems.push(tItems[key]);
+            }
+        }
+
+        console.log(newTitems);
+        for (let key in newTitems) {
+            let obj = {
+                _id: newTitems[key]._id,
+                t_souvenir_id: newTitems[key].t_souvenir_id,
+                m_souvenir_id: newTitems[key].m_souvenir_id,
+                qty:newTitems[key].qty,
+                notes: newTitems[key].notes,
+
+            }
+
+            dataTitems.push(obj);
+        }
+        
+        this.setState({
+            editTSouvenir: true,
+            t_souvenir_stock: {
+                _id:t_souvenir_stock._id,
+                code: t_souvenir_stock.code,
+                received_by: t_souvenir_stock.received_by,
+                received_date: t_souvenir_stock.received_date,
+                note: t_souvenir_stock.note,
+            },
+
+            items: dataTitems,
+
+        })
+
+    }
+
+    handleView = (_id) => {
+        let newTitems = [];
+        let dataTitems = [];
+        // this.componentDidMount(_id);
+        const { t_souvenirs_stock, tItems } = this.state;
+        const t_souvenir_stock = t_souvenirs_stock.find(u => u._id === _id);
+        console.log(t_souvenir_stock);
+        // console.log(_id);
+
+        for (let key in tItems) {
+            if (tItems[key].t_souvenir_id == _id) {
+                // console.log(tItems[key]);
+                newTitems.push(tItems[key]);
+            }
+        }
+
+        console.log(newTitems);
+        for (let key in newTitems) {
+            let obj = {
+                id: newTitems[key]._id,
+                t_souvenir_id: newTitems[key].t_souvenir_id,
+                m_souvenir_id: newTitems[key].m_souvenir_id,
+                qty:newTitems[key].qty,
+                notes: newTitems[key].notes,
+
+            }
+
+            dataTitems.push(obj);
+        }
+        
+        this.setState({
+            viewTSouvenir: true,
+            t_souvenir_stock: {
+                code: t_souvenir_stock.code,
+                received_by: t_souvenir_stock.received_by,
+                received_date: t_souvenir_stock.received_date,
+                note: t_souvenir_stock.note,
+            },
+
+            items: dataTitems,
+
+        })
 
     }
 
@@ -176,12 +307,18 @@ class T_Souvenir extends React.Component {
     render() {
         const { t_souvenirs_stock, load } = this.state;
         const { classes } = this.props;
+
         let i = 1;
         return (
 
             <div>
                 <h3>List Of Transaksi Souvenir Stock</h3>
-                <AddSouvenir createNew={this.state.createNew} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit} items={this.state.items} m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} item={this.state.item} handleChangeItem={this.handleChangeItem}/>
+                <AddSouvenir createNew={this.state.createNew} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit} items={this.state.items} m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} item={this.state.item} handleChangeItem={this.handleChangeItem} />
+
+                <ViewSouvenir viewTSouvenir={this.state.viewTSouvenir} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit}  m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} items={this.state.items} handleChangeItem={this.handleChangeItem} />
+
+               <EditSouvenir editTSouvenir={this.state.editTSouvenir} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit}  m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} items={this.state.items} handleChangeItem={this.handleChangeItem} />
+
 
                 <CircularProgress className={classes.progress} style={{ visibility: (load ? 'visible' : 'hidden') }} color="secondary" />
 
