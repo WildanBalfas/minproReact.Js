@@ -30,10 +30,10 @@ export default ({editUnit, handleClose , handleChange, handleSubmit, handleChang
             </form>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+            <Button onClick={handleClose} color="secondary" variant="contained">
                     Cancel
             </Button>
-                <Button onClick={handleSubmit} color="primary" autoFocus>
+                <Button onClick={handleSubmit} color="primary" variant="contained" autoFocus>
                     Save
             </Button>
             </DialogActions>

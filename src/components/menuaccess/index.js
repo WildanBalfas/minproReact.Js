@@ -10,7 +10,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import ViewIcon from '@material-ui/icons/Search';
 import EditMenuAccess from './edit';
-// import deleteMenuAccess from './delete';
+import DeleteMenuAccess from './delete';
 
 import CreateMenuAccess from './create';
 import ViewMenuAccess from './view';
@@ -113,18 +113,6 @@ class MenuAccess extends React.Component {
             })
     }
 
-    reloadMenuByRoleId = () => {
-        axios.get(config.url + '/terserah')
-            .then(res => {
-                this.setState({
-                    menuAccesByRoleId: res.data
-                })
-
-            })
-            .catch((error) => {
-                alert(error);
-            })
-    }
 
     componentDidMount() {
         this.reloadMenuAccessData();
@@ -204,7 +192,11 @@ class MenuAccess extends React.Component {
                 .catch((error) => {
                     alert(error)
                 })
-        } else {
+                
+                checked: checked
+        } 
+        
+        else {
             let newMenuAccess = [];
             let coba = [];
             newMenuAccess.push(menuaccess);
@@ -239,23 +231,34 @@ class MenuAccess extends React.Component {
 
     handleEdit = (_id) => {
         const { m_menu_access } = this.state;
-        console.log(m_menu_access);
         const menuaccess = m_menu_access.find(u => u._id === _id);
+        let checked = [];
+        menuaccess.menu.forEach(m => {
+            checked.push(m._id);
+        });
         this.setState({
             editMenuAccess: true,
             menuaccess: {
-                _id: menuaccess._id,
+                _id: menuaccess._id, // ini rada aneh
+                m_role_id: menuaccess._id, // ini yg ditambahkan
                 name: menuaccess.name,
                 menu: menuaccess.menu,
                 code: menuaccess.code,
                 description: menuaccess.description
-            }
+            },
+            checked: checked
         })
     }
 
     handleDelete = (_id) => {
         const { m_menu_access } = this.state;
         const menuaccess = m_menu_access.find(u => u._id === _id);
+        //ditambahkan dari sini
+        let checked = [];
+        menuaccess.menu.forEach(m => {
+            checked.push(m._id);
+        });
+        // sampai disini
         this.setState({
             deleteMenuAccess: true,
             menuaccess: {
@@ -263,15 +266,22 @@ class MenuAccess extends React.Component {
                 m_role_id: menuaccess.m_role_id,
                 m_menu_id: menuaccess.m_menu_id,
                 createDate: menuaccess.createdDate,
-                createBy: menuaccess.createBy
-            }
+                createBy: menuaccess.createBy,
+                code: menuaccess.code
+            },
+            checked: checked // ini juga ditambkan
         })
     }
 
     handleView = (_id) => {
         const { m_menu_access } = this.state;
         const menuaccess = m_menu_access.find(u => u._id === _id);
-
+        //ditambahkan dari sini
+        let checked = [];
+        menuaccess.menu.forEach(m => {
+            checked.push(m._id);
+        });
+        // sampai disini
         this.setState({
             viewMenuAccess: true,
             menuaccess: {
@@ -280,8 +290,9 @@ class MenuAccess extends React.Component {
                 m_menu_id: menuaccess.m_menu_id,
                 createDate: menuaccess.createdDate,
                 createBy: menuaccess.createBy,
-                code: menuaccess.role.code
-            }
+                code: menuaccess.code
+            },
+            checked: checked // ini juga ditambkan
         })
     }
 
@@ -299,9 +310,11 @@ class MenuAccess extends React.Component {
 
     }
 
+    
 
 
-
+       
+    
 
     render() {
         const { m_menu_access, loading } = this.state;
@@ -315,19 +328,19 @@ class MenuAccess extends React.Component {
 
                 <EditMenuAccess editMenuAccess={this.state.editMenuAccess} toggleCheckbox={this.toggleCheckbox} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} menuaccess={this.state.menuaccess} role={this.state.role} menu={this.state.menu} checked={this.state.checked} />
 
-                {/* <deleteMenuAccess deleteMenuAccess={this.state.deleteMenuAccess} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} handleChangeCheckBox = {this.handleChangeCheckBox} unit={this.state.unit} handleChange = {this.handleChange} /> */}
+                <DeleteMenuAccess deleteMenuAccess={this.state.deleteMenuAccess} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} handleChangeCheckBox = {this.handleChangeCheckBox} menuaccess={this.state.menuaccess} role={this.state.role} menu={this.state.menu} checked={this.state.checked} />
 
-                <ViewMenuAccess viewMenuAccess={this.state.viewMenuAccess} toggleCheckbox={this.toggleCheckbox} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} menuaccess={this.state.menuaccess} role={this.state.role} menu={this.state.menu} checked={this.state.checked} />
+                <ViewMenuAccess viewMenuAccess={this.state.viewMenuAccess} checkit={this.handleCheckit} toggleCheckbox={this.toggleCheckbox} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} menuaccess={this.state.menuaccess} role={this.state.role} menu={this.state.menu} checked={this.state.checked} />
 
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Role Code</TableCell>
-                            <TableCell>Role Name</TableCell>
-                            <TableCell>Created Date</TableCell>
-                            <TableCell>Create By</TableCell>
-                            <TableCell>Action</TableCell>
+                        <TableCell style={{fontWeight:"bold", color:"black"}}>Role Code</TableCell>
+                        <TableCell style={{fontWeight:"bold", color:"black"}}>Role Name</TableCell>
+                        <TableCell style={{fontWeight:"bold", color:"black"}}>Created Date</TableCell>
+                        <TableCell style={{fontWeight:"bold", color:"black"}}>Create By</TableCell>
+                        <TableCell style={{textAlign:"center",fontWeight:"bold", color:"black"}}>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -341,10 +354,10 @@ class MenuAccess extends React.Component {
                                     <TableCell>{n.name}</TableCell>
                                     <TableCell>{n.createDate}</TableCell>
                                     <TableCell>{n.createBy}</TableCell>
-                                    <TableCell>
-                                        <IconButton><EditIcon onClick={() => this.handleEdit(n._id)} /></IconButton>
-                                        <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} /></IconButton>
-                                        <IconButton><ViewIcon onClick={() => this.handleView(n._id)} /></IconButton>
+                                    <TableCell style={{textAlign:"center"}}>
+                                        <IconButton><EditIcon onClick={() => this.handleEdit(n._id)} color="primary" /></IconButton>
+                                        <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} color="primary" /></IconButton>
+                                        <IconButton><ViewIcon onClick={() => this.handleView(n._id)} color="primary" /></IconButton>
                                     </TableCell>
                                 </TableRow>
                             );

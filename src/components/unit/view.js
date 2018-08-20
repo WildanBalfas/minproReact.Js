@@ -29,7 +29,7 @@ export default ({viewUnit, handleClose , unit : {code, name, description}}) => {
             </form>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={handleClose} color="secondary" variant="contained">
                     Cancel
             </Button>
             </DialogActions>
