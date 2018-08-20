@@ -7,6 +7,10 @@ function LocalStorage() {
         return objUser._id;
     }
 
+    this.loginEmployeeId = function(){
+        return objUser.m_employee_id;
+    }
+
     this.loginUsername = function () {
         return objUser.username;
     }

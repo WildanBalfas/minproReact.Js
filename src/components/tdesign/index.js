@@ -26,6 +26,8 @@ import {
     FormControl
 } from '@material-ui/core';
 
+import LocalStorage from '../base/base.localstorage';
+
 // From Local Dir
 import CreateTDesign from './create';
 import EditTDesign from './edit';
@@ -37,7 +39,7 @@ import ViewTDesignInProgress from './viewInProgress';
 // Base Function
 import { changeValue, changeDateFormat } from '../system/base.function';
 
-class Users extends React.Component {
+class tIndex extends React.Component {
 
     idx = 0;
     tDesignModel = {
@@ -45,7 +47,7 @@ class Users extends React.Component {
         code: '',
         tEventId: '',
         titleHeader: '',
-        requestBy: '',
+        requestBy: LocalStorage.loginEmployeeId(),
         requestDate: '',
         approvedBy: '',
         approvedDate: '',
@@ -164,6 +166,8 @@ class Users extends React.Component {
             t_event_id: tDesign.tEventId,
             title_header: tDesign.titleHeader,
             note: tDesign.note,
+            request_by: tDesign.requestBy,
+            status: 1
         }
         let objItem = [];
 
@@ -568,7 +572,7 @@ class Users extends React.Component {
                                     <TableCell>{i++}</TableCell>
                                     <TableCell>{tDesign.code}</TableCell>
                                     <TableCell>{tDesign.requestFirstName + ' ' + tDesign.requestLastName}</TableCell>
-                                    <TableCell>{tDesign.request_date}</TableCell>
+                                    <TableCell>{changeDateFormat(tDesign.request_date)}</TableCell>
                                     <TableCell style={{textAlign: 'center'}}>
                                         {tDesign.assignToFirstName ? tDesign.assignToFirstName : '-' ? 
                                          tDesign.assignToLastName ? tDesign.assignToLastName : '-' : ' - '}</TableCell>
@@ -601,4 +605,4 @@ class Users extends React.Component {
     }
 }
 
-export default Users;
+export default tIndex;
