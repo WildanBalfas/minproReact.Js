@@ -2,6 +2,8 @@
 import React from 'react';
 import axios from 'axios';
 import { config } from '../configuration/config';
+import { deleteData } from '../base/base.model';
+
 
 // Material UI
 import Table from '@material-ui/core/Table';
@@ -30,6 +32,7 @@ import {
 import CreateUser from './create';
 import EditUser from './edit';
 import ViewUser from './view';
+
 
 class Users extends React.Component {
 
@@ -176,13 +179,15 @@ class Users extends React.Component {
     }
 
     handleDeleteConfirm = (_id) => {
-        axios.delete(config.url + '/m-user/' + _id)
-            .then(res => {
-                this.reloadData('users', '/user-aggregation');
-            })
-            .catch((error) => {
-                alert('Error');
-            })
+        deleteData('m-user', _id);
+        this.reloadData('users', '/user-aggregation');
+        // axios.delete(config.url + '/m-user/' + _id)
+        //     .then(res => {
+        //         this.reloadData('users', '/user-aggregation');
+        //     })
+        //     .catch((error) => {
+        //         alert('Error');
+        //     })
     }
 
 
@@ -255,17 +260,17 @@ class Users extends React.Component {
                     </TableBody>
                 </Table>
 
-                <Dialog open={this.state.deleteUser} onClose={this.handleClose} style={{textAlign:'center'}}>
-                <DialogContent>
-                    <DialogContentText>
-                        Delete Data?
+                <Dialog open={this.state.deleteUser} onClose={this.handleClose} style={{ textAlign: 'center' }}>
+                    <DialogContent>
+                        <DialogContentText>
+                            Delete Data?
                     </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.handleClose} variant="contained" color="secondary" >Cancel</Button>
-                    <Button onClick={() => this.handleDeleteConfirm(deleteUser._id)} variant="contained" color="primary" autoFocus>Save</Button>
-                </DialogActions>
-            </Dialog>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleClose} variant="contained" color="secondary" >Cancel</Button>
+                        <Button onClick={() => this.handleDeleteConfirm(deleteUser._id)} variant="contained" color="primary" autoFocus>Save</Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         )
     }

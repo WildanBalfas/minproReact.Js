@@ -14,16 +14,8 @@ import {
 } from '@material-ui/core';
 
 import EditIcon from '@material-ui/icons/Edit';
-import SearchIcon from '@material-ui/icons/Search'
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-
 
 export default (
     {
@@ -34,6 +26,8 @@ export default (
         handleChange,
         handleChangeSelectItems,
         addNewItem,
+        getProductDescription,
+        handleRemove,
         tDesign: {
             code,
             tEventId,
@@ -174,7 +168,7 @@ export default (
                                             </div>
                                         </div>
                                         <div className="div-table-column">
-                                            <TextField value='' margin="normal"  disabled />
+                                            <TextField value={getProductDescription(n.mProductId)}margin="normal"  disabled />
                                         </div>
                                         <div className="div-table-column">
                                             <TextField value={n.titleItem} onChange={handleChangeSelectItems('titleItem', n.id)} margin="normal" />
@@ -202,7 +196,7 @@ export default (
                                         </div>
                                         <div className="div-table-column center wdth5">
                                         <IconButton onClick=''><EditIcon color="primary" /></IconButton>
-                                        <IconButton onClick=''><DeleteIcon color="secondary" /></IconButton>
+                                        <IconButton onClick={() => handleRemove(n.id)}><DeleteIcon color="secondary" /></IconButton>
                                     
                                         </div>
                                     </div>

@@ -2,6 +2,8 @@
 import React from 'react';
 import axios from 'axios';
 import { config } from '../configuration/config';
+import { deleteData } from '../base/base.model';
+
 
 // Material UI
 import Table from '@material-ui/core/Table';
@@ -176,13 +178,16 @@ class Users extends React.Component {
     }
 
     handleDeleteConfirm = (_id) => {
-        axios.delete(config.url + '/m-employee/' + _id)
-            .then(res => {
-                this.reloadData('employees', '/employee-aggregation');
-            })
-            .catch((error) => {
-                alert('Error');
-            })
+        deleteData('m-employee', _id);
+        this.reloadData('employees', '/employee-aggregation');
+
+        // axios.delete(config.url + '/m-employee/' + _id)
+        //     .then(res => {
+        //         this.reloadData('employees', '/employee-aggregation');
+        //     })
+        //     .catch((error) => {
+        //         alert('Error');
+        //     })
     }
 
 

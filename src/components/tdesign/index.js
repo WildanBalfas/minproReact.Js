@@ -225,7 +225,6 @@ class Users extends React.Component {
     handleEdit = (_id) => {
         let newTitems = [];
         let dataTitems = [];
-        // this.componentDidMount(_id);
         const { tDesigns, tItems } = this.state;
         const design = tDesigns.find(u => u._id === _id);
         
@@ -282,6 +281,18 @@ class Users extends React.Component {
         //     })
     }
 
+    handleRemove = (_id) => {
+        const { items } = this.state;
+        console.log(items);
+        const selectIdx = items.findIndex(u => u._id === _id);
+        items.splice(selectIdx, 1);
+        console.log(selectIdx + '-' + _id);
+        this.setState({
+            items: items
+        })
+    }
+
+
     // reloadTItemByID = (objID) => {
     //     axios.get(config.url + '/t-design-by-id/'+ objID)
     //         .then(res => {
@@ -305,7 +316,6 @@ class Users extends React.Component {
     handleView = (_id) => {
         let newTitems = [];
         let dataTitems = [];
-        // this.componentDidMount(_id);
         const { tDesigns, tItems } = this.state;
         const design = tDesigns.find(u => u._id === _id);
         console.log(tItems);
@@ -316,7 +326,6 @@ class Users extends React.Component {
             }
         }
 
-        console.log(newTitems);
         for (let key in newTitems) {
             let objTITems = {
                 id:newTitems[key]._id,
@@ -421,6 +430,7 @@ class Users extends React.Component {
                     handleClose={this.handleClose}
                     handleSubmit={this.handleSubmit}
                     handleChange={this.handleChange}
+                    handleRemove={this.handleRemove}
                     handleChangeSelectItems={this.handleChangeSelectItems}
                     addNewItem={this.addNewItem}
                     tDesign={this.state.tDesign}
@@ -437,9 +447,11 @@ class Users extends React.Component {
                     handleSubmit={this.handleSubmit}
                     handleChange={this.handleChange}
                     handleChangeSelectItems={this.handleChangeSelectItems}
+                    handleRemove = {this.handleRemove}
                     addNewItem={this.addNewItem}
                     tDesign={this.state.tDesign}
                     tDesignItem={this.state.tDesignItem}
+                    getProductDescription={this.getProductDescription}
                     items={this.state.items}
                     products={this.state.products}
                     events={this.state.events}
