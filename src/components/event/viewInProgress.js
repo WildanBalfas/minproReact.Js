@@ -12,7 +12,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 
-export default ({ viewEventInProgress, closeEvent, handleClose, handleCloseRequest, handleChange, handleDelete, handleCloseRequestConfirm, event: { code, event_name, place, start_date, end_date, budget, request_by, request_date, assign_to, note, reject_reason, requestName }, employes }) => {
+export default ({ viewEventInProgress, closeEvent, handleClose, handleCloseRequest, handleChange, handleDelete, handleCloseRequestConfirm, event: { code, event_name, place, start_date, end_date, budget, request_by, request_date, assign_toName,assign_to, note, reject_reason, requestName }, employes }) => {
     return <Fragment>
         <Dialog
             open={viewEventInProgress}
@@ -33,7 +33,7 @@ export default ({ viewEventInProgress, closeEvent, handleClose, handleCloseReque
                     &nbsp;
                     <TextField label="Budget (Rp.)" value={budget} margin="normal" disabled />
                     &nbsp;
-                    <TextField label="Assign To" value={assign_to.first + ' ' + assign_to.last} margin='normal' disabled/>
+                    <TextField label="Assign To" value={assign_toName} margin='normal' disabled/>
                     &nbsp;
                     <TextField label="Request By" value={requestName} margin="normal" disabled />
                     &nbsp;

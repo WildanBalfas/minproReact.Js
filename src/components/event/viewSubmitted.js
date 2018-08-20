@@ -11,7 +11,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 
-export default ({ viewEventSubmitted, rejectEvent, handleClose, handleReject, handleRejectConfirm, handleChange, handleDelete, handleApproved, event: { code, event_name, place, start_date, end_date, budget, request_by, request_date, assign_to, note, reject_reason, requestName }, employes }) => {
+export default ({ viewEventSubmitted, rejectEvent, handleClose, handleReject, handleRejectConfirm, handleChange, handleDelete, handleApproved, event: { code, event_name, place, start_date, end_date, budget, request_by, request_date, assign_toName,assign_to, note, reject_reason, requestName }, employes }) => {
     return <Fragment>
         <Dialog
             open={viewEventSubmitted}

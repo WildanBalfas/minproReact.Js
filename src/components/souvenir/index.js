@@ -33,7 +33,6 @@ class Souvenirs extends React.Component  {
         createDate: '',
         created_by: LSData.loginRoleId(),
         updateDate: '',
-        updated_by: '',
         is_delete: '',
     }
     constructor(props) {
@@ -213,7 +212,7 @@ class Souvenirs extends React.Component  {
         axios.delete(config.url + '/m-souvenir/' + souvenir._id, delProp)
         .then(res => {
             this.reloadSouvenirData();
-            alert('Data Deleted! Data Souvenir with code '+ res.data.ops[0].code + ' has been deleted');
+            alert('Data Deleted!');
         })
         .catch((error) => {
             alert(error);

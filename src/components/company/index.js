@@ -37,7 +37,6 @@ class Companies extends React.Component  {
         address: '',
         createDate: '',
         created_by: LSData.loginRoleId(),
-        updated_by: '',
         is_delete: ''
     }
     constructor(props) {
@@ -127,7 +126,6 @@ class Companies extends React.Component  {
                     alert(error)
                 })
         }else{
-           
             axios.put(config.url + '/m-company/' +company._id , newCompany)
             .then(res => {
                 this.reloadCompanyData();
@@ -168,7 +166,7 @@ class Companies extends React.Component  {
         const company = companies.find(u => u._id === _id);
         this.setState({
             deleteCompany: true,
-             company: {
+            company: {
                 _id: company._id,
                 code: company.code,
                 name: company.name,
@@ -205,7 +203,7 @@ class Companies extends React.Component  {
         axios.put(config.url + '/m-company/' + company._id, delProp)
         .then(res =>{
             this.reloadCompanyData();
-            alert('Data Deleted! Data Company with code '+ res.data.ops[0].code + ' has been deleted');
+            alert('Data Deleted!');
         })
         .catch((error) => {
             alert(error);

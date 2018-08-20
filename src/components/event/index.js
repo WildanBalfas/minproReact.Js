@@ -29,18 +29,19 @@ class Events extends React.Component {
         end_date: '',
         place: '',
         budget: '',
-        request_by: LSData.loginId(),
+        request_by: LSData.loginEmployeeId(),
         requestName: '',
         request_date: new Date().toLocaleDateString(),
         approved_by: '',
         approved_date: '',
         assign_to: '',
+        assign_toName: '',
         closed_date: '',
         note: '',
         status: '',
         reject_reason: '',
         is_delete: '',
-        created_by: LSData.loginId(),
+        created_by: LSData.loginEmployeeId(),
         createDate: '',
         updateBy: '',
         updateDate: ''
@@ -174,9 +175,10 @@ class Events extends React.Component {
         }    
     }
     
-    handleEdit = (_id) => {
+    handleEdit = (_id, status) => {
         const { events } = this.state;
-        const event = events.find(u => u._id === _id);
+        const event = events.find(u => u._id === _id && u.status === status);
+        if(status == 1) {
         this.setState({
             editEvent: true,
             event: {
@@ -197,6 +199,7 @@ class Events extends React.Component {
             }
            
         })
+    }
     }
 
     handleView= (_id, status) => {
@@ -221,6 +224,7 @@ class Events extends React.Component {
                     request_date: event.request_date,
                     requestName: event.requestName.first + ' ' + event.requestName.last,
                     assign_to: event.assign_to,
+                    assign_toName: event.assign_toName.first + ' ' + event.assign_toName.last,
                     
                 }
             })
@@ -242,6 +246,7 @@ class Events extends React.Component {
                     status: event.status,
                     request_date: event.request_date,
                     assign_to: event.assign_to,
+                    assign_toName: event.assign_toName.first + ' ' + event.assign_toName.last,
                     requestName: event.requestName.first + ' ' + event.requestName.last,
                 }
             })
@@ -262,6 +267,7 @@ class Events extends React.Component {
                     status: event.status,
                     request_date: event.request_date,
                     assign_to: event.assign_to,
+                    assign_toName: event.assign_toName,
                     reject_reason:event.reject_reason
                 }
             })
@@ -371,7 +377,7 @@ class Events extends React.Component {
                                     <TableCell>{(e.requestName.first ? e.requestName.first  + ' ' : '') + 
                                     (e.requestName.last ? e.requestName.last  + ' ' : '')}</TableCell>
                                     <TableCell style={{textAlign:'center'}}> <IconButton><SearchIcon onClick={() => this.handleView(e._id, e.status)} /></IconButton>
-                                    <IconButton><EditIcon onClick={() => this.handleEdit(e._id)}/></IconButton>
+                                    <IconButton><EditIcon onClick={() => this.handleEdit(e._id, e.status)}/></IconButton>
                                     </TableCell>
                                 </TableRow>
                             );
