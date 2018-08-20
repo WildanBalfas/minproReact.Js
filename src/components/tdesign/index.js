@@ -465,6 +465,26 @@ class tIndex extends React.Component {
         })
     }
 
+    fileSelectedHandler = event => {
+        this.setState({
+            selectedFile: event.target.files[0],
+        })
+    }
+
+    fileUploadHandler = () => {
+      
+        const fd = new FormData();
+        fd.append('file', this.state.selectedFile, this.state.selectedFile.name);
+        axios.post('http://localhost:8000/api/upload', fd, {
+            onUploadProgress: ProgressEvent => {
+                console.log('Upload Progress: ', + Math.round(ProgressEvent.loaded / ProgressEvent.total  * 100 ) + '%')
+            }
+        })
+        .then( res => {
+            console.log(res);
+        });
+    }
+
 
     render() {
         this.handleFindRequester('Leonel Messi');
@@ -548,6 +568,8 @@ class tIndex extends React.Component {
                     products={this.state.products}
                     events={this.state.events}
                     employees={this.state.employees}
+                    fileSelectedHandler = {this.fileSelectedHandler}
+                    fileUploadHandler = {this.fileUploadHandler}
                 />
                 
 

@@ -30,6 +30,8 @@ import { changeValue, changeDateFormat } from '../system/base.function';
 export default (
     {
         viewTDesignInProgress,
+        fileUploadHandler,
+        fileSelectedHandler,
         handleToggle,
         handleClose,
         handleSubmit,
@@ -148,6 +150,8 @@ export default (
                                     <div className="div-table-column title wdth12">Start Date</div>
                                     <div className="div-table-column title wdth12">End Date</div>
                                     <div className="div-table-column title wdth12">Note</div>
+                                    <div className="div-table-column title wdth12"> </div>
+                                    
                                 </div>
                                 : 'No Item Selected'}
                             {items.map((n, index) => {
@@ -201,6 +205,12 @@ export default (
                                         <div className="div-table-column wdth12">
                                             <TextField value={n.inote} margin="normal" disabled />
                                         </div>
+
+                                       <div className="div-table-column wdth12" >
+                                        <input type="file" onChange={fileSelectedHandler} />
+                                     <Button variant = "contained" size = "medium" color = "primary" onClick={fileUploadHandler}>Upload</Button>
+                                     </div>
+
                                     </div>
                                 );
                             })}
