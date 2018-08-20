@@ -18,6 +18,12 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import LSData from '../base/base.localstorage';
+import {changeDateFormat} from '../system/base.function';
+import { TextField } from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
 
 class Companies extends React.Component  {
 
@@ -43,6 +49,7 @@ class Companies extends React.Component  {
             deleteCompany: false,
             loading: true,
             company: this.companyModel,
+            updateCompany: false,
 
         }
     }
@@ -56,7 +63,8 @@ class Companies extends React.Component  {
                 editCompany: false,
                 deleteCompany: false,
                 company: this.companyModel,
-                loading: false
+                loading: false,
+                updateCompany: false
             })
         })
         .catch((error) => {
@@ -80,7 +88,8 @@ class Companies extends React.Component  {
             editCompany: false,
             deleteCompany: false,
             viewCompany: false,
-            company: this.companyModel
+            company: this.companyModel,
+            updateCompany: false
         });
     }
     //bisa diketik
@@ -95,9 +104,7 @@ class Companies extends React.Component  {
 
 
     handleSubmit = () => {
-        
         const { company, createNew } = this.state;
-
         let newCompany =
         {
             name: company.name,
@@ -106,12 +113,11 @@ class Companies extends React.Component  {
             address: company.address,
             createDate: company.createDate,
             created_by: company.created_by,
-            // updated_by: company.updated_by,
-            // updateDate: company.updateDate
+            updated_by: company.updated_by,
+            updateDate: company.updateDate
         }
      
         if(createNew){
-           
             axios.post(config.url + '/m-company', newCompany)
                 .then(res => {
                     this.reloadCompanyData();
@@ -121,7 +127,7 @@ class Companies extends React.Component  {
                     alert(error)
                 })
         }else{
-            console.log('apa');
+           
             axios.put(config.url + '/m-company/' +company._id , newCompany)
             .then(res => {
                 this.reloadCompanyData();
@@ -138,6 +144,7 @@ class Companies extends React.Component  {
         const company = companies.find(u => u._id === _id);
         this.setState({
             editCompany: true,
+            updateCompany: false,
             company: {
                 _id: company._id,
                 code: company.code,
@@ -145,8 +152,14 @@ class Companies extends React.Component  {
                 phone: company.phone,
                 email: company.email,
                 address: company.address,
-                // updated_by: LSData.loginRoleId()
+                updated_by: LSData.loginRoleId()
             }
+        })
+    }
+
+    handleUpdateCompany = () => {
+        this.setState({
+            updateCompany: true
         })
     }
 
@@ -208,10 +221,60 @@ class Companies extends React.Component  {
             <div>
                 <h3><center>List Company</center></h3>
                 <CreateCompany createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} company={this.state.company} />
-                <EditCompany editCompany={this.state.editCompany} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} company={this.state.company} />
+                <EditCompany editCompany={this.state.editCompany} updateCompany={this.state.updateCompany} handleUpdateCompany={this.handleUpdateCompany} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} company={this.state.company} />
                 <DeleteCompany deleteCompany={this.state.deleteCompany} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} company={this.state.company} />
                 <ViewCompany viewCompany={this.state.viewCompany} handleView={this.handleView} handleClose={this.handleClose} company={this.state.company} />
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
+                <FormControl>
+                    <TableHead >
+                    <TableCell style={{width: 300, border: 'none'}}>
+                        <Select
+                            fullWidth
+                            value={companies._id}
+                            onChange={this.handleChange('companies_id')}
+                            inputProps={{
+                                name: 'companies._id',
+                                id: 'unit-simple'
+                            }}
+                            displayEmpty
+                        >
+                            <MenuItem>
+                                Select Company Code
+                            </MenuItem>
+                            {companies.map(c => {
+                                return(
+                                    <MenuItem value={c._id}>{c.code}</MenuItem>
+                                )
+                            })}
+                        </Select>
+                        </TableCell>
+                        <TableCell style={{width: 200, border: 'none'}}>
+                        <Select
+                            fullWidth
+                            value={companies._id}
+                            onChange={this.handleChange('companies._id')}
+                            inputProps={{
+                                name: 'companies._id',
+                                id: 'unit-simple'
+                            }}
+                            displayEmpty
+                          
+                        >
+                            <MenuItem>
+                                Select Company Name
+                            </MenuItem>
+                            {companies.map(c => {
+                                return(
+                                    <MenuItem value={c._id}>{c.name}</MenuItem>
+                                )
+                            })}
+                        </Select>
+                        </TableCell>
+                        <TableCell style={{width: 200, border: 'none'}}><TextField fullWidth type='date' placeholder='Created'/></TableCell>
+                        <TableCell style={{width: 200, border: 'none'}}><TextField placeholder='Created By'/></TableCell>
+                        <TableCell style={{width: 200, border: 'none'}}> <Button variant="contained" color="secondary" style={{float: 'right'}}>Search</Button></TableCell>
+                        </TableHead>
+                    </FormControl>
                 <Table>
                     <TableHead >
                         <TableRow>
@@ -230,7 +293,7 @@ class Companies extends React.Component  {
                                     <TableCell component="th" scope="row">{i++}</TableCell>
                                     <TableCell component="th" scope="row">{n.code}</TableCell>
                                     <TableCell>{n.name}</TableCell>
-                                    <TableCell>{n.createDate}</TableCell>
+                                    <TableCell>{changeDateFormat(n.createDate)}</TableCell>
                                     <TableCell>{n.created_by}</TableCell>
                                     <TableCell style={{textAlign:'center'}}> <IconButton><SearchIcon onClick={() => this.handleView(n._id)} /></IconButton>
                                     <IconButton><EditIcon onClick={() => this.handleEdit(n._id)}/></IconButton>

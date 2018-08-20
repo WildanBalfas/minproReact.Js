@@ -7,7 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-export default ({ createNew, handleToggle, handleChange, handleClose, handleSubmit, event: { code, event_name, place, start_date, end_date, budget, request_date, note } }) => {
+export default ({ createNew, handleToggle, handleChange, handleClose, handleSubmit, event: { code, event_name, place, start_date, end_date, budget, request_date, note, request_by, requestName } }) => {
     return <Fragment>
         <Button onClick={handleToggle} variant="contained" color="primary" style={{ float: 'right' }}>Add</Button>
         <Dialog
@@ -30,9 +30,9 @@ export default ({ createNew, handleToggle, handleChange, handleClose, handleSubm
                         &nbsp;
                     <TextField label="Budget (Rp.)" value={budget} onChange={handleChange('budget')} margin="normal" InputLabelProps={{ shrink: true }} placeholder="Type Budget" required/>
                         &nbsp;
-                    {/* <TextField label="Request By" value={request_by} onChange={handleChange('request_by')} margin="normal" InputLabelProps={{ shrink: true }} placeholder="Type Request by" required/>
-                        &nbsp; */}
-                    <TextField label="Request Date" value={request_date} onChange={handleChange('request_date')} margin="normal" InputLabelProps={{ shrink: true }} placeholder={request_date} type='date' />
+                    <TextField label="Request By" value={request_by} margin="normal" InputLabelProps={{ shrink: true }} required disabled/>
+                        &nbsp;
+                    <TextField label="Request Date" value={request_date} onChange={handleChange('request_date')} margin="normal" InputLabelProps={{ shrink: true }} placeholder={request_date} disabled/>
                         &nbsp;
                     <TextField label="Note" value={note} onChange={handleChange('note')} margin="normal" InputLabelProps={{ shrink: true }} placeholder="Type Note" />
                     </form>

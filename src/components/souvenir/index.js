@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import LSData from '../base/base.localstorage';
+import { changeDateFormat } from '../system/base.function';
 
 class Souvenirs extends React.Component  {
 
@@ -31,6 +32,8 @@ class Souvenirs extends React.Component  {
         m_unit_id: '',
         createDate: '',
         created_by: LSData.loginRoleId(),
+        updateDate: '',
+        updated_by: '',
         is_delete: '',
     }
     constructor(props) {
@@ -117,6 +120,8 @@ class Souvenirs extends React.Component  {
             description: souvenir.description,
             createDate: souvenir.createDate,
             created_by: souvenir.created_by,
+            updateDate: souvenir.updateDate,
+            updated_by: souvenir.updated_by
         }
 
         if(createNew){
@@ -153,6 +158,9 @@ class Souvenirs extends React.Component  {
                 unitName: souvenir.unitName,
                 description: souvenir.description,
                 createDate: souvenir.createDate,
+                updated_by: LSData.loginRoleId(),
+                updateDate: souvenir.updateDate
+
             }
            
         })
@@ -246,7 +254,7 @@ class Souvenirs extends React.Component  {
                                     <TableCell component="th" scope="row">{n.code}</TableCell>
                                     <TableCell>{n.name}</TableCell>
                                     <TableCell>{n.unitName}</TableCell>
-                                    <TableCell>{n.createDate}</TableCell>
+                                    <TableCell>{changeDateFormat(n.createDate)}</TableCell>
                                     <TableCell>{n.created_by}</TableCell>
                                     <TableCell style={{textAlign:'center'}}> <IconButton><SearchIcon onClick={() => this.handleView(n._id)} /></IconButton>
                                     <IconButton><EditIcon onClick={() => this.handleEdit(n._id)}/></IconButton>

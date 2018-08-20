@@ -31,6 +31,8 @@ import CreateTDesign from './create';
 import EditTDesign from './edit';
 import ViewTDesign from './view';
 import DeviceSignalCellular0Bar from 'material-ui/SvgIcon';
+import ViewTDesignSubmitted from './viewSubmitted';
+import ViewTDesignInProgress from './viewInProgress';
 
 // Base Function
 import { changeValue, changeDateFormat } from '../system/base.function';
@@ -100,12 +102,8 @@ class Users extends React.Component {
             editUser: false,
             deleteUser: false,
             load: true,
-            categories: [
-                { _id: 1, name: 'Category One' },
-                { _id: 2, name: 'Category Two' },
-                { _id: 3, name: 'Category Three' },
-                { _id: 4, name: 'Category Four' },
-            ]
+            viewTDesignSubmitted: false,
+            viewTDesignInProgress: false
         }
     }
 
@@ -114,7 +112,8 @@ class Users extends React.Component {
         this.reloadData('tItems', '/t-design-items');
         this.reloadData('products', '/m-product');
         this.reloadData('events', '/t-event');
-        this.reloadData('employees', '/m-employee');
+        // this.reloadData('employees', '/m-employee');
+        this.reloadData('employees', '/m_employee_role_requester');
         
         if(objID){
             this.reloadData('tItemsByID', '/t-design-by-id/'+ objID);
@@ -153,7 +152,9 @@ class Users extends React.Component {
             editTDesign: false,
             viewTDesign: false,
             deleteTDesign: false,
-            items: []
+            items: [],
+            viewTDesignSubmitted: false,
+            viewTDesignInProgress: false
         })
     }
 
@@ -179,7 +180,7 @@ class Users extends React.Component {
                             title_item: item.titleItem,
                             request_due_date: item.requestDueDate,
                             note: item.inote,
-                            request_pic: item.requestPic,
+                            request_pic:  this.handleFindRequester(item.requestPic),
                             created_by: LSData.loginId(),
                         }
                         objItem.push(newItem);
@@ -225,6 +226,7 @@ class Users extends React.Component {
     handleEdit = (_id) => {
         let newTitems = [];
         let dataTitems = [];
+        // this.componentDidMount(_id);
         const { tDesigns, tItems } = this.state;
         const design = tDesigns.find(u => u._id === _id);
         
@@ -281,18 +283,6 @@ class Users extends React.Component {
         //     })
     }
 
-    handleRemove = (_id) => {
-        const { items } = this.state;
-        console.log(items);
-        const selectIdx = items.findIndex(u => u._id === _id);
-        items.splice(selectIdx, 1);
-        console.log(selectIdx + '-' + _id);
-        this.setState({
-            items: items
-        })
-    }
-
-
     // reloadTItemByID = (objID) => {
     //     axios.get(config.url + '/t-design-by-id/'+ objID)
     //         .then(res => {
@@ -316,6 +306,7 @@ class Users extends React.Component {
     handleView = (_id) => {
         let newTitems = [];
         let dataTitems = [];
+        // this.componentDidMount(_id);
         const { tDesigns, tItems } = this.state;
         const design = tDesigns.find(u => u._id === _id);
         console.log(tItems);
@@ -326,6 +317,7 @@ class Users extends React.Component {
             }
         }
 
+        console.log(newTitems);
         for (let key in newTitems) {
             let objTITems = {
                 id:newTitems[key]._id,
@@ -347,21 +339,39 @@ class Users extends React.Component {
 
             dataTitems.push(objTITems);
         }
-
-        this.setState({
-            viewTDesign: true,
-            tDesign: {
-                code: design.code,
-                tEventId: design.t_event_id,
-                tEventCode: design.tEventCode,
-                titleHeader: design.title_header,
-                status: design.status,
-                requestBy: design.request_by,
-                requestDate: design.request_date,
-                note: design.note
-            },
-            items: dataTitems,
-        })
+        if(design.status ==1) {
+            this.setState({
+                viewTDesignSubmitted: true,
+                tDesign: {
+                    code: design.code,
+                    tEventId: design.t_event_id,
+                    tEventCode: design.tEventCode,
+                    titleHeader: design.title_header,
+                    status: design.status,
+                    requestBy: design.request_by,
+                    requestDate: design.request_date,
+                    note: design.note,
+                    status: design.status
+                },
+                items: dataTitems,
+            })
+        } else if(design.status == 2) {
+            this.setState({
+            viewTDesignInProgress: true,
+                tDesign: {
+                    code: design.code,
+                    tEventId: design.t_event_id,
+                    tEventCode: design.tEventCode,
+                    titleHeader: design.title_header,
+                    status: design.status,
+                    requestBy: design.request_by,
+                    requestDate: design.request_date,
+                    note: design.note,
+                    status: design.status
+                },
+                items: dataTitems,
+            })
+        }
     }
 
     // handleDeleteConfirm = (_id) => {
@@ -394,6 +404,7 @@ class Users extends React.Component {
             createdDate: '',
             updatedBy: '',
             updatedDate: '',
+            status:1,
         };
         items.push(newOrder);
         this.setState({
@@ -418,8 +429,41 @@ class Users extends React.Component {
         }
     }
 
+    
+    handleReject = () => {
+        this.setState({
+            rejectRequest:true
+        })
+    }
+
+    handleFindRequester = (name) => {
+        const { employees } = this.state;
+        const employee = employees.findIndex(u => u.name.first === name || u.name.first+ ' ' + u.name.last === name || u.name.last === name);
+        const objEmployee= employees[employee];
+        if(objEmployee){
+            return objEmployee._id;
+        }
+      
+    }
+    handleCloseRequest = () => {
+        const { tDesign} = this.state;
+       
+        let closeReq = {
+            status: tDesign.status + 1,
+        }
+        axios.put(config.url + '/t-design/' + tDesign._id, closeReq)
+        .then(res =>{
+            this.reloadData('tDesigns', '/t-design');
+            alert('Data Closed ! Transaction event request with code '+ res.data.ops[0].code+ ' has been close request !');
+        })
+        .catch((error) => {
+            alert(error);
+        })
+    }
+
 
     render() {
+        this.handleFindRequester('Leonel Messi');
         const { tDesigns } = this.state;
         let i = 1;
         return (
@@ -430,7 +474,6 @@ class Users extends React.Component {
                     handleClose={this.handleClose}
                     handleSubmit={this.handleSubmit}
                     handleChange={this.handleChange}
-                    handleRemove={this.handleRemove}
                     handleChangeSelectItems={this.handleChangeSelectItems}
                     addNewItem={this.addNewItem}
                     tDesign={this.state.tDesign}
@@ -447,17 +490,15 @@ class Users extends React.Component {
                     handleSubmit={this.handleSubmit}
                     handleChange={this.handleChange}
                     handleChangeSelectItems={this.handleChangeSelectItems}
-                    handleRemove = {this.handleRemove}
                     addNewItem={this.addNewItem}
                     tDesign={this.state.tDesign}
                     tDesignItem={this.state.tDesignItem}
-                    getProductDescription={this.getProductDescription}
                     items={this.state.items}
                     products={this.state.products}
                     events={this.state.events}
                     employees={this.state.employees}
                 />
-                <ViewTDesign
+                {/* <ViewTDesign
                     viewTDesign={this.state.viewTDesign}
                     handleToggle={this.handleToggle}
                     handleClose={this.handleClose}
@@ -471,7 +512,41 @@ class Users extends React.Component {
                     products={this.state.products}
                     events={this.state.events}
                     employees={this.state.employees}
+                /> */}
+                <ViewTDesignSubmitted
+                    viewTDesignSubmitted={this.state.viewTDesignSubmitted}
+                    handleToggle={this.handleToggle}
+                    handleClose={this.handleClose}
+                    handleReject= {this.handleReject}
+                    handleSubmit={this.handleSubmit}
+                    handleChange={this.handleChange}
+                    handleChangeSelectItems={this.handleChangeSelectItems}
+                    addNewItem={this.addNewItem}
+                    tDesign={this.state.tDesign}
+                    tDesignItem={this.state.tDesignItem}
+                    items={this.state.items}
+                    products={this.state.products}
+                    events={this.state.events}
+                    employees={this.state.employees}
                 />
+                <ViewTDesignInProgress
+                    viewTDesignInProgress={this.state.viewTDesignInProgress}
+                    handleToggle={this.handleToggle}
+                    handleClose={this.handleClose}
+                    handleCloseRequest= {this.handleCloseRequest}
+                    handleSubmit={this.handleSubmit}
+                    handleChange={this.handleChange}
+                    handleChangeSelectItems={this.handleChangeSelectItems}
+                    addNewItem={this.addNewItem}
+                    tDesign={this.state.tDesign}
+                    tDesignItem={this.state.tDesignItem}
+                    items={this.state.items}
+                    products={this.state.products}
+                    events={this.state.events}
+                    employees={this.state.employees}
+                />
+                
+
                 <Table>
                     <TableHead>
                         <TableRow>

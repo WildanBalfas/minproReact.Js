@@ -5,7 +5,7 @@ export const changeValue = function (status) {
     } else if (status == 1) {
         return 'Submited';
     } else if (status == 2) {
-        return 'On Progress';
+        return 'In Progress';
     } else if (status == 3) {
         return 'Done';
     }

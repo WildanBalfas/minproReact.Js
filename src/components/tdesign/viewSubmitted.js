@@ -24,14 +24,17 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+// Base Function
+import { changeValue, changeDateFormat } from '../system/base.function';
 
 export default (
     {
-        editTDesign,
+        viewTDesignSubmitted,
         handleToggle,
         handleClose,
         handleSubmit,
         handleChange,
+        handleReject,
         handleChangeSelectItems,
         addNewItem,
         tDesign: {
@@ -67,8 +70,8 @@ export default (
     }) => {
     return (
         <Fragment>
-            <Dialog open={editTDesign} onClose={handleClose} fullScreen>
-                <div className="div-dialog-header">Add Design Request</div>
+            <Dialog open={viewTDesignSubmitted} onClose={handleClose} fullScreen>
+                <div className="div-dialog-header">Approval Design Request</div>
                 <DialogContent>
                     <DialogContentText className="border">
                         <form>
@@ -96,14 +99,13 @@ export default (
                                             </Select>
                                         </FormControl>
                                     </div>
-                                    <TextField className="input-text" label="Design Title" value={titleHeader} margin='normal' onChange={handleChange('titleHeader')} disabled required />
-                                    <TextField className="input-text" label="Status" value={status} margin='normal' onChange={handleChange('status')} disabled required />
+                                    <TextField className="input-text" label="Design Title" value={titleHeader} margin='normal' disabled required />
+                                    <TextField className="input-text" label="Status" value={changeValue(status)} margin='normal'  disabled required />
                                     <div className="clear-selected">
                                         <FormControl fullWidth="true">
                                             <InputLabel shrink htmlFor="unit-simple" required>Assign To</InputLabel>
                                             <Select
                                                 value={assignTo}
-                                                onChange={handleChange('assignTo')}
                                                 inputProps={{
                                                     name: 'assignTo',
                                                     id: 'unit-simple',
@@ -128,27 +130,26 @@ export default (
                                     <TextField className="input-text" label="Request Date" value={requestDate} margin='normal' disabled required />
                                     <br />
                                     <div className="clear" />
-                                    <TextField className="input-text" label="Note" value={note} onChange={handleChange('note')} disabled />
+                                    <TextField className="input-text" label="Note" value={note} disabled />
                                 </div>
                             </div>
                         </form>
                     </DialogContentText>
                     <div className="clear" />
                     <DialogContentText className="border">
-                        <Button onClick={addNewItem} variant="contained" color="secondary" >Add Item</Button>
                         <div className="div-table">
                             {items.length != 0 ?
                                 <div className="div-table-row">
                                     <div className="div-table-column title wdth15">Product Name</div>
-                                    <div className="div-table-column title">Product Description</div>
+                                    <div className="div-table-column title wdth15">Product Description</div>
                                     <div className="div-table-column title">Title</div>
                                     <div className="div-table-column title">Request PIC</div>
                                     <div className="div-table-column title wdth12">Due Date</div>
                                     <div className="div-table-column title wdth12">Start Date</div>
                                     <div className="div-table-column title wdth12">End Date</div>
-                                    <div className="div-table-column title">Note</div>
+                                    <div className="div-table-column title wdth12">Note</div>
                                 </div>
-                                : ''}
+                                : 'No Item Selected'}
                             {items.map((n, index) => {
                                 return (
                                     <div className="div-table-row" key={n.id}>
@@ -157,11 +158,11 @@ export default (
                                                 <FormControl fullWidth="true">
                                                     <Select
                                                         value={n.mProductId}
-                                                        onChange={handleChangeSelectItems('mProductId', n.id)}
                                                         inputProps={{
                                                             name: 'mProductId',
                                                             id: 'unit-simple',
                                                         }}
+                                                        disabled
                                                     >
                                                         <MenuItem key={n.mProductId} value={n.mProductId}><em>-Select Product Name-</em> </MenuItem>
                                                         {products.map(product => {
@@ -173,37 +174,32 @@ export default (
                                                 </FormControl>
                                             </div>
                                         </div>
-                                        <div className="div-table-column">
+                                        <div className="div-table-column wdth15">
                                             <TextField value='' margin="normal"  disabled />
                                         </div>
                                         <div className="div-table-column">
-                                            <TextField value={n.titleItem} onChange={handleChangeSelectItems('titleItem', n.id)} margin="normal" />
+                                            <TextField value={n.titleItem} margin="normal" disabled />
                                         </div>
                                         <div className="div-table-column">
-                                            <TextField value={n.requestPic} onChange={handleChangeSelectItems('requestPic',  n.id)} margin="normal" />
+                                            <TextField value={n.requestPic} margin="normal" disabled />
                                         </div>
                                         <div className="div-table-column wdth12">
                                             <div className="mgpd">
-                                                <TextField type="date" value={n.requestDueDate} onChange={handleChangeSelectItems('requestDueDate',  n.id)} defaultValue="2017-05-24" InputLabelProps={{ shrink: true, }} />
+                                                <TextField type="date" value={changeDateFormat(n.requestDueDate)} disabled defaultValue="2018-08-24" InputLabelProps={{ shrink: true, }} />
                                             </div>
                                         </div>
                                         <div className="div-table-column wdth12">
                                             <div className="mgpd">
-                                                <TextField type="date" defaultValue="2017-05-24" InputLabelProps={{ shrink: true, }} disabled />
+                                                <TextField type="date" defaultValue="2018-08-24" InputLabelProps={{ shrink: true, }} disabled />
                                             </div>
                                         </div>
                                         <div className="div-table-column wdth12">
                                             <div className="mgpd">
-                                                <TextField type="date" defaultValue="2017-05-24" InputLabelProps={{ shrink: true, }} disabled />
+                                                <TextField type="date" defaultValue="2018-08-24" InputLabelProps={{ shrink: true, }} disabled />
                                             </div>
                                         </div>
-                                        <div className="div-table-column">
-                                            <TextField value={n.inote} onChange={handleChangeSelectItems('inote', n.id)} margin="normal" />
-                                        </div>
-                                        <div className="div-table-column center wdth5">
-                                        <IconButton onClick=''><EditIcon color="primary" /></IconButton>
-                                        <IconButton onClick=''><DeleteIcon color="secondary" /></IconButton>
-                                    
+                                        <div className="div-table-column wdth12">
+                                            <TextField value={n.inote} margin="normal" disabled />
                                         </div>
                                     </div>
                                 );
@@ -214,8 +210,8 @@ export default (
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} variant="contained" color="secondary" >Cancel</Button>
-                    <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>Reject</Button>
-                    <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>Aproved</Button>
+                    <Button onClick={handleReject} variant="contained" color="primary" autoFocus>Reject</Button>
+                    <Button onClick={handleClose} variant="contained" color="primary" autoFocus>Aproved</Button>
                 </DialogActions>
             </Dialog>
         </Fragment>

@@ -18,6 +18,7 @@ import ViewEventSubmitted from './viewSubmitted';
 import ViewEventInProgress from './viewInProgress';
 // import ViewEvent from './view';
 import LSData from '../base/base.localstorage';
+import { changeValue,changeDateFormat } from '../system/base.function';
 
 class Events extends React.Component {
     eventModel = {
@@ -30,7 +31,7 @@ class Events extends React.Component {
         budget: '',
         request_by: LSData.loginId(),
         requestName: '',
-        request_date: '',
+        request_date: new Date().toLocaleDateString(),
         approved_by: '',
         approved_date: '',
         assign_to: '',
@@ -364,9 +365,9 @@ class Events extends React.Component {
                                     <TableCell component="th" scope="row">{e.code}</TableCell>
                                     <TableCell>{(e.requestName.first ? e.requestName.first  + ' ' : '') + 
                                     (e.requestName.last ? e.requestName.last  + ' ' : '')}</TableCell>
-                                    <TableCell>{e.request_date}</TableCell>
-                                    <TableCell>{e.status == 0 ? 'Rejected' : e.status == 1 ? 'Submitted' : e.status== 2 ? 'In Progress' : 'Done'}</TableCell>
-                                    <TableCell>{e.createDate}</TableCell>
+                                    <TableCell>{changeDateFormat(e.request_date)}</TableCell>
+                                    <TableCell>{changeValue(e.status)}</TableCell>
+                                    <TableCell>{changeDateFormat(e.createDate)}</TableCell>
                                     <TableCell>{(e.requestName.first ? e.requestName.first  + ' ' : '') + 
                                     (e.requestName.last ? e.requestName.last  + ' ' : '')}</TableCell>
                                     <TableCell style={{textAlign:'center'}}> <IconButton><SearchIcon onClick={() => this.handleView(e._id, e.status)} /></IconButton>
