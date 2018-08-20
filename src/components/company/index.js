@@ -225,7 +225,7 @@ class Companies extends React.Component  {
                 <DeleteCompany deleteCompany={this.state.deleteCompany} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} company={this.state.company} />
                 <ViewCompany viewCompany={this.state.viewCompany} handleView={this.handleView} handleClose={this.handleClose} company={this.state.company} />
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
-                <FormControl>
+                {/* <FormControl>
                     <TableHead >
                     <TableCell style={{width: 300, border: 'none'}}>
                         <Select
@@ -274,7 +274,7 @@ class Companies extends React.Component  {
                         <TableCell style={{width: 200, border: 'none'}}><TextField placeholder='Created By'/></TableCell>
                         <TableCell style={{width: 200, border: 'none'}}> <Button variant="contained" color="secondary" style={{float: 'right'}}>Search</Button></TableCell>
                         </TableHead>
-                    </FormControl>
+                    </FormControl> */}
                 <Table>
                     <TableHead >
                         <TableRow>
