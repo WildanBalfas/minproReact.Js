@@ -25,6 +25,8 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
+import { Redirect } from 'react-router-dom';
+import { isLogged } from '../configuration/config';
 class Companies extends React.Component  {
 
     companyModel = 
@@ -212,6 +214,9 @@ class Companies extends React.Component  {
  
 
     render() {
+        if(!isLogged()){
+            return(<Redirect to= {'/login'} />)
+        }
         const {companies, loading} = this.state;
         const {classes} = this.props;
         let i=1;

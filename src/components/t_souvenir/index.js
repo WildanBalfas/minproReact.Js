@@ -16,8 +16,9 @@ import AddSouvenir from './create';
 import ViewSouvenir from './view';
 import EditSouvenir from './edit';
 
-import { config } from '../configuration/config';
+import { config, isLogged } from '../configuration/config';
 import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 class T_Souvenir extends React.Component {
 
@@ -305,6 +306,11 @@ class T_Souvenir extends React.Component {
 
 
     render() {
+        if(!isLogged()){
+            return(<Redirect to= {'/login'} />)
+        }
+
+        
         const { t_souvenirs_stock, load } = this.state;
         const { classes } = this.props;
 

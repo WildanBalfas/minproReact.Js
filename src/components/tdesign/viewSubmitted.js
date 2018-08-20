@@ -115,7 +115,7 @@ export default (
                                                 {employees.map(employee => {
                                                     return (
                                                         <MenuItem value={employee._id}>
-                                                            {employee.first_name + ' ' + (employee.last_name ? employee.last_name : '')}
+                                                            {employee.name.first + ' ' + (employee.name.last ? employee.name.last : '')}
                                                         </MenuItem>
                                                     )
                                                 })}

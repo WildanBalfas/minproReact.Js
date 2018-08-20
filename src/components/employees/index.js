@@ -4,7 +4,8 @@ import axios from 'axios';
 import { config } from '../configuration/config';
 import { deleteData } from '../base/base.model';
 import LS from '../base/base.localstorage';
-
+import { Redirect } from 'react-router-dom';
+import { isLogged } from '../configuration/config';
 
 // Material UI
 import Table from '@material-ui/core/Table';
@@ -196,10 +197,12 @@ class Users extends React.Component {
 
 
     render() {
+        if(!isLogged()){
+            return(<Redirect to= {'/login'} />)
+        }
         const { employees } = this.state;
         const deleteEmployee = this.state.employee;
         let i = 1;
-        console.log(employees);
         return (
             <div>
                 <CreateEmployee

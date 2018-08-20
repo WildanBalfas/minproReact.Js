@@ -19,6 +19,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import LSData from '../base/base.localstorage';
+import { Redirect } from 'react-router-dom';
+import { isLogged } from '../configuration/config';
 import { changeDateFormat } from '../system/base.function';
 
 class Souvenirs extends React.Component  {
@@ -221,6 +223,10 @@ class Souvenirs extends React.Component  {
     }
 
     render() {
+        if(!isLogged()){
+            return(<Redirect to= {'/login'} />)
+        }
+
         const {souvenirs,souvenir, loading} = this.state;
         const {classes} = this.props;
         let i=1;

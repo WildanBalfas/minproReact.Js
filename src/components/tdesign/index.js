@@ -13,6 +13,8 @@ import TableRow from '@material-ui/core/TableRow';
 import EditIcon from '@material-ui/icons/Edit';
 import SearchIcon from '@material-ui/icons/Search'
 import IconButton from '@material-ui/core/IconButton';
+import { Redirect } from 'react-router-dom';
+import { isLogged } from '../configuration/config';
 
 import {
     Dialog,
@@ -65,14 +67,14 @@ class tIndex extends React.Component {
         assignToLastName: '',
         createdByUserName: '',
         mProductId: '',
-        mProductDescription:'',
-        tEventCode:''
+        mProductDescription: '',
+        tEventCode: ''
     };
 
     tDesignItemModel = {
         tDesignId: '',
         mProductId: '',
-        mProductDescription:'',
+        mProductDescription: '',
         titleItem: '',
         requestPic: '',
         startDate: '',
@@ -116,9 +118,8 @@ class tIndex extends React.Component {
         this.reloadData('events', '/t-event');
         // this.reloadData('employees', '/m-employee');
         this.reloadData('employees', '/m_employee_role_requester');
-        
-        if(objID){
-            this.reloadData('tItemsByID', '/t-design-by-id/'+ objID);
+        if (objID) {
+            this.reloadData('tItemsByID', '/t-design-by-id/' + objID);
         }
     }
 
@@ -183,8 +184,9 @@ class tIndex extends React.Component {
                             t_design_id: objToString.toString(),
                             title_item: item.titleItem,
                             request_due_date: item.requestDueDate,
+                            request_date: new Date(),
                             note: item.inote,
-                            request_pic:  this.handleFindRequester(item.requestPic),
+                            request_pic: this.handleFindRequester(item.requestPic),
                             created_by: LSData.loginId(),
                         }
                         objItem.push(newItem);
@@ -201,12 +203,18 @@ class tIndex extends React.Component {
                     alert(error);
                 })
         }
-        // else {
-        //     axios.put(config.url + '/m-user/' + user._id, newUser)
-        //         .then(res => {
-        //             this.reloadData('users', '/user-aggregation');
-        //         });
-        // }
+        else {
+            console.log(newDesign);
+            console.log(items);
+            // axios.post(config.url + '/t-design', newDesign)
+            // .then(res => {
+            // });
+
+            // axios.put(config.url + '/m-user/' + user._id, newUser)
+            //     .then(res => {
+            //         this.reloadData('users', '/user-aggregation');
+            //     });
+        }
     }
 
     handleChange = name => ({ target: { value } }) => {
@@ -233,17 +241,17 @@ class tIndex extends React.Component {
         // this.componentDidMount(_id);
         const { tDesigns, tItems } = this.state;
         const design = tDesigns.find(u => u._id === _id);
-        
-        for(let key in tItems){
-            if(tItems[key].t_design_id == _id){
+
+        for (let key in tItems) {
+            if (tItems[key].t_design_id == _id) {
                 newTitems.push(tItems[key]);
             }
         }
         for (let key in newTitems) {
             let objTITems = {
-                id:newTitems[key]._id,
+                id: newTitems[key]._id,
                 tDesignId: newTitems[key].t_design_id,
-                mProductId:newTitems[key].m_product_id,
+                mProductId: newTitems[key].m_product_id,
                 titleItem: newTitems[key].title_item,
                 requestPic: newTitems[key].request_pic,
                 startDate: newTitems[key].start_date,
@@ -313,21 +321,19 @@ class tIndex extends React.Component {
         // this.componentDidMount(_id);
         const { tDesigns, tItems } = this.state;
         const design = tDesigns.find(u => u._id === _id);
-        console.log(tItems);
-        
-        for(let key in tItems){
-            if(tItems[key].t_design_id == _id){
+
+        for (let key in tItems) {
+            if (tItems[key].t_design_id == _id) {
                 newTitems.push(tItems[key]);
             }
         }
 
-        console.log(newTitems);
         for (let key in newTitems) {
             let objTITems = {
-                id:newTitems[key]._id,
+                id: newTitems[key]._id,
                 tDesignId: newTitems[key].t_design_id,
-                mProductId:newTitems[key].m_product_id,
-                mProductDescription:newTitems[key].mProductDescription,
+                mProductId: newTitems[key].m_product_id,
+                mProductDescription: newTitems[key].mProductDescription,
                 titleItem: newTitems[key].title_item,
                 requestPic: newTitems[key].request_pic,
                 startDate: newTitems[key].start_date,
@@ -343,7 +349,7 @@ class tIndex extends React.Component {
 
             dataTitems.push(objTITems);
         }
-        if(design.status ==1) {
+        if (design.status == 1) {
             this.setState({
                 viewTDesignSubmitted: true,
                 tDesign: {
@@ -359,9 +365,9 @@ class tIndex extends React.Component {
                 },
                 items: dataTitems,
             })
-        } else if(design.status == 2) {
+        } else if (design.status == 2) {
             this.setState({
-            viewTDesignInProgress: true,
+                viewTDesignInProgress: true,
                 tDesign: {
                     code: design.code,
                     tEventId: design.t_event_id,
@@ -396,7 +402,7 @@ class tIndex extends React.Component {
             id: _id,
             tDesignId: '',
             mProductId: '',
-            mProductDescription:'',
+            mProductDescription: '',
             titleItem: '',
             requestPic: '',
             startDate: '',
@@ -408,7 +414,7 @@ class tIndex extends React.Component {
             createdDate: '',
             updatedBy: '',
             updatedDate: '',
-            status:1,
+            status: 1,
         };
         items.push(newOrder);
         this.setState({
@@ -427,42 +433,42 @@ class tIndex extends React.Component {
 
     getProductDescription = (_id) => {
         const { products } = this.state;
-        if(_id){
+        if (_id) {
             const index = products.findIndex(i => i._id === _id);
             return products[index].description;
         }
     }
 
-    
+
     handleReject = () => {
         this.setState({
-            rejectRequest:true
+            rejectRequest: true
         })
     }
 
     handleFindRequester = (name) => {
         const { employees } = this.state;
-        const employee = employees.findIndex(u => u.name.first === name || u.name.first+ ' ' + u.name.last === name || u.name.last === name);
-        const objEmployee= employees[employee];
-        if(objEmployee){
+        const employee = employees.findIndex(u => u.name.first === name || u.name.first + ' ' + u.name.last === name || u.name.last === name);
+        const objEmployee = employees[employee];
+        if (objEmployee) {
             return objEmployee._id;
         }
-      
+
     }
     handleCloseRequest = () => {
-        const { tDesign} = this.state;
-       
+        const { tDesign } = this.state;
+
         let closeReq = {
             status: tDesign.status + 1,
         }
         axios.put(config.url + '/t-design/' + tDesign._id, closeReq)
-        .then(res =>{
-            this.reloadData('tDesigns', '/t-design');
-            alert('Data Closed ! Transaction event request with code '+ res.data.ops[0].code+ ' has been close request !');
-        })
-        .catch((error) => {
-            alert(error);
-        })
+            .then(res => {
+                this.reloadData('tDesigns', '/t-design');
+                alert('Data Closed ! Transaction event request with code ' + res.data.ops[0].code + ' has been close request !');
+            })
+            .catch((error) => {
+                alert(error);
+            })
     }
 
     fileSelectedHandler = event => {
@@ -472,22 +478,24 @@ class tIndex extends React.Component {
     }
 
     fileUploadHandler = () => {
-      
+
         const fd = new FormData();
         fd.append('file', this.state.selectedFile, this.state.selectedFile.name);
         axios.post('http://localhost:8000/api/upload', fd, {
             onUploadProgress: ProgressEvent => {
-                console.log('Upload Progress: ', + Math.round(ProgressEvent.loaded / ProgressEvent.total  * 100 ) + '%')
+                // console.log('Upload Progress: ', + Math.round(ProgressEvent.loaded / ProgressEvent.total * 100) + '%')
             }
         })
-        .then( res => {
-            console.log(res);
-        });
+            .then(res => {
+                // console.log(res);
+            });
     }
 
 
     render() {
-        this.handleFindRequester('Leonel Messi');
+        if(!isLogged()){
+            return(<Redirect to= {'/login'} />)
+        }
         const { tDesigns } = this.state;
         let i = 1;
         return (
@@ -498,6 +506,7 @@ class tIndex extends React.Component {
                     handleClose={this.handleClose}
                     handleSubmit={this.handleSubmit}
                     handleChange={this.handleChange}
+                    handleRemove={this.handleRemove}
                     handleChangeSelectItems={this.handleChangeSelectItems}
                     addNewItem={this.addNewItem}
                     tDesign={this.state.tDesign}
@@ -541,7 +550,7 @@ class tIndex extends React.Component {
                     viewTDesignSubmitted={this.state.viewTDesignSubmitted}
                     handleToggle={this.handleToggle}
                     handleClose={this.handleClose}
-                    handleReject= {this.handleReject}
+                    handleReject={this.handleReject}
                     handleSubmit={this.handleSubmit}
                     handleChange={this.handleChange}
                     handleChangeSelectItems={this.handleChangeSelectItems}
@@ -557,7 +566,7 @@ class tIndex extends React.Component {
                     viewTDesignInProgress={this.state.viewTDesignInProgress}
                     handleToggle={this.handleToggle}
                     handleClose={this.handleClose}
-                    handleCloseRequest= {this.handleCloseRequest}
+                    handleCloseRequest={this.handleCloseRequest}
                     handleSubmit={this.handleSubmit}
                     handleChange={this.handleChange}
                     handleChangeSelectItems={this.handleChangeSelectItems}
@@ -568,10 +577,10 @@ class tIndex extends React.Component {
                     products={this.state.products}
                     events={this.state.events}
                     employees={this.state.employees}
-                    fileSelectedHandler = {this.fileSelectedHandler}
-                    fileUploadHandler = {this.fileUploadHandler}
+                    fileSelectedHandler={this.fileSelectedHandler}
+                    fileUploadHandler={this.fileUploadHandler}
                 />
-                
+
 
                 <Table>
                     <TableHead>
@@ -595,9 +604,9 @@ class tIndex extends React.Component {
                                     <TableCell>{tDesign.code}</TableCell>
                                     <TableCell>{tDesign.requestFirstName + ' ' + tDesign.requestLastName}</TableCell>
                                     <TableCell>{changeDateFormat(tDesign.request_date)}</TableCell>
-                                    <TableCell style={{textAlign: 'center'}}>
-                                        {tDesign.assignToFirstName ? tDesign.assignToFirstName : '-' ? 
-                                         tDesign.assignToLastName ? tDesign.assignToLastName : '-' : ' - '}</TableCell>
+                                    <TableCell style={{ textAlign: 'center' }}>
+                                        {tDesign.assignToFirstName ? tDesign.assignToFirstName : '-' ?
+                                            tDesign.assignToLastName ? tDesign.assignToLastName : '-' : ' - '}</TableCell>
                                     <TableCell>{changeValue(tDesign.status)}</TableCell>
                                     <TableCell>{changeDateFormat(tDesign.createDate)}</TableCell>
                                     <TableCell>{tDesign.createdByUsername}</TableCell>

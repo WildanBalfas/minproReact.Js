@@ -5,7 +5,7 @@ import axios from 'axios';
 import DialogActions from '@material-ui/core/DialogActions';
 import { Redirect } from 'react-router-dom';
 import '../style.css';
-import { config } from '../configuration/config';
+import { config, isLogged } from '../configuration/config';
 
 // import Validation from '../base/validation';
 // import { PostData } from '../service/postData';
@@ -56,24 +56,12 @@ class Login extends React.Component {
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }
-
-    // handleSubmit() {
-    //     console.log(this.state);
-    //     this.setState({
-    //         user: {
-    //             nama: "data"
-    //         }
-    //     })
-    // }
-
+    
     render() {
-        if(this.state.redirect){
-            return(<Redirect to= {'/'} />)
-        }
-
-        // if(){
+        // if(isLogged()){
         //     return(<Redirect to= {'/'} />)
         // }
+
         const { userData } = this.state;
         return (
             <div class="outer-wrapper">

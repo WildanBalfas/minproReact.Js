@@ -4,23 +4,33 @@ let objUser = JSON.parse(localStorage.getItem('userData'));
 function LocalStorage() {
 
     this.loginId = function () {
-        return objUser._id;
+        if(objUser){
+            return objUser._id;
+        }
     }
 
     this.loginEmployeeId = function(){
-        return objUser.m_employee_id;
+        if(objUser){
+            return objUser.m_employee_id;
+        }
     }
 
     this.loginUsername = function () {
-        return objUser.username;
+        if(objUser){
+            return objUser.username;
+        }
     }
 
     this.loginRoleId = function () {
-        return objUser.m_role_id;
+        if(objUser){
+            return objUser.m_role_id;
+        }
     }
 
     this.loginToken = function () {
-
+        if(objUser){
+            return objUser.token;
+        }
     }
 }
 

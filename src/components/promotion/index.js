@@ -17,6 +17,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
+import { Redirect } from 'react-router-dom';
+import { isLogged } from '../configuration/config';
 
 class Promotions extends React.Component {
 
@@ -221,6 +223,9 @@ class Promotions extends React.Component {
   }
 
   render() {
+    if(!isLogged()){
+      return(<Redirect to= {'/login'} />)
+  }
     const { promos, loading, events, employes, designs } = this.state;
     const { classes } = this.props;
     let i = 1;

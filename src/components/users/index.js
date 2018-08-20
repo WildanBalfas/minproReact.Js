@@ -4,6 +4,9 @@ import axios from 'axios';
 import { config } from '../configuration/config';
 import { deleteData } from '../base/base.model';
 import LS from '../base/base.localstorage';
+import { isLogged } from '../configuration/config';
+import { Redirect } from 'react-router-dom';
+
 
 
 // Material UI
@@ -191,20 +194,15 @@ class Users extends React.Component {
     handleDeleteConfirm = (_id) => {
         deleteData('m-user', _id);
         this.reloadData('users', '/user-aggregation');
-        // axios.delete(config.url + '/m-user/' + _id)
-        //     .then(res => {
-        //         this.reloadData('users', '/user-aggregation');
-        //     })
-        //     .catch((error) => {
-        //         alert('Error');
-        //     })
     }
 
 
     render() {
+        if(!isLogged()){
+            return(<Redirect to= {'/login'} />)
+        }
         const { users } = this.state;
         const deleteUser = this.state.user;
-        console.log(this.state.employees);
         let i = 1;
         return (
             <div>

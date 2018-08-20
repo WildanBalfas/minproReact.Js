@@ -23,6 +23,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { changeValue }  from '../system/base.function';
 
 
 export default (
@@ -85,7 +86,6 @@ export default (
                                                     name: 'tEventId',
                                                     id: 'unit-simple',
                                                 }}
-                                                disabled
                                             >
                                                 <MenuItem value={tEventId}>{tEventCode}</MenuItem>
                                                 {events.map(event => {
@@ -96,30 +96,8 @@ export default (
                                             </Select>
                                         </FormControl>
                                     </div>
-                                    <TextField className="input-text" label="Design Title" value={titleHeader} margin='normal' onChange={handleChange('titleHeader')} disabled required />
-                                    <TextField className="input-text" label="Status" value={status} margin='normal' onChange={handleChange('status')} disabled required />
-                                    <div className="clear-selected">
-                                        <FormControl fullWidth="true">
-                                            <InputLabel shrink htmlFor="unit-simple" required>Assign To</InputLabel>
-                                            <Select
-                                                value={assignTo}
-                                                onChange={handleChange('assignTo')}
-                                                inputProps={{
-                                                    name: 'assignTo',
-                                                    id: 'unit-simple',
-                                                }}
-                                            >
-                                                <MenuItem value={assignTo}><em>-Select Employee-</em> </MenuItem>
-                                                {employees.map(employee => {
-                                                    return (
-                                                        <MenuItem value={employee._id}>
-                                                            {employee.first_name + ' ' + (employee.last_name ? employee.last_name : '')}
-                                                        </MenuItem>
-                                                    )
-                                                })}
-                                            </Select>
-                                        </FormControl>
-                                    </div>
+                                    <TextField className="input-text" label="Design Title" value={titleHeader} margin='normal' onChange={handleChange('titleHeader')} required />
+                                    <TextField className="input-text" label="Status" value={changeValue(status)} margin='normal' onChange={handleChange('status')} disabled required />
                                 </div>
 
                                 <div className="dialog-content-kanan">
@@ -128,7 +106,7 @@ export default (
                                     <TextField className="input-text" label="Request Date" value={requestDate} margin='normal' disabled required />
                                     <br />
                                     <div className="clear" />
-                                    <TextField className="input-text" label="Note" value={note} onChange={handleChange('note')} disabled />
+                                    <TextField className="input-text" label="Note" value={note} onChange={handleChange('note')} />
                                 </div>
                             </div>
                         </form>
@@ -213,9 +191,8 @@ export default (
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
+                    <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>Update</Button>
                     <Button onClick={handleClose} variant="contained" color="secondary" >Cancel</Button>
-                    <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>Reject</Button>
-                    <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>Aproved</Button>
                 </DialogActions>
             </Dialog>
         </Fragment>

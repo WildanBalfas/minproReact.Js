@@ -33,6 +33,7 @@ export default (
         handleSubmit,
         handleChange,
         handleChangeSelectItems,
+        handleRemove,
         addNewItem,
         getProductDescription,
         tDesign: {
@@ -176,9 +177,8 @@ export default (
                                             <TextField value={n.inote} onChange={handleChangeSelectItems('inote', n.id)} margin="normal" />
                                         </div>
                                         <div className="div-table-column center wdth5">
-                                        <IconButton onClick=''><EditIcon color="primary" /></IconButton>
-                                        <IconButton onClick=''><DeleteIcon color="secondary" /></IconButton>
-                                    
+                                        <IconButton onClick=""><EditIcon color="primary" /></IconButton>
+                                        <IconButton onClick={() => handleRemove(n._id)}><DeleteIcon color="secondary" /></IconButton>
                                         </div>
                                     </div>
                                 );

@@ -16,6 +16,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import { config } from '../configuration/config';
+import { isLogged } from '../configuration/config';
+
 class Users extends React.Component {
 
     designModel = {
@@ -251,6 +253,9 @@ class Users extends React.Component {
     }
 
     render() {
+        if(isLogged()){
+            return(<Redirect to= {'/login'} />)
+        }
         const { users, load, designAgg } = this.state;
         const { classes } = this.props;
         let i = 1;

@@ -9,5 +9,7 @@ export const config ={
 export const isLogged = () => {
         if(loginData){
             return true;
+        }else{
+            return false;
         }
 }
