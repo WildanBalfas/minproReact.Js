@@ -12,7 +12,7 @@ import TextField from '@material-ui/core/TextField';
 export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, unit : {code, name,description}}) => {
     return <Fragment>
        
-        <Button onClick={handleToggle} variant="contained" color="primary">Create</Button>
+       <Button onClick={handleToggle} variant="contained" color="primary" style={{ float:'right' }}>Add</Button>
         <Dialog
             open={createNew}
             onClose={handleClose}
@@ -33,10 +33,10 @@ export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, 
             </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+            <Button onClick={handleClose} color="secondary" variant="contained">
                     Cancel
             </Button>
-                <Button onClick={handleSubmit} color="primary" autoFocus>
+                <Button onClick={handleSubmit} color="primary" variant="contained" autoFocus>
                     Save
             </Button>
             </DialogActions>

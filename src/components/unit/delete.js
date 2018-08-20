@@ -29,12 +29,12 @@ export default ({deleteUnit, handleDeleteConfirm , handleClose ,   unit : {code,
             </form>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={handleClose} color="secondary" variant="contained">
                     Cancel
             </Button>
-                <Button onClick={handleDeleteConfirm} color="primary" autoFocus>
-                    Delete
-            </Button>
+                    <Button onClick={handleDeleteConfirm} color="primary" variant="contained" autoFocus>
+                        Delete
+                </Button>
             </DialogActions>
         </Dialog>
     </Fragment>

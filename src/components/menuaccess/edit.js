@@ -5,7 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-// import TextField from '@material-ui/core/TextField';
+import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
@@ -18,7 +18,7 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 
 
-export default ({ editMenuAccess,toggleCheckbox , handleToggle, handleClose, handleSubmit,handleChange,checked, menuaccess : {m_role_id, m_menu_id } , role , menu}) => {
+export default ({ editMenuAccess,toggleCheckbox , handleToggle, handleClose, handleSubmit,handleChange,checked, menuaccess : {m_role_id, m_menu_id , code} , role , menu}) => {
   
 
     return <Fragment>
@@ -36,25 +36,11 @@ export default ({ editMenuAccess,toggleCheckbox , handleToggle, handleClose, han
             <form>
         
             <FormControl fullWidth='true'>
-        <InputLabel>Role Code</InputLabel>
-          <Select
-          value = {m_role_id}
-          onChange = {handleChange('m_role_id')} 
-          inputProps = {{
-              name : 'm_role_id',
-              id: 'unit-simple',
-          }} >
-            <MenuItem value = "" >
-              <em>-Select Role Code-</em>
-            </MenuItem>
-            {role.map(n => {
-                return(
-                    <MenuItem value = {n._id}>{n.name}   </MenuItem>
-                )
-            })}  
-          </Select>
-          
-          </FormControl>
+                            <TextField label='Role Code' value={code} margin='normal' disabled={true} />
+
+                        </FormControl>
+
+
             
             <List fullWidth = 'true'  >
 

@@ -133,21 +133,19 @@ class m_unit extends React.Component {
         }
 
         if(createNew){
-          
             axios.post(config.url + '/m-unit', newUnit)
                 .then(res => {
                     this.reloadUnitData();
-                    alert('Data Saved! New unit has been added with code');
+                    alert('Data Saved! New unit has been added with code ' + res.data.ops[0].code);
                 })
                 .catch((error) => {
                     alert(error)
                 })
         }else{
-   
             axios.put(config.url + '/m-unit/' + unit._id , newUnit)
             .then(res => {
                 this.reloadUnitData();
-                alert('Unit has been updated');
+                alert('Unit has been updated ' + res.data.ops[0].code);
             })
             .catch((error) => {
                 alert(error)
@@ -235,11 +233,11 @@ class m_unit extends React.Component {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Unit Code</TableCell>
-                            <TableCell>Unit Name</TableCell>
-                            <TableCell>Created Date</TableCell>
-                            <TableCell>Create By</TableCell>
-                            <TableCell>Action</TableCell>
+                        <TableCell style={{fontWeight:"bold", color:"black"}}>Unit Code</TableCell>
+                        <TableCell style={{fontWeight:"bold", color:"black"}}>Unit Name</TableCell>
+                        <TableCell style={{fontWeight:"bold", color:"black"}}>Created Date</TableCell>
+                        <TableCell style={{fontWeight:"bold", color:"black"}}>Create By</TableCell>
+                        <TableCell style={{textAlign:"center",fontWeight:"bold", color:"blue"}}>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -252,10 +250,10 @@ class m_unit extends React.Component {
                                     <TableCell>{n.name}</TableCell>
                                     <TableCell>{n.createDate}</TableCell>
                                     <TableCell>{n.createBy}</TableCell>
-                                    <TableCell>
-                                    <IconButton><EditIcon onClick={() => this.handleEdit(n._id)}/></IconButton>
-                                    <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} /></IconButton> 
-                                    <IconButton><ViewIcon onClick={() => this.handleView(n._id)} /></IconButton>
+                                    <TableCell style={{textAlign:"center"}}>
+                                    <IconButton><EditIcon onClick={() => this.handleEdit(n._id)}color="primary" /></IconButton>
+                                    <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} color="primary" /> </IconButton> 
+                                    <IconButton><ViewIcon onClick={() => this.handleView(n._id)} color="primary" /></IconButton>
                                     </TableCell>
                                 </TableRow>
                             );

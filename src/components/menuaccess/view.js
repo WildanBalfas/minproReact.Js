@@ -15,8 +15,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 
 
-export default ({ viewMenuAccess,  handleToggle, handleClose, handleSubmit,handleChange,checked, menuaccess : {m_role_id, m_menu_id, code } , role , menu}) => {
-  
+export default ({ viewMenuAccess,  handleClose,  checked, menuaccess: { m_role_id, m_menu_id, code}, role, menu }) => {
+
 
     return <Fragment>
         <Dialog
@@ -26,41 +26,41 @@ export default ({ viewMenuAccess,  handleToggle, handleClose, handleSubmit,handl
             <DialogTitle id="alert-dialog-title">{"View Menu Access"}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                  
-                   
-        <form>
-        
-        <FormControl fullWidth='true'>
-        <TextField label = 'Role Code' value = {code}  margin = 'normal' disabled = {true}/>
-       
-      </FormControl>
-        
-        <List fullWidth = 'true'  >
 
-        {menu.map(n=>{
-            return(
 
-        <ListItem 
+                    <form>
 
-          role={undefined}
-          key = {n._id}
-          disabled = {true} >
+                        <FormControl fullWidth='true'>
+                            <TextField label='Role Code' value={code} margin='normal' disabled={true} />
 
-        <Checkbox
-            checked ={checked.indexOf(n._id) !== -1}
-            tabIndex={-1}
-            disableRipple
-        />       
-        <ListItemText primary={n.name} />
-        </ListItem>
+                        </FormControl>
 
-         )
-        })}
-      
-        </List>
+                        <List fullWidth='true'  >
 
-        </form>
-            </DialogContentText>
+                            {menu.map(n => {
+                                return (
+
+                                    <ListItem 
+
+                                        role={undefined}
+                                        key={n._id}
+                                        disabled={true} >
+
+                                        <Checkbox
+                                             checked={checked.indexOf(n._id) !== -1}
+                                            tabIndex={-1}
+                                            disableRipple
+                                            />
+                                        <ListItemText primary={n.name} />
+                                    </ListItem>
+
+                                )
+                            })}
+
+                        </List>
+
+                    </form>
+                </DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">

@@ -1,7 +1,3 @@
-
-
-
-
 import React, { Fragment } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -27,7 +23,7 @@ export default ({ createNew,toggleCheckbox , handleToggle, handleClose, handleSu
 
     return <Fragment>
         
-        <Button onClick={handleToggle} variant="contained" color="primary">Add</Button>
+        <Button onClick={handleToggle} variant="contained" color="primary" style={{ float:'right' }}>Add</Button>
         <Dialog
             open={createNew}
             onClose={handleClose}
@@ -90,9 +86,6 @@ export default ({ createNew,toggleCheckbox , handleToggle, handleClose, handleSu
           
             </List>
 
-        
-
-             
             </form>
             </DialogContentText>
             </DialogContent>
