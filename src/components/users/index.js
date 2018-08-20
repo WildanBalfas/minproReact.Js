@@ -3,6 +3,7 @@ import React from 'react';
 import axios from 'axios';
 import { config } from '../configuration/config';
 import { deleteData } from '../base/base.model';
+import LS from '../base/base.localstorage';
 
 
 // Material UI
@@ -47,7 +48,9 @@ class Users extends React.Component {
         created_date: '',
         update_by: '',
         update_date: '',
-        re_password: ''
+        re_password: '',
+        mEmployeeFirstName:'',
+        mEmployeeLastName: ''
     };
 
     constructor(props) {
@@ -111,6 +114,7 @@ class Users extends React.Component {
             m_employee_id: user.m_employee_id,
         }
         if (createNew) {
+            newUser.created_by = LS.loginId();
             axios.post(config.url + '/m-user', newUser)
                 .then(res => {
                     this.reloadData('users', '/user-aggregation');
@@ -119,6 +123,7 @@ class Users extends React.Component {
                     alert(error);
                 })
         } else {
+            newUser.updated_by = LS.loginId();
             axios.put(config.url + '/m-user/' + user._id, newUser)
                 .then(res => {
                     this.reloadData('users', '/user-aggregation');
@@ -146,7 +151,9 @@ class Users extends React.Component {
                 password: user.password,
                 re_password: user.password,
                 m_role_id: user.m_role_id,
-                m_employee_id: user.m_employee_id
+                m_employee_id: user.m_employee_id,
+                mEmployeeFirstName: user.mEmployeeFirstName,
+                mEmployeeLastName: user.mEmployeeLastName,
             }
         })
     }
@@ -165,6 +172,7 @@ class Users extends React.Component {
     handleView = (_id) => {
         const { users } = this.state;
         const user = users.find(u => u._id === _id);
+        console.log(user);
         this.setState({
             viewUser: true,
             user: {
@@ -173,7 +181,9 @@ class Users extends React.Component {
                 password: user.password,
                 re_password: user.password,
                 m_role_id: user.m_role_id,
-                m_employee_id: user.m_employee_id
+                m_employee_id: user.m_employee_id,
+                mEmployeeFirstName: user.mEmployeeFirstName,
+                mEmployeeLastName: user.mEmployeeLastName,
             }
         })
     }
@@ -194,6 +204,7 @@ class Users extends React.Component {
     render() {
         const { users } = this.state;
         const deleteUser = this.state.user;
+        console.log(this.state.employees);
         let i = 1;
         return (
             <div>
@@ -248,7 +259,7 @@ class Users extends React.Component {
                                     <TableCell>{user.mEmployeemCompanyName}</TableCell>
                                     <TableCell>{user.username}</TableCell>
                                     <TableCell>{user.createDate}</TableCell>
-                                    <TableCell>{user.mRoleName}</TableCell>
+                                    <TableCell>{user.createdByRoleName}</TableCell>
                                     <TableCell style={{ textAlign: "center" }}>
                                         <IconButton onClick={() => this.handleView(user._id)}><SearchIcon color="primary" /></IconButton>
                                         <IconButton onClick={() => this.handleEdit(user._id)}><EditIcon color="primary" /></IconButton>
@@ -267,8 +278,8 @@ class Users extends React.Component {
                     </DialogContentText>
                     </DialogContent>
                     <DialogActions>
+                        <Button onClick={() => this.handleDeleteConfirm(deleteUser._id)} variant="contained" color="primary" autoFocus>Delete</Button>
                         <Button onClick={this.handleClose} variant="contained" color="secondary" >Cancel</Button>
-                        <Button onClick={() => this.handleDeleteConfirm(deleteUser._id)} variant="contained" color="primary" autoFocus>Save</Button>
                     </DialogActions>
                 </Dialog>
             </div>

@@ -25,7 +25,8 @@ export default ({ createNew, handleToggle, handleClose, handleSubmit, handleChan
                         <form>
                             <div className="dialog-content-kiri pdt16">
                                 <FormControl fullWidth="true">
-                                    <InputLabel shrink htmlFor="unit-simple" required>Employee Name</InputLabel>
+                                <div className="clear"/>
+                                    <InputLabel shrink htmlFor="unit-simple" required>Role Name</InputLabel>
                                     <Select
                                         value={m_role_id}
                                         onChange={handleChange('m_role_id')}
@@ -54,7 +55,7 @@ export default ({ createNew, handleToggle, handleClose, handleSubmit, handleChan
                                             id: 'unit-simple',
                                         }}
                                     >
-                                        <MenuItem value=""><em>-Select Role Name-</em> </MenuItem>
+                                        <MenuItem value=""><em>-Select Employee Name-</em> </MenuItem>
                                         {employees.map(employee => {
                                             return(
                                                 <MenuItem value={employee._id}>{employee.first_name + ' ' + employee.last_name}</MenuItem>

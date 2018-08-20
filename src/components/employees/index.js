@@ -3,6 +3,7 @@ import React from 'react';
 import axios from 'axios';
 import { config } from '../configuration/config';
 import { deleteData } from '../base/base.model';
+import LS from '../base/base.localstorage';
 
 
 // Material UI
@@ -32,6 +33,7 @@ import {
 import CreateEmployee from './create';
 import EditEmployee from './edit';
 import ViewUser from './view';
+import { changeDateFormat } from '../system/base.function';
 
 class Users extends React.Component {
 
@@ -107,9 +109,10 @@ class Users extends React.Component {
             first_name: employee.firstName,
             last_name: employee.lastName,
             m_company_id: employee.mCompanyId,
-            email: employee.email
+            email: employee.email,
         }
         if (createNew) {
+            newEmployee.created_by = LS.loginId();
             axios.post(config.url + '/m-employee', newEmployee)
                 .then(res => {
                     this.reloadData('employees', '/employee-aggregation');
@@ -118,6 +121,7 @@ class Users extends React.Component {
                     alert(error);
                 })
         } else {
+            newEmployee.updated_by = LS.loginId();
             axios.put(config.url + '/m-employee/' + employee._id, newEmployee)
                 .then(res => {
                     this.reloadData('employees', '/employee-aggregation');
@@ -140,7 +144,7 @@ class Users extends React.Component {
         this.setState({
             editEmployee: true,
             employee: {
-                _id : employee._id,
+                _id: employee._id,
                 employee_number: employee.employee_number,
                 firstName: employee.firstName,
                 lastName: employee.lastName,
@@ -167,7 +171,7 @@ class Users extends React.Component {
         this.setState({
             viewEmployee: true,
             employee: {
-                _id : employee._id,
+                _id: employee._id,
                 employee_number: employee.employee_number,
                 firstName: employee.firstName,
                 lastName: employee.lastName,
@@ -242,8 +246,8 @@ class Users extends React.Component {
                                     <TableCell>{employee.employee_number}</TableCell>
                                     <TableCell component="th" scope="row">{employee.firstName + ' ' + employee.lastName}</TableCell>
                                     <TableCell>{employee.mCompanyName}</TableCell>
-                                    <TableCell>{employee.createdDate}</TableCell>
-                                    <TableCell>{employee.createdBy}</TableCell>
+                                    <TableCell>{changeDateFormat(employee.createdDate)}</TableCell>
+                                    <TableCell>{employee.mRoleName}</TableCell>
                                     <TableCell style={{ textAlign: "center" }}>
                                         <IconButton onClick={() => this.handleView(employee._id)}><SearchIcon color="primary" /></IconButton>
                                         <IconButton onClick={() => this.handleEdit(employee._id)}><EditIcon color="primary" /></IconButton>
@@ -255,17 +259,17 @@ class Users extends React.Component {
                     </TableBody>
                 </Table>
 
-                <Dialog open={this.state.deleteEmployee} onClose={this.handleClose} style={{textAlign:'center'}}>
-                <DialogContent>
-                    <DialogContentText>
-                        Delete Data?
+                <Dialog open={this.state.deleteEmployee} onClose={this.handleClose} style={{ textAlign: 'center' }}>
+                    <DialogContent>
+                        <DialogContentText>
+                            Delete Data?
                     </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.handleClose} variant="contained" color="secondary" >Cancel</Button>
-                    <Button onClick={() => this.handleDeleteConfirm(deleteEmployee._id)} variant="contained" color="primary" autoFocus>Save</Button>
-                </DialogActions>
-            </Dialog>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleClose} variant="contained" color="secondary" >Cancel</Button>
+                        <Button onClick={() => this.handleDeleteConfirm(deleteEmployee._id)} variant="contained" color="primary" autoFocus>Save</Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         )
     }

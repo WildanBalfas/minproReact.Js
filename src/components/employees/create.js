@@ -33,7 +33,7 @@ export default (
         <Fragment>
             <Button onClick={handleToggle} variant="contained" color="primary" style={{ float: 'right' }}>Add</Button>
             <Dialog open={createNew} onClose={handleClose} fullWidth>
-                <div className="div-dialog-header">Add User</div>
+                <div className="div-dialog-header">Add Employee</div>
                 <DialogContent>
                     <DialogContentText className="border">
                         <form>
@@ -53,7 +53,7 @@ export default (
                                             id: 'unit-simple',
                                         }}
                                     >
-                                        <MenuItem value={mCompanyId}><em>-Select Role Name-</em> </MenuItem>
+                                        <MenuItem value={mCompanyId}><em>-Select Company Name-</em> </MenuItem>
                                         {companies.map(company => {
                                             return (
                                                 <MenuItem value={company._id}>{company.name}</MenuItem>

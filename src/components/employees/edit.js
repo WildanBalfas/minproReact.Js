@@ -32,7 +32,7 @@ export default (
     return (
         <Fragment>
             <Dialog open={editEmployee} onClose={handleClose} fullWidth>
-                <div className="div-dialog-header">Add User</div>
+                <div className="div-dialog-header">Edit Employee - {firstName + ' ' + (lastName ? lastName : '')} ({employee_number})</div>
                 <DialogContent>
                     <DialogContentText className="border">
                         <form>
@@ -52,7 +52,7 @@ export default (
                                             id: 'unit-simple',
                                         }}
                                     >
-                                        <MenuItem value={mCompanyId}><em>-Select Role Name-</em> </MenuItem>
+                                        <MenuItem value={mCompanyId}><em>-Select employee Name-</em> </MenuItem>
                                         {companies.map(company => {
                                             return (
                                                 <MenuItem value={company._id}>{company.name}</MenuItem>
@@ -67,8 +67,8 @@ export default (
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
+                    <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>Update</Button>
                     <Button onClick={handleClose} variant="contained" color="secondary" >Cancel</Button>
-                    <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>Save</Button>
                 </DialogActions>
             </Dialog>
         </Fragment>

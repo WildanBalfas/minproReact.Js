@@ -31,7 +31,7 @@ export default (
     return (
         <Fragment>
             <Dialog open={viewEmployee} onClose={handleClose} fullWidth>
-                <div className="div-dialog-header">Add User</div>
+                <div className="div-dialog-header">View Employee - {firstName + ' ' + (lastName ? lastName : '')} ({employee_number})</div>
                 <DialogContent>
                     <DialogContentText className="border">
                         <form>
@@ -66,8 +66,7 @@ export default (
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} variant="contained" color="secondary" >Cancel</Button>
-                    <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>Save</Button>
+                    <Button onClick={handleClose} variant="contained" color="secondary" >Close</Button>
                 </DialogActions>
             </Dialog>
         </Fragment>

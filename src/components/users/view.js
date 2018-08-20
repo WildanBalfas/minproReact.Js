@@ -14,17 +14,17 @@ import {
 } from '@material-ui/core';
 
 
-export default ({ viewUser, handleClose, handleSubmit, handleChange, user: { username, password, re_password, m_employee_id, m_role_id }, employees, roles }) => {
+export default ({ viewUser, handleClose, handleSubmit, handleChange, user: { username, mEmployeeFirstName, password, mEmployeeLastName, re_password, m_employee_id, m_role_id }, employees, roles }) => {
     return (
         <Fragment>
             <Dialog open={viewUser} onClose={handleClose} fullWidth>
-                <div className="div-dialog-header">Add User</div>
+                <div className="div-dialog-header">View User - {mEmployeeFirstName + ' ' + (mEmployeeLastName ? mEmployeeLastName : ' ')} ({username})</div>
                 <DialogContent>
                     <DialogContentText className="border">
                         <form>
                             <div className="dialog-content-kiri pdt16">
                                 <FormControl fullWidth="true">
-                                    <InputLabel shrink htmlFor="unit-simple" required>Employee Name</InputLabel>
+                                    <InputLabel shrink htmlFor="unit-simple" required>Role Name</InputLabel>
                                     <Select
                                         value={m_role_id}
                                         inputProps={{
@@ -53,7 +53,7 @@ export default ({ viewUser, handleClose, handleSubmit, handleChange, user: { use
                                         }}
                                         disabled
                                     >
-                                        <MenuItem value=""><em>-Select Role Name-</em> </MenuItem>
+                                        <MenuItem value=""><em>-Select Employee Name-</em> </MenuItem>
                                         {employees.map(employee => {
                                             return(
                                                 <MenuItem value={employee._id}>{employee.first_name + ' ' + employee.last_name}</MenuItem>

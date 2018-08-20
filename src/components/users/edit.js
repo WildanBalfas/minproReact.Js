@@ -14,11 +14,11 @@ import {
 } from '@material-ui/core';
 
 
-export default ({ editUser, handleClose, handleSubmit, handleChange, user: { username, password, re_password, m_employee_id, m_role_id }, employees, roles }) => {
+export default ({ editUser, handleClose, handleSubmit, handleChange, user: { username, password, mEmployeeFirstName, mEmployeeLastName, re_password, m_employee_id, m_role_id }, employees, roles }) => {
     return (
         <Fragment>
             <Dialog open={editUser} onClose={handleClose} fullWidth>
-                <div className="div-dialog-header">Add User</div>
+                <div className="div-dialog-header">Edit User - {mEmployeeFirstName + ' ' + (mEmployeeLastName ? mEmployeeLastName : ' ')} ({username})</div>
                 <DialogContent>
                     <DialogContentText className="border">
                         <form>
