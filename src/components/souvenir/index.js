@@ -254,7 +254,7 @@ class Souvenirs extends React.Component  {
                     <TableBody>
                         {souvenirs.map(n => {
                             return (
-                                <TableRow>
+                                <TableRow key={n._id}>
                                     <TableCell component="th" scope="row">{i++}</TableCell>
                                     <TableCell component="th" scope="row">{n.code}</TableCell>
                                     <TableCell>{n.name}</TableCell>

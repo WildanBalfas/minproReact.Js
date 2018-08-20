@@ -292,7 +292,7 @@ class Companies extends React.Component  {
                     <TableBody>
                         {companies.map(n => {
                             return (
-                                <TableRow>
+                                <TableRow key={n._id}>
                                     <TableCell component="th" scope="row">{i++}</TableCell>
                                     <TableCell component="th" scope="row">{n.code}</TableCell>
                                     <TableCell>{n.name}</TableCell>

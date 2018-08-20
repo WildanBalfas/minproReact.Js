@@ -26,7 +26,7 @@ class Header extends React.Component {
         const { classes, theme } = this.props;
 
         return (
-            <div className={classes.root} class="header">
+            <div className={classes.root} className="header">
                 <AppBar position="absolute" color='primary' anchor='bottom'>
                     <ToolBar variant="dense">
                         <IconButton className={classes.menuButton} color="inherit" aria-label="Menu"

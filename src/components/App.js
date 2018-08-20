@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import Header  from './layout/header';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { BrowserRouter} from 'react-router-dom';
 import './App.css';
 
+const theme = createMuiTheme()
 export default class extends Component {
+    
     render() {
         return (
-           <MuiThemeProvider>
+           <MuiThemeProvider theme={theme}>
                <BrowserRouter> 
-               <div>
+               <div >
                    <Header/>
                </div>
                </BrowserRouter>

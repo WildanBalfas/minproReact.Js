@@ -41,7 +41,7 @@ export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, 
                             </MenuItem>
                             {unit.map(c => {
                                 return(
-                                    <MenuItem value={c._id}>{c.name}</MenuItem>
+                                    <MenuItem value={c._id} key={c._id}>{c.name}</MenuItem>
                                 )
                             })}
                         </Select>
