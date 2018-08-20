@@ -18,6 +18,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
+import LSData from '../base/base.localstorage'
 
 
 class m_unit extends React.Component {
@@ -28,6 +29,7 @@ class m_unit extends React.Component {
         code: '',
         name: '',
         description : '',  
+        created_by: LSData.loginRoleId(),
         is_delete : '', 
         createdDate : ''
    
@@ -49,7 +51,7 @@ class m_unit extends React.Component {
     }
 
     reloadUnitData = () => {
-        axios.get(config.url + '/m-unit')
+        axios.get(config.url + '/m_unit_aggregation')
         .then(res => {
             this.setState({
                 m_unit : res.data,
@@ -65,25 +67,12 @@ class m_unit extends React.Component {
         })
     }
 
-    componentDidMout(){
+    componentDidMount(){
         this.reloadUnitData();
     }
 
     //API connect to cloud
-    componentDidMount() {
-        axios.get(config.url + '/m-unit')
-            .then(res => {
-                this.setState({
-                    m_unit: res.data,
-                    loading: false
-                })
-            })
-            .catch((error) => {
-                this.setState({
-                    CreateUnit: true,
-                })
-            })
-    }
+   
 
     handleToggle = () => {
         this.setState({
@@ -128,8 +117,10 @@ class m_unit extends React.Component {
         {
             code: unit.code,
             name: unit.name,
-            is_delete : 0,
-            description : unit.description
+            description : unit.description,
+            createDate: unit.createDate,
+            created_by: unit.created_by
+            
         }
 
         if(createNew){
@@ -145,7 +136,7 @@ class m_unit extends React.Component {
             axios.put(config.url + '/m-unit/' + unit._id , newUnit)
             .then(res => {
                 this.reloadUnitData();
-                alert('Unit has been updated ' + res.data.ops[0].code);
+                alert('Unit has been updated ' );
             })
             .catch((error) => {
                 alert(error)
@@ -173,6 +164,7 @@ class m_unit extends React.Component {
     handleDelete = (_id) => {
         const { m_unit } = this.state;
         const unit = m_unit.find(u => u._id === _id);
+        
         this.setState({
             deleteUnit: true,
             unit: {
@@ -202,19 +194,18 @@ class m_unit extends React.Component {
 
     handleDeleteConfirm = () => {
         const { unit } = this.state;
+        
         let delProp = {
             is_delete: unit.is_delete + 1,
         }
-        
         axios.put(config.url + '/m-unit/' + unit._id, delProp)
         .then(res =>{
             this.reloadUnitData();
-            alert('has been deleted');
+            alert('Data Deleted! Data Unit with code '+ res.data.ops[0].code + ' has been deleted');
         })
         .catch((error) => {
             alert(error);
         })
-        
     }
 
 
@@ -227,7 +218,7 @@ class m_unit extends React.Component {
                 <h3><center>List of Unit</center></h3>
                 <CreateUnit createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleChangeCheckBox = {this.handleChangeCheckBox} unit = {this.state.unit} />
                 <EditUnit editUnit={this.state.editUnit} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleChangeCheckBox = {this.handleChangeCheckBox} unit = {this.state.unit} />
-                <DeleteUnit deleteUnit={this.state.deleteUnit} handleClose={this.handleClose} handleDeleteConfirm={this.handleDeleteConfirm} handleChangeCheckBox = {this.handleChangeCheckBox} unit={this.state.unit} handleChange = {this.handleChange} />
+                <DeleteUnit deleteUnit={this.state.deleteUnit} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} handleChangeCheckBox = {this.handleChangeCheckBox} unit={this.state.unit} handleChange = {this.handleChange} />
                 <ViewUnit viewUnit={this.state.viewUnit} handleClose={this.handleClose} unit={this.state.unit} />
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
                 <Table>
@@ -242,6 +233,7 @@ class m_unit extends React.Component {
                     </TableHead>
                     <TableBody>
                         {m_unit.map(n => {
+                               
                             return (
                                 <TableRow>
                                     <TableCell component="th" scope="row">
@@ -249,7 +241,7 @@ class m_unit extends React.Component {
                                     </TableCell>
                                     <TableCell>{n.name}</TableCell>
                                     <TableCell>{n.createDate}</TableCell>
-                                    <TableCell>{n.createBy}</TableCell>
+                                    <TableCell>{n.created_by}</TableCell>
                                     <TableCell style={{textAlign:"center"}}>
                                     <IconButton><EditIcon onClick={() => this.handleEdit(n._id)}color="primary" /></IconButton>
                                     <IconButton><DeleteIcon onClick={() => this.handleDelete(n._id)} color="primary" /> </IconButton> 

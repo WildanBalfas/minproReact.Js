@@ -33,6 +33,7 @@ class MenuAccess extends React.Component {
             createDate: '',
             createBy: '',
             menu: [],
+            
         }
 
     constructor(props) {
@@ -170,16 +171,11 @@ class MenuAccess extends React.Component {
             {
                 m_role_id: menuaccess.m_role_id,
                 m_menu_id: checked[key],
+                createDate : menuaccess.createDate
             }
 
             objArray.push(newMenuAccess);
         }
-
-        for (let key in menuaccess) {
-            console.log(menuaccess.menu);
-        }
-
-        objMenuId.push(1);
 
         if (createNew) {
             axios.post(config.url + '/m-menu-access', objArray)
@@ -187,13 +183,13 @@ class MenuAccess extends React.Component {
                 .then(res => {
 
                     this.reloadMenuAccessData();
-                    alert('Data Saved! New unit has been added with code');
+                    alert('Data Saved!');
                 })
                 .catch((error) => {
                     alert(error)
                 })
                 
-                checked: checked
+                
         } 
         
         else {
@@ -215,17 +211,7 @@ class MenuAccess extends React.Component {
                         console.log(objArray);
                     }
                 }
-            }else{
-                // console.log('gagal');
             }
-            // axios.put(config.url + '/m-menu-access/' + menuaccess._id, objArray)
-            //     .then(res => {
-            //         this.reloadMenuAccessData();
-            //         alert('Menu Access has been updated');
-            //     })
-            //     .catch((error) => {
-            //         alert(error)
-            //     })
         }
     }
 
@@ -249,6 +235,7 @@ class MenuAccess extends React.Component {
             checked: checked
         })
     }
+    
 
     handleDelete = (_id) => {
         const { m_menu_access } = this.state;

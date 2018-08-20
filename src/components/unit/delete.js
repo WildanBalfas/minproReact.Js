@@ -8,7 +8,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
 
-export default ({deleteUnit, handleDeleteConfirm , handleClose ,   unit : {code, name, description}}) => {
+export default ({deleteUnit, handleDelete , handleClose ,   unit : {code, name, description}}) => {
+ 
     return <Fragment>
         <Dialog
             open={deleteUnit}
@@ -32,7 +33,7 @@ export default ({deleteUnit, handleDeleteConfirm , handleClose ,   unit : {code,
                 <Button onClick={handleClose} color="secondary" variant="contained">
                     Cancel
             </Button>
-                    <Button onClick={handleDeleteConfirm} color="primary" variant="contained" autoFocus>
+                    <Button onClick={handleDelete} color="primary" variant="contained" autoFocus>
                         Delete
                 </Button>
             </DialogActions>
