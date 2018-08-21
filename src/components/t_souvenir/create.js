@@ -16,7 +16,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Table from '@material-ui/core/Table';
 
-export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit,handleChangeItem, handleAddItem,m_souvenirs, m_employee, t_souvenir_stock:{received_by, received_date, note }, items}) => {
+export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit,handleChangeItem, handleAddItem,m_souvenirs, m_employee, t_souvenir_stock:{received_by, received_date, note }, errorsT:{received_byErr, received_dateErr, noteErr}, items}) => {
     return <Fragment>
         <Button onClick={handleToggle} variant="contained" color="primary" style={{float: 'right'}}>Add</Button>
         <Dialog
@@ -33,7 +33,7 @@ export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit,h
                     <TextField label="Transaction Code"  margin="normal" InputLabelProps={{shrink: true}} placeholder="Auto Generated" disabled required/>
                     <br/>
                     <FormControl style={{width:200}} required>
-                        <InputLabel shrink htmlFor="employee-simple" >Employee Name </InputLabel>
+                        <InputLabel shrink htmlFor="employee-simple"  >Employee Name </InputLabel>
                         <Select
                             value={received_by}
                             onChange={handleChange('received_by')}
@@ -42,6 +42,7 @@ export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit,h
                                 id: 'employee-simple',
                                
                             }}
+                            error={received_byErr == 0 ? false : true } 
                             displayEmpty
                         >
                             <MenuItem value='' disabled>
@@ -57,9 +58,9 @@ export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit,h
                     <br/>
                     {/* <DatePicker></DatePicker>
                     <br/> */}
-                    <TextField style={{width:200}} label="Received Date" value={received_date} onChange={handleChange('received_date')} margin='normal' />
+                    <TextField type='date' style={{width:200}} label={received_dateErr == 0 ? "Received Date" : received_dateErr } value={received_date} onChange={handleChange('received_date')} margin='normal'error={received_dateErr == 0 ? false : true } InputLabelProps={{shrink: true}}  />
                     <br />
-                    <TextField style={{width:200}} label="Note" value={note} onChange={handleChange('note')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Note" multiline/>&nbsp;
+                    <TextField style={{width:200}} label={noteErr == 0 ? "Note" : noteErr } value={note} onChange={handleChange('note')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Note" multiline InputLabelProps={{shrink: true}} error={noteErr == 0 ? false : true }  />&nbsp;
                
             </DialogContentText>
             </DialogContent>

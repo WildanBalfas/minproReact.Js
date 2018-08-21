@@ -22,7 +22,22 @@ import { Redirect } from 'react-router-dom';
 
 class T_Souvenir extends React.Component {
 
-    transactionModel = { _id:"", code: "", received_by: "", received_date: "", note: "", EmployeeFirstName: "", EmployeeLastName: "", items: [] }
+    transactionModel = {
+        _id: "",
+        code: "",
+        received_by: "",
+        received_date: "",
+        note: "",
+        EmployeeFirstName: "",
+        EmployeeLastName: "",
+    }
+    errTModel = {
+        received_byErr: "",
+        received_dateErr: "",
+        noteErr: "",
+    }
+
+
     idx = 0
     constructor(props) {
         super(props);
@@ -36,13 +51,47 @@ class T_Souvenir extends React.Component {
             tItems: [],
             t_souvenir: this.transactionModel,
             m_souvenir: {},
+            errorsT: this.errTModel,
             createNew: false,
-            editTSouvenir:false,
+            editTSouvenir: false,
             viewTSouvenir: false,
             load: true
 
         }
     }
+
+
+    validate = () => {
+
+        const { t_souvenir_stock } = this.state;
+        let isError = false;
+        const errorsT = {
+            received_byErr: "",
+            received_dateErr: "",
+            noteErr: "",
+        };
+
+        if (t_souvenir_stock.received_by.length < 1) {
+            isError = true;
+            errorsT.received_byErr = "Fill out Received By";
+        }
+
+        if (t_souvenir_stock.received_date.length < 1) {
+            isError = true;
+            errorsT.received_dateErr = "Fill out Received Date";
+        }
+        if (t_souvenir_stock.note.length < 1) {
+            isError = true;
+            errorsT.noteErr = "Fill out Note";
+        }
+
+
+        this.setState({
+            errorsT: errorsT
+        });
+        console.log(errorsT)
+        return isError;
+    };
 
     reloadTSouvenirData = () => {
         axios.get(config.url + '/t_souvenir_stock')
@@ -108,7 +157,7 @@ class T_Souvenir extends React.Component {
     handleToggle = () => {
         this.setState({
             createNew: true,
-            
+
             t_souvenir_stock: this.transactionModel,
 
         })
@@ -137,9 +186,9 @@ class T_Souvenir extends React.Component {
     handleClose = () => {
         this.setState({
             createNew: false,
-            viewTSouvenir:false,
-            editTSouvenir:false,
-            items : [],
+            viewTSouvenir: false,
+            editTSouvenir: false,
+            items: [],
             // editProduct: false,
             // viewProduct: false,
             // deleteProduct: false,
@@ -173,43 +222,46 @@ class T_Souvenir extends React.Component {
     }
 
     handleSubmit = () => {
-        const { items, t_souvenir_stock, createNew } = this.state
-        let arr = [];
-        let newStock = {
+        const err = this.validate();
+        if (!err) {
+            const { items, t_souvenir_stock, createNew } = this.state
+            let arr = [];
+            let newStock = {
 
-            received_by: t_souvenir_stock.received_by,
-            received_date: t_souvenir_stock.received_date,
-            note: t_souvenir_stock.note,
-            type:'addtional'
-        }
+                received_by: t_souvenir_stock.received_by,
+                received_date: t_souvenir_stock.received_date,
+                note: t_souvenir_stock.note,
+                type: 'addtional'
+            }
 
-        arr.push(newStock, items)
+            arr.push(newStock, items)
 
-        if (createNew) {
-            axios.post(config.url + '/add_souvenir_stock', arr)
-                .then(res => {
-                    this.reloadTSouvenirData();
-                    alert('has been saved ' + res.data.ops[0].code);
-                    // console.log(res.data);
-
-
-                })
-                .catch((error) => {
-                    alert(error);
-                })
-        } else {
-            axios.put(config.url + '/update_souvenir_stock/' + t_souvenir_stock._id, arr)
-            // console.log(config.url + '/update_souvenir_stock/' + t_souvenir_stock._id, arr)
-            .then(res => {
-                // this.reloadTSouvenirData();
-                // alert('has been saved ' + res.data.ops[0].code);
-                // console.log(res.data);
+            if (createNew) {
+                axios.post(config.url + '/add_souvenir_stock', arr)
+                    .then(res => {
+                        this.reloadTSouvenirData();
+                        alert('has been saved ' + res.data.ops[0].code);
+                        // console.log(res.data);
 
 
-            })
-            // .catch((error) => {
-            //     alert(error);
-            // })
+                    })
+                    .catch((error) => {
+                        alert(error);
+                    })
+            } else {
+                axios.put(config.url + '/update_souvenir_stock/' + t_souvenir_stock._id, arr)
+                    // console.log(config.url + '/update_souvenir_stock/' + t_souvenir_stock._id, arr)
+                    .then(res => {
+                        // this.reloadTSouvenirData();
+                        // alert('has been saved ' + res.data.ops[0].code);
+                        // console.log(res.data);
+
+
+                    })
+                // .catch((error) => {
+                //     alert(error);
+                // })
+            }
         }
 
     }
@@ -235,18 +287,18 @@ class T_Souvenir extends React.Component {
                 _id: newTitems[key]._id,
                 t_souvenir_id: newTitems[key].t_souvenir_id,
                 m_souvenir_id: newTitems[key].m_souvenir_id,
-                qty:newTitems[key].qty,
+                qty: newTitems[key].qty,
                 notes: newTitems[key].notes,
 
             }
 
             dataTitems.push(obj);
         }
-        
+
         this.setState({
             editTSouvenir: true,
             t_souvenir_stock: {
-                _id:t_souvenir_stock._id,
+                _id: t_souvenir_stock._id,
                 code: t_souvenir_stock.code,
                 received_by: t_souvenir_stock.received_by,
                 received_date: t_souvenir_stock.received_date,
@@ -281,14 +333,14 @@ class T_Souvenir extends React.Component {
                 id: newTitems[key]._id,
                 t_souvenir_id: newTitems[key].t_souvenir_id,
                 m_souvenir_id: newTitems[key].m_souvenir_id,
-                qty:newTitems[key].qty,
+                qty: newTitems[key].qty,
                 notes: newTitems[key].notes,
 
             }
 
             dataTitems.push(obj);
         }
-        
+
         this.setState({
             viewTSouvenir: true,
             t_souvenir_stock: {
@@ -306,11 +358,11 @@ class T_Souvenir extends React.Component {
 
 
     render() {
-        if(!isLogged()){
-            return(<Redirect to= {'/login'} />)
+        if (!isLogged()) {
+            return (<Redirect to={'/login'} />)
         }
 
-        
+
         const { t_souvenirs_stock, load } = this.state;
         const { classes } = this.props;
 
@@ -319,11 +371,11 @@ class T_Souvenir extends React.Component {
 
             <div>
                 <h3>List Of Transaksi Souvenir Stock</h3>
-                <AddSouvenir createNew={this.state.createNew} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit} items={this.state.items} m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} item={this.state.item} handleChangeItem={this.handleChangeItem} />
+                <AddSouvenir errorsT={this.state.errorsT} createNew={this.state.createNew} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit} items={this.state.items} m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} item={this.state.item} handleChangeItem={this.handleChangeItem} />
 
-                <ViewSouvenir viewTSouvenir={this.state.viewTSouvenir} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit}  m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} items={this.state.items} handleChangeItem={this.handleChangeItem} />
+                <ViewSouvenir viewTSouvenir={this.state.viewTSouvenir} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit} m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} items={this.state.items} handleChangeItem={this.handleChangeItem} />
 
-               <EditSouvenir editTSouvenir={this.state.editTSouvenir} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit}  m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} items={this.state.items} handleChangeItem={this.handleChangeItem} />
+                <EditSouvenir editTSouvenir={this.state.editTSouvenir} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit} m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} items={this.state.items} handleChangeItem={this.handleChangeItem} />
 
 
                 <CircularProgress className={classes.progress} style={{ visibility: (load ? 'visible' : 'hidden') }} color="secondary" />
