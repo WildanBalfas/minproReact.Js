@@ -41,22 +41,22 @@ export default class SideBar extends React.Component {
                     </div>
                     <Divider />
                     <List onClick={() => onSelected()}>
-                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/" className={classes.MenuList}>Home</Link></ListItem>
-                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/users" className={classes.MenuList}>Users</Link></ListItem>
-                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/employees" className={classes.MenuList}>Employees</Link></ListItem>
-                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/design" className={classes.MenuList}>Design</Link></ListItem>
-                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/promotion" className={classes.MenuList}>Promotion</Link></ListItem>
-                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/company" className={classes.MenuList}>Company</Link></ListItem>
-                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/souvenir" className={classes.MenuList}>Souvenir</Link></ListItem>
-                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/product" className={classes.MenuList}>Master Product</Link></ListItem>
-                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} /><Link to="/tsouveniradd" className={classes.MenuList}>Transaksi Add Souvenir</Link></ListItem>
-                        <ListItem className={classes.ListItem}><MenuIcon className={classes.MenuIcon} color="primary" /><Link to="/menu" className={classes.MenuList}>Menu</Link></ListItem>
-                        <ListItem className={classes.ListItem}><RoleIcon className={classes.MenuIcon} color="primary" /><Link to="/role" className={classes.MenuList}>Role</Link></ListItem>
-                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} color="primary" /><Link to="/event" className={classes.MenuList}>Event</Link></ListItem>
-                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} color="primary" /><Link to="/unit" className={classes.MenuList}>Unit</Link></ListItem>
-                        <ListItem className={classes.ListItem}><HomeIcon className={classes.MenuIcon} color="primary" /><Link to="/menuaccess" className={classes.MenuList}>Menu Access</Link></ListItem>
-                        <ListItem className={classes.ListItem}><HelpIcon className={classes.MenuIcon} /><Link to="/help" className={classes.MenuList}>Help</Link></ListItem>
-                        <ListItem className={classes.ListItem}><HelpIcon className={classes.MenuIcon} /><Link to="/login" className={classes.MenuList}>Login</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/" className={classes.MenuList}>Home</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/users" className={classes.MenuList}>Users</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/employees" className={classes.MenuList}>Employees</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/design" className={classes.MenuList}>Design</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/promotion" className={classes.MenuList}>Promotion</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/company" className={classes.MenuList}>Company</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/souvenir" className={classes.MenuList}>Souvenir</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/product" className={classes.MenuList}>Master Product</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/tsouveniradd" className={classes.MenuList}>Transaksi Add Souvenir</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/menu" className={classes.MenuList}>Menu</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/role" className={classes.MenuList}>Role</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/event" className={classes.MenuList}>Event</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/unit" className={classes.MenuList}>Unit</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/menuaccess" className={classes.MenuList}>Menu Access</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/help" className={classes.MenuList}>Help</Link></ListItem>
+                        <ListItem className={classes.ListItem}><Link to="/login" className={classes.MenuList}>Login</Link></ListItem>
                     </List>
                 </Drawer>
                 <Route exact path="/" component={Home} />
