@@ -16,7 +16,7 @@ import CreateEvent from './create';
 import EditEvent from './edit';
 import ViewEventSubmitted from './viewSubmitted';
 import ViewEventInProgress from './viewInProgress';
-// import ViewEvent from './view';
+import ViewEventReject from './viewReject';
 import LSData from '../base/base.localstorage';
 import { changeValue,changeDateFormat } from '../system/base.function';
 
@@ -81,7 +81,7 @@ class Events extends React.Component {
                 viewEventInProgress: false,
                 event: this.eventModel,
                 loading: false,
-                viewEvent: false
+                viewEventReject: false
             })
         })
         .catch((error) => {
@@ -121,7 +121,7 @@ class Events extends React.Component {
             viewEventInProgress: false,
             rejectEvent:false,
             event: this.eventModel,
-            viewEvent: false
+            viewEventReject: false
         });
     }
 
@@ -250,9 +250,9 @@ class Events extends React.Component {
                     requestName: event.requestName.first + ' ' + event.requestName.last,
                 }
             })
-        } else if(status == 0 || status == 3){
+        } else if(status == 0){
             this.setState({
-                viewEvent: true,
+                viewEventReject: true,
                 event: {
                     _id: event._id,
                     code: event.code,
@@ -268,7 +268,8 @@ class Events extends React.Component {
                     request_date: event.request_date,
                     assign_to: event.assign_to,
                     assign_toName: event.assign_toName,
-                    reject_reason:event.reject_reason
+                    reject_reason:event.reject_reason,
+                    requestName: event.requestName.first + ' ' + event.requestName.last,
                 }
             })
         }
@@ -286,6 +287,7 @@ class Events extends React.Component {
        
         let RejectReq = {
             status: event.status - 1,
+            reject_reason: event.reject_reason
         }
         axios.put(config.url + '/t-event/' + event._id, RejectReq)
         .then(res =>{
@@ -348,7 +350,7 @@ class Events extends React.Component {
                 <EditEvent editEvent={this.state.editEvent} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} event={this.state.event}/>
                 <ViewEventSubmitted viewEventSubmitted={this.state.viewEventSubmitted} handleRejectConfirm={this.handleRejectConfirm} handleApproved={this.handleApproved} rejectEvent={this.state.rejectEvent} handleReject={this.handleReject} handleChange={this.handleChange} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event} employes={this.state.employes}/>
                 <ViewEventInProgress viewEventInProgress={this.state.viewEventInProgress} handleCloseRequestConfirm={this.handleCloseRequestConfirm} closeEvent={this.state.closeEvent} handleCloseRequest={this.handleCloseRequest} handleChange={this.handleChange} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event} employes={this.state.employes}/>  
-                {/* <ViewEvent viewEvent={this.state.viewEvent} handleChange={this.handleChange} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event}/> */}
+                <ViewEventReject viewEventReject={this.state.viewEventReject} handleChange={this.handleChange} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event}/>
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
                 <Table>
                     <TableHead >

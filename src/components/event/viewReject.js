@@ -7,10 +7,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
 
-export default ({ viewEvent, closeEvent, handleClose, handleChange, handleDelete, event: { code, event_name, place, start_date, end_date, budget, request_by, request_date, assign_to, note, reject_reason, requestName }}) => {
+export default ({ viewEventReject, closeEvent, handleClose, handleChange, handleDelete, event: { code, event_name, place, start_date, end_date, budget, request_by, request_date, note, reject_reason, requestName }}) => {
     return <Fragment>
         <Dialog
-            open={viewEvent}
+            open={viewEventReject}
             onClose={handleClose}
         >
             <DialogTitle id="alert-dialog-title">{"Approval Event Request"}</DialogTitle>
@@ -27,8 +27,6 @@ export default ({ viewEvent, closeEvent, handleClose, handleChange, handleDelete
                     <TextField label="Event End Date" value={end_date} margin="normal" disabled />
                     &nbsp;
                     <TextField label="Budget (Rp.)" value={budget} margin="normal" disabled />
-                    &nbsp;
-                    <TextField label="Assign To" value={assign_to} margin='normal' disabled/>
                     &nbsp;
                     <TextField label="Request By" value={requestName} margin="normal" disabled />
                     &nbsp;
