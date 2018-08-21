@@ -1,7 +1,7 @@
 import React from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import { Home, Help } from '../content';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route, Redirect } from 'react-router-dom';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import HomeIcon from '@material-ui/icons/Home';
@@ -32,7 +32,7 @@ export default class SideBar extends React.Component {
         const { classes, onSelected, showMenu } = this.props;
         return (
             <div>
-                <Drawer /*style={{visibility: (isLogged() ? 'visible': 'hidden')}}*/ variant='temporary' anchor='left' open={showMenu} onClick={() => onSelected()}>
+                <Drawer style={{visibility: (isLogged() ? 'visible': 'hidden')}} variant='temporary' anchor='left' open={showMenu} onClick={() => onSelected()}>
                     <div className={classes.toolbar} >
                         <IconButton>
                             <ChevronLeftIcon />
@@ -74,6 +74,7 @@ export default class SideBar extends React.Component {
                 <Route exact path="/unit" component={Unit} />
                 <Route exact path="/menuaccess" component={MenuAccess} />
                 <Route exact path="/login" component={LoginPage} />
+                <Redirect from='/' to='/login'/>
             </div>
         )
     }

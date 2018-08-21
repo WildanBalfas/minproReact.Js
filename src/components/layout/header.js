@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import SideBar from './sidebar';
+import { isLogged } from '../configuration/config';
 
 class Header extends React.Component {
     constructor(props) {
@@ -26,8 +27,8 @@ class Header extends React.Component {
         const { classes, theme } = this.props;
 
         return (
-            <div className={classes.root} className="header">
-                <AppBar position="absolute" color='primary' anchor='bottom'>
+            <div className={classes.root} class="header">
+                <AppBar style={{visibility: (isLogged() ? 'visible': 'hidden')}} position="absolute" color='primary' anchor='bottom'>
                     <ToolBar variant="dense">
                         <IconButton className={classes.menuButton} color="inherit" aria-label="Menu"
                             onClick={() => this.toggleDrawer()} >

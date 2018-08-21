@@ -58,10 +58,9 @@ class Login extends React.Component {
     }
     
     render() {
-        // if(isLogged()){
-        //     return(<Redirect to= {'/'} />)
-        // }
-
+        if(isLogged()){
+            return(<Redirect to= {'/users'} />)
+        }
         const { userData } = this.state;
         return (
             <div class="outer-wrapper">
