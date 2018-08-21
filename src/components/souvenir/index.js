@@ -37,6 +37,11 @@ class Souvenirs extends React.Component  {
         updateDate: '',
         is_delete: '',
     }
+
+    errModel ={
+        nameErr: '',
+        unitNameErr: ''
+    }
     constructor(props) {
         super(props);
         this.state = {
@@ -47,6 +52,7 @@ class Souvenirs extends React.Component  {
             deleteSouvenir: false,
             loading: true,
             souvenir: this.souvenirModel,
+            errors: this.errModel
 
         }
     }
@@ -97,7 +103,8 @@ class Souvenirs extends React.Component  {
             editSouvenir: false,
             deleteSouvenir: false,
             viewSouvenir: false,
-            souvenir: this.souvenirModel
+            souvenir: this.souvenirModel,
+            errors: this.errModel
         });
     }
     //bisa diketik
@@ -111,6 +118,8 @@ class Souvenirs extends React.Component  {
     }
 
     handleSubmit = () => {
+        const err = this.validate();
+        if (!err) {
         const { souvenir, createNew } = this.state;
 
         let newSouvenir =
@@ -145,6 +154,7 @@ class Souvenirs extends React.Component  {
             })
         }    
     }
+}
     
     handleEdit = (_id) => {
         const { souvenirs } = this.state;
@@ -222,6 +232,33 @@ class Souvenirs extends React.Component  {
 
     }
 
+    validate = () => {
+        const { souvenir } = this.state;
+        let isError=false;
+
+        const errors = {
+            nameErr:"",
+            // unitNameErr:""
+        };
+
+        if (souvenir.name.length < 1) {
+            isError = true;
+            errors.nameErr = "Fill out Souvenir name";
+          }
+          
+        // if (souvenir.unitName.length < 1) {
+        //     isError= true;
+        //     errors.unitNameErr= "Fill out Unit Name"
+        // }
+      
+          this.setState({
+            errors:errors
+          });
+          console.log(errors)
+          return isError;
+        };
+  
+    
     render() {
         if(!isLogged()){
             return(<Redirect to= {'/login'} />)
@@ -234,7 +271,7 @@ class Souvenirs extends React.Component  {
         return (
             <div>
                 <h3><center>List Souvenirs</center></h3>
-                <CreateSouvenir createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} souvenir={this.state.souvenir} unit={this.state.unit} />
+                <CreateSouvenir createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} errors={this.state.errors} souvenir={this.state.souvenir} unit={this.state.unit} />
                 <EditSouvenir editSouvenir={this.state.editSouvenir} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} souvenir={this.state.souvenir} unit={this.state.unit}/>
                 <DeleteSouvenir deleteSouvenir={this.state.deleteSouvenir} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} souvenir={this.state.souvenir} />
                 <ViewSouvenir viewSouvenir={this.state.viewSouvenir} handleView={this.handleView} handleClose={this.handleClose} souvenir={this.state.souvenir} />

@@ -41,6 +41,10 @@ class Companies extends React.Component  {
         created_by: LSData.loginRoleId(),
         is_delete: ''
     }
+
+    errModel = {
+        nameErr: '',   
+    }
     constructor(props) {
         super(props);
         this.state = {
@@ -51,6 +55,7 @@ class Companies extends React.Component  {
             loading: true,
             company: this.companyModel,
             updateCompany: false,
+            errors: this.errModel
 
         }
     }
@@ -90,7 +95,8 @@ class Companies extends React.Component  {
             deleteCompany: false,
             viewCompany: false,
             company: this.companyModel,
-            updateCompany: false
+            updateCompany: false,
+            errors:this.errModel
         });
     }
     //bisa diketik
@@ -105,6 +111,8 @@ class Companies extends React.Component  {
 
 
     handleSubmit = () => {
+        const err = this.validate();
+        if (!err) {
         const { company, createNew } = this.state;
         let newCompany =
         {
@@ -136,7 +144,8 @@ class Companies extends React.Component  {
             .catch((error) => {
                 alert(error)
             })
-        }    
+        } 
+    }   
     }
     
     handleEdit = (_id) => {
@@ -212,6 +221,26 @@ class Companies extends React.Component  {
         })
     }
  
+    validate = () => {
+        
+        const { company } = this.state;
+        let isError = false;
+        const errors = {
+          nameErr: ""
+        };
+    
+        if (company.name.length < 1) {
+          isError = true;
+          errors.nameErr = "Fill out Company name";
+        }
+        
+    
+        this.setState({
+          errors:errors
+        });
+        console.log(errors)
+        return isError;
+      };
 
     render() {
         if(!isLogged()){
@@ -223,7 +252,7 @@ class Companies extends React.Component  {
         return (
             <div>
                 <h3><center>List Company</center></h3>
-                <CreateCompany createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} company={this.state.company} />
+                <CreateCompany createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} errors={this.state.errors} company={this.state.company} />
                 <EditCompany editCompany={this.state.editCompany} updateCompany={this.state.updateCompany} handleUpdateCompany={this.handleUpdateCompany} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} company={this.state.company} />
                 <DeleteCompany deleteCompany={this.state.deleteCompany} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} company={this.state.company} />
                 <ViewCompany viewCompany={this.state.viewCompany} handleView={this.handleView} handleClose={this.handleClose} company={this.state.company} />

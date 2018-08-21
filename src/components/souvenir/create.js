@@ -11,7 +11,7 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
-export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, souvenir: {code, name, m_unit_id, description }, unit}) => {
+export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, errors: {nameErr}, souvenir: {code, name, m_unit_id, description }, unit}) => {
     return <Fragment>
         <Button onClick={handleToggle} variant="contained" color="primary" style={{float: 'right'}}>Add</Button>
         <Dialog
@@ -24,7 +24,7 @@ export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, 
                    <form>
                     <TextField label="Souvenir Code" value={code} onChange={handleChange('code')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Auto Generated" required disabled/>
                     <br/>
-                    <TextField label="Souvenir Name" value={name} onChange={handleChange('name')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Souvenir Name" required />
+                    <TextField  label={nameErr == 0 ? "Souvenir Name " : nameErr } value={name} onChange={handleChange('name')} margin="normal" InputLabelProps={{shrink: true}} error={nameErr == 0 ? false : true } placeholder="Type Souvenir Name" required />
                     <FormControl fullWidth='true' required>
                         <InputLabel shrink htmlFor="unit-simple" >Unit Name </InputLabel>
                         <Select
