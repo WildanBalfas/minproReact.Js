@@ -74,7 +74,7 @@ export default class SideBar extends React.Component {
                 <Route exact path="/unit" component={Unit} />
                 <Route exact path="/menuaccess" component={MenuAccess} />
                 <Route exact path="/login" component={LoginPage} />
-                <Redirect from='/' to='/login'/>
+                
             </div>
         )
     }

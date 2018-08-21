@@ -14,12 +14,12 @@ export default ({ deleteSouvenir,handleClose, handleDelete,  souvenir: {code, na
             open={deleteSouvenir}
             onClose={handleClose}
         >
-            <DialogTitle id="alert-dialog-title">{"Delete Souvenir"}</DialogTitle>
-            <DialogContent>
-            <DialogContentText id="alert-dialog-description">
+            <DialogTitle id="alert-dialog-title">{"Delete Souvenir ?"}</DialogTitle>
+            
+            {/* <DialogContentText id="alert-dialog-description">
                    Delete Data ?
-            </DialogContentText>
-                   <form>
+            </DialogContentText> */}
+                   {/* <form>
                     <TextField label="Souvenir Code" value={code}  margin="normal"  disabled={true}/>&nbsp;
                     <br/>
                     <TextField label="Souvenir Name" value={name}  margin="normal"  disabled={true}/>
@@ -27,8 +27,8 @@ export default ({ deleteSouvenir,handleClose, handleDelete,  souvenir: {code, na
                     <TextField label="Unit Name" value={unitName} margin="normal"  disabled={true}/> 
                     <br />
                     <TextField label="Description" value={description} margin="normal"  disabled={true}/>                   
-                </form>
-            </DialogContent>
+                </form> */}
+           
             <DialogActions>
             <Button onClick={handleDelete} variant="contained" color="primary"> 
                     Delete

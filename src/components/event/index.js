@@ -19,6 +19,7 @@ import ViewEventInProgress from './viewInProgress';
 import ViewEventReject from './viewReject';
 import LSData from '../base/base.localstorage';
 import { changeValue,changeDateFormat } from '../system/base.function';
+import ViewEventDone from './viewDone';
 
 class Events extends React.Component {
     eventModel = {
@@ -48,6 +49,13 @@ class Events extends React.Component {
         
     }
 
+    errModel = {
+        event_nameErr: "",
+        placeErr: "",
+        budgetErr: ""
+
+    }
+
     constructor(props){
         super(props);
         this.state ={ 
@@ -64,7 +72,9 @@ class Events extends React.Component {
             event: this.eventModel,
             rejectEvent: false,
             closeEvent: false,
-            viewEvent: false
+            viewEvent: false,
+            errors: this.errModel,
+            viewEventDone: false
         }
     }
 
@@ -121,7 +131,9 @@ class Events extends React.Component {
             viewEventInProgress: false,
             rejectEvent:false,
             event: this.eventModel,
-            viewEventReject: false
+            viewEventReject: false,
+            errors:this.errModel,
+            viewEventDone: false
         });
     }
 
@@ -135,6 +147,8 @@ class Events extends React.Component {
     }
 
     handleSubmit = () => {
+        const err = this.validate();
+        if (!err) {
         const { event, createNew } = this.state;
         
         let newEvent =
@@ -151,7 +165,8 @@ class Events extends React.Component {
             end_date: event.end_date,
             createDate: event.createDate,
             created_by: event.created_by,
-            status: 1,
+            status: 1
+           
         }
 
         if(createNew){
@@ -174,6 +189,7 @@ class Events extends React.Component {
             })
         }    
     }
+}
     
     handleEdit = (_id, status) => {
         const { events } = this.state;
@@ -267,8 +283,29 @@ class Events extends React.Component {
                     status: event.status,
                     request_date: event.request_date,
                     assign_to: event.assign_to,
-                    assign_toName: event.assign_toName,
+                    assign_toName: event.assign_toName.first + ' ' + event.assign_toName.last,
                     reject_reason:event.reject_reason,
+                    requestName: event.requestName.first + ' ' + event.requestName.last,
+                }
+            })
+        } else if(status == 3){
+            this.setState({
+                viewEventDone: true,
+                event: {
+                    _id: event._id,
+                    code: event.code,
+                    event_name: event.event_name,
+                    start_date: event.start_date,
+                    end_date: event.end_date,
+                    place: event.place,
+                    budget: event.budget,
+                    approved_by: event.approved_by,
+                    closed_date: event.closed_date,
+                    note: event.note,
+                    status: event.status,
+                    request_date: event.request_date,
+                    assign_to: event.assign_to,
+                    assign_toName: event.assign_toName.first + ' ' + event.assign_toName.last,
                     requestName: event.requestName.first + ' ' + event.requestName.last,
                 }
             })
@@ -287,12 +324,13 @@ class Events extends React.Component {
        
         let RejectReq = {
             status: event.status - 1,
-            reject_reason: event.reject_reason
+            reject_reason: event.reject_reason,
+            assign_to: event.assign_to,
         }
         axios.put(config.url + '/t-event/' + event._id, RejectReq)
         .then(res =>{
             this.reloadEventData();
-            alert('Data Rejected ! Transaction event request with code '+ res.data.ops[0].code+ ' has been rejected');
+            alert('Data Rejected ! Transaction event request with code '+ event.code + ' has been rejected');
         })
         .catch((error) => {
             alert(error);
@@ -314,7 +352,7 @@ class Events extends React.Component {
         axios.put(config.url + '/t-event/' + event._id, closeReq)
         .then(res =>{
             this.reloadEventData();
-            alert('Data Closed ! Transaction event request with code '+ res.data.ops[0].code+ ' has been close request !');
+            alert('Data Closed ! Transaction event request with code '+  event.code+ ' has been close request !');
         })
         .catch((error) => {
             alert(error);
@@ -322,21 +360,63 @@ class Events extends React.Component {
     }
 
     handleApproved = () => {
+        const err = this.validate();
+        if (!err) {
         const {event} = this.state;
-       
         let approvedReq = {
             status: event.status + 1,
-            assign_to: event.assign_to
+            assign_to: event.assign_to,
         }
+        
         axios.put(config.url + '/t-event/' + event._id, approvedReq)
         .then(res =>{
             this.reloadEventData();
-            alert('Data Approved ! Transaction event request with code '+ res.data.ops[0].code+ ' has been approved');
+            alert('Data Approved ! Transaction event request with code '+ event.code+ ' has been approved');
         })
         .catch((error) => {
             alert(error);
         })
     }
+    }
+
+    
+    validate = () => {
+        const { event } = this.state;
+        let isError=false;
+
+        const errors = {
+            event_nameErr:"",
+            placeErr:"",
+            budgetErr: "",
+            assign_toErr: ""
+        };
+
+        if (event.event_name.length < 1) {
+            isError = true;
+            errors.event_nameErr = "Fill out Event name";
+          }
+          
+        if (event.place.length < 1) {
+            isError= true;
+            errors.placeErr= "Fill out Event Place"
+        }
+
+        if (!event.budget.match(/^[0-9]+$/)) {
+            isError= true;
+            errors.budgetErr= "Fill out Budget"
+        }
+
+        if (event.assign_to == null) {
+            isError= true;
+            errors.assign_toErr= "Fill out assign_to"
+        }
+      
+          this.setState({
+            errors:errors
+          });
+          console.log(errors)
+          return isError;
+        };
 
     render() {
         const {events, loading, employes} = this.state;
@@ -346,11 +426,12 @@ class Events extends React.Component {
         return (
             <div>
                 <h3><center>List Events</center></h3>
-                <CreateEvent createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} event={this.state.event} />
+                <CreateEvent createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} event={this.state.event} errors= {this.state.errors}/>
                 <EditEvent editEvent={this.state.editEvent} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} event={this.state.event}/>
-                <ViewEventSubmitted viewEventSubmitted={this.state.viewEventSubmitted} handleRejectConfirm={this.handleRejectConfirm} handleApproved={this.handleApproved} rejectEvent={this.state.rejectEvent} handleReject={this.handleReject} handleChange={this.handleChange} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event} employes={this.state.employes}/>
+                <ViewEventSubmitted viewEventSubmitted={this.state.viewEventSubmitted} handleRejectConfirm={this.handleRejectConfirm} handleApproved={this.handleApproved} rejectEvent={this.state.rejectEvent} handleReject={this.handleReject} handleChange={this.handleChange} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event} employes={this.state.employes} errors={this.state.errors}/>
                 <ViewEventInProgress viewEventInProgress={this.state.viewEventInProgress} handleCloseRequestConfirm={this.handleCloseRequestConfirm} closeEvent={this.state.closeEvent} handleCloseRequest={this.handleCloseRequest} handleChange={this.handleChange} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event} employes={this.state.employes}/>  
                 <ViewEventReject viewEventReject={this.state.viewEventReject} handleChange={this.handleChange} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event}/>
+                <ViewEventDone viewEventDone={this.state.viewEventDone} handleChange={this.handleChange} handleView={this.handleView} handleClose={this.handleClose} event={this.state.event}/>
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
                 <Table>
                     <TableHead >
@@ -396,6 +477,7 @@ const styles = theme => ({
     progress: {
         position: 'absolute',
         alignSlef: 'center',
+        left: '50%',
         top: '50%',
         alignItem: 'center'
     },

@@ -11,7 +11,7 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
-export default ({ editSouvenir, handleToggle, handleChange, handleClose, handleSubmit, souvenir: { code, name, m_unit_id, unitName, description }, unit }) => {
+export default ({ editSouvenir, handleToggle, handleChange, handleClose, handleSubmit,errors:{nameErr}, souvenir: { code, name, m_unit_id, unitName, description }, unit }) => {
     return <Fragment>
         <Dialog
             open={editSouvenir}
@@ -23,7 +23,7 @@ export default ({ editSouvenir, handleToggle, handleChange, handleClose, handleS
                    <form>
                         <TextField label="Souvenir Code" value={code} margin="normal" required disabled />&nbsp;
                     <br />
-                        <TextField label="Souvenir Name" value={name} onChange={handleChange('name')} margin="normal" required />
+                        <TextField label="Souvenir Name" value={name} error={nameErr == 0 ? false : true } onChange={handleChange('name')}  margin="normal" required />
                         <FormControl fullWidth='true' required>
                             <InputLabel shrink htmlFor="unit-simple">Unit Name</InputLabel>
                             <Select

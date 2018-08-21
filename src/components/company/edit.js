@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-export default ({editCompany,updateCompany,handleUpdateCompany,handleChange,handleClose,handleEdit,handleSubmit, company: {code, name, email, phone,address}}) => {
+export default ({editCompany,updateCompany,handleUpdateCompany,handleChange,handleClose,handleEdit,handleSubmit, errors: {nameErr, emailErr, phoneErr}, company: {code, name, email, phone,address}}) => {
    return <Fragment>
         <Dialog
             open={editCompany}
@@ -17,11 +17,11 @@ export default ({editCompany,updateCompany,handleUpdateCompany,handleChange,hand
             <form>
                 <TextField label='Company Code' value={code} onChange={handleChange('code')} margin='normal' disabled/>
                 &nbsp;
-                <TextField label='Company Name' value={name} onChange={handleChange('name')} margin='normal'/>
+                <TextField label='Company Name' value={name} onChange={handleChange('name')} error={nameErr == 0 ? false : true} margin='normal'/>
                 &nbsp;
-                <TextField label='Email' value={email} onChange={handleChange('email')} margin='normal'/>
+                <TextField label='Email' value={email} onChange={handleChange('email')} error={emailErr == 0 ? false : true} margin='normal'/>
                 &nbsp;
-                <TextField label='Phone' value={phone} onChange={handleChange('phone')} margin='normal'/>
+                <TextField label='Phone' value={phone} onChange={handleChange('phone')} error={phoneErr == 0 ? false : true} margin='normal'/>
                 &nbsp;
                 <TextField label='Address' value={address} onChange={handleChange('address')} fullWidth={true} multiline={true} margin='normal'/>
                 &nbsp;

@@ -40,7 +40,7 @@ class Souvenirs extends React.Component  {
 
     errModel ={
         nameErr: '',
-        unitNameErr: ''
+        // unitNameErr: ''
     }
     constructor(props) {
         super(props);
@@ -272,7 +272,7 @@ class Souvenirs extends React.Component  {
             <div>
                 <h3><center>List Souvenirs</center></h3>
                 <CreateSouvenir createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} errors={this.state.errors} souvenir={this.state.souvenir} unit={this.state.unit} />
-                <EditSouvenir editSouvenir={this.state.editSouvenir} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} souvenir={this.state.souvenir} unit={this.state.unit}/>
+                <EditSouvenir editSouvenir={this.state.editSouvenir} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} souvenir={this.state.souvenir} unit={this.state.unit} errors={this.state.errors}/>
                 <DeleteSouvenir deleteSouvenir={this.state.deleteSouvenir} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} souvenir={this.state.souvenir} />
                 <ViewSouvenir viewSouvenir={this.state.viewSouvenir} handleView={this.handleView} handleClose={this.handleClose} souvenir={this.state.souvenir} />
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />

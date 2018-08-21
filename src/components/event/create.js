@@ -7,7 +7,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-export default ({ createNew, handleToggle, handleChange, handleClose, handleSubmit, event: { code, event_name, place, start_date, end_date, budget, request_date, note, request_by, requestName } }) => {
+export default ({ createNew, handleToggle, handleChange, handleClose, handleSubmit, errors: {event_nameErr, placeErr, budgetErr}, event: { code, event_name, place, start_date, end_date, budget, request_date, note, request_by, requestName } }) => {
+    console.log(requestName);
     return <Fragment>
         <Button onClick={handleToggle} variant="contained" color="primary" style={{ float: 'right' }}>Add</Button>
         <Dialog
@@ -20,17 +21,17 @@ export default ({ createNew, handleToggle, handleChange, handleClose, handleSubm
                     <form>
                         <TextField label="Event Code" value={code} onChange={handleChange('code')} margin="normal" InputLabelProps={{ shrink: true }} placeholder="Auto Generated" required disabled/>
                         &nbsp;
-                    <TextField label="Event Name" value={event_name} onChange={handleChange('event_name')} margin="normal" InputLabelProps={{ shrink: true }} placeholder="Type Event Name" required />
+                    <TextField label="Event Name" value={event_name} onChange={handleChange('event_name')} margin="normal" InputLabelProps={{ shrink: true }} error={event_nameErr == 0 ? false : true} placeholder="Type Event Name" required />
                         &nbsp;
-                    <TextField label="Event Place" value={place} onChange={handleChange('place')} margin="normal" InputLabelProps={{ shrink: true }} placeholder="Type Event Place" required />
+                    <TextField label="Event Place" value={place} onChange={handleChange('place')} margin="normal" InputLabelProps={{ shrink: true }} error={placeErr == 0 ? false : true} placeholder="Type Event Place" required />
                         &nbsp;
                     <TextField type='date' label="Event Start Date" value={start_date} onChange={handleChange('start_date')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Date" required/>
                     &nbsp;
                     <TextField type='date' label="Event End Date" value={end_date} onChange={handleChange('end_date')} margin="normal" InputLabelProps={{ shrink: true }} placeholder="Type Date" required />
                         &nbsp;
-                    <TextField label="Budget (Rp.)" value={budget} onChange={handleChange('budget')} margin="normal" InputLabelProps={{ shrink: true }} placeholder="Type Budget" required/>
+                    <TextField label="Budget (Rp.)" value={budget} onChange={handleChange('budget')} margin="normal" InputLabelProps={{ shrink: true }} error={budgetErr == 0 ? false : true} placeholder="Type Budget" required/>
                         &nbsp;
-                    <TextField label="Request By" value={request_by} margin="normal" InputLabelProps={{ shrink: true }} required disabled/>
+                    <TextField label="Request By" value={''} margin="normal" InputLabelProps={{ shrink: true }} required disabled/>
                         &nbsp;
                     <TextField label="Request Date" value={request_date} onChange={handleChange('request_date')} margin="normal" InputLabelProps={{ shrink: true }} placeholder={request_date} disabled/>
                         &nbsp;

@@ -34,8 +34,11 @@ export default (
         handleChange,
         handleChangeSelectItems,
         handleRemove,
+        handleCloseRemove,
         addNewItem,
         getProductDescription,
+        deleteConfirm,
+        handleDeleteConfirm,
         tDesign: {
             code,
             tEventId,
@@ -178,7 +181,7 @@ export default (
                                         </div>
                                         <div className="div-table-column center wdth5">
                                         <IconButton onClick=""><EditIcon color="primary" /></IconButton>
-                                        <IconButton onClick={() => handleRemove(n._id)}><DeleteIcon color="secondary" /></IconButton>
+                                        <IconButton onClick={() => handleDeleteConfirm(n.id)}><DeleteIcon color="secondary" /></IconButton>
                                         </div>
                                     </div>
                                 );
@@ -190,6 +193,15 @@ export default (
                 <DialogActions>
                     <Button onClick={handleClose} variant="contained" color="secondary" >Cancel</Button>
                     <Button onClick={handleSubmit} variant="contained" color="primary" autoFocus>Save</Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={deleteConfirm} onClose=''>
+                <DialogContent>
+                    <DialogContentText style={{textAlign: 'center'}}>Delete Item?</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleRemove}variant="contained" color="primary" autoFocus>Delete</Button>
+                    <Button onClick={handleCloseRemove} variant="contained" color="secondary" >Cancel</Button>
                 </DialogActions>
             </Dialog>
         </Fragment>

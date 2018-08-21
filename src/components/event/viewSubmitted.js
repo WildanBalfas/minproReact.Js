@@ -11,7 +11,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 
-export default ({ viewEventSubmitted, rejectEvent, handleClose, handleReject, handleRejectConfirm, handleChange, handleDelete, handleApproved, event: { code, event_name, place, start_date, end_date, budget, request_by, request_date, assign_toName,assign_to, note, reject_reason, requestName }, employes }) => {
+export default ({ viewEventSubmitted, rejectEvent, handleClose, handleReject, handleRejectConfirm, handleChange, handleDelete, handleApproved, errors: {assign_toErr},event: { code, event_name, place, start_date, end_date, budget, request_by, request_date, assign_toName,assign_to, note, reject_reason, requestName }, employes }) => {
     return <Fragment>
         <Dialog
             open={viewEventSubmitted}
@@ -33,7 +33,7 @@ export default ({ viewEventSubmitted, rejectEvent, handleClose, handleReject, ha
                     <TextField label="Budget (Rp.)" value={budget} margin="normal" disabled />
                     &nbsp;
                     <FormControl fullWidth='true' required>
-                        <InputLabel shrink htmlFor="unit-simple" >Assign To </InputLabel>
+                        <InputLabel shrink htmlFor="unit-simple">Assign To </InputLabel>
                         <Select
                             value={assign_to}
                             onChange={handleChange('assign_to')}
@@ -41,6 +41,7 @@ export default ({ viewEventSubmitted, rejectEvent, handleClose, handleReject, ha
                                 name: 'assign_to',
                                 id: 'unit-simple'
                             }}
+                            error={assign_toErr === null ? false : true}
                         >
                             <MenuItem value=''>
                                 -Select Name-

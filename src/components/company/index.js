@@ -44,6 +44,8 @@ class Companies extends React.Component  {
 
     errModel = {
         nameErr: '',   
+        emailErr: '',
+        phoneErr: ''
     }
     constructor(props) {
         super(props);
@@ -210,11 +212,13 @@ class Companies extends React.Component  {
         const { company } = this.state;
         let delProp = {
             is_delete: company.is_delete + 1,
+          
         }
         axios.put(config.url + '/m-company/' + company._id, delProp)
         .then(res =>{
             this.reloadCompanyData();
-            alert('Data Deleted!');
+            console.log(res.data);
+            alert('Data Deleted ! Data Company with code '+ company.code+ ' has been deleted !');
         })
         .catch((error) => {
             alert(error);
@@ -226,22 +230,42 @@ class Companies extends React.Component  {
         const { company } = this.state;
         let isError = false;
         const errors = {
-          nameErr: ""
+          nameErr: "",
+          emailErr: "",
+          phoneErr: "",
         };
     
         if (company.name.length < 1) {
           isError = true;
           errors.nameErr = "Fill out Company name";
+          
         }
-        
+
+        if (!company.email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)){
+            isError = true;
+            errors.emailErr= "Email invalid"
+        }
+
+        if (!company.phone.match(/^[0-9-()]*$/)){
+            isError = true;
+            errors.phoneErr= "Phone invalid"
+        }
     
         this.setState({
           errors:errors
         });
-        console.log(errors)
         return isError;
       };
 
+
+    // handleSearch = (name) => {
+    //     const { companies } = this.state;
+    //     const company = companies.findIndex(u => u.name === name);
+    //     const objCompany = companies[company];
+    //     if (objCompany) {
+    //         return objCompany._id;
+    //     }
+    // }
     render() {
         if(!isLogged()){
             return(<Redirect to= {'/login'} />)
@@ -253,7 +277,7 @@ class Companies extends React.Component  {
             <div>
                 <h3><center>List Company</center></h3>
                 <CreateCompany createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} errors={this.state.errors} company={this.state.company} />
-                <EditCompany editCompany={this.state.editCompany} updateCompany={this.state.updateCompany} handleUpdateCompany={this.handleUpdateCompany} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} company={this.state.company} />
+                <EditCompany editCompany={this.state.editCompany} updateCompany={this.state.updateCompany} handleUpdateCompany={this.handleUpdateCompany} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} company={this.state.company} errors={this.state.errors} />
                 <DeleteCompany deleteCompany={this.state.deleteCompany} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} company={this.state.company} />
                 <ViewCompany viewCompany={this.state.viewCompany} handleView={this.handleView} handleClose={this.handleClose} company={this.state.company} />
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
@@ -345,6 +369,7 @@ const styles = theme => ({
     progress: {
         position: 'absolute',
         alignSlef: 'center',
+        left: '50%',
         top: '50%',
         alignItem: 'center'
     },

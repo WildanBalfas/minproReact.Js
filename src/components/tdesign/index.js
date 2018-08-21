@@ -1,8 +1,8 @@
-
 import React from 'react';
 import axios from 'axios';
 import { config } from '../configuration/config';
 import LSData from '../base/base.localstorage';
+// import { closeRequest } from '../base/base.model';
 
 // Material UI
 import Table from '@material-ui/core/Table';
@@ -45,7 +45,7 @@ class tIndex extends React.Component {
 
     idx = 0;
     tDesignModel = {
-        id: '',
+        _id: '',
         code: '',
         tEventId: '',
         titleHeader: '',
@@ -93,6 +93,7 @@ class tIndex extends React.Component {
         this.state = {
             tDesigns: [],
             items: [], // add to table
+            itemId: '',
             tItems: [],
             products: [],
             events: [],
@@ -105,6 +106,7 @@ class tIndex extends React.Component {
             createNew: false,
             editUser: false,
             deleteUser: false,
+            deleteConfirm: false,
             load: true,
             viewTDesignSubmitted: false,
             viewTDesignInProgress: false
@@ -271,6 +273,7 @@ class tIndex extends React.Component {
         this.setState({
             editTDesign: true,
             tDesign: {
+                _id: design._id,
                 code: design.code,
                 tEventId: design.t_event_id,
                 tEventCode: design.tEventCode,
@@ -354,6 +357,7 @@ class tIndex extends React.Component {
                 viewTDesignSubmitted: true,
                 tDesign: {
                     code: design.code,
+                    _id: design._id,
                     tEventId: design.t_event_id,
                     tEventCode: design.tEventCode,
                     titleHeader: design.title_header,
@@ -369,6 +373,7 @@ class tIndex extends React.Component {
             this.setState({
                 viewTDesignInProgress: true,
                 tDesign: {
+                    _id: design._id,
                     code: design.code,
                     tEventId: design.t_event_id,
                     tEventCode: design.tEventCode,
@@ -384,15 +389,20 @@ class tIndex extends React.Component {
         }
     }
 
-    // handleDeleteConfirm = (_id) => {
-    //     axios.delete(config.url + '/m-user/' + _id)
-    //         .then(res => {
-    //             this.reloadData('users', '/user-aggregation');
-    //         })
-    //         .catch((error) => {
-    //             alert('Error');
-    //         })
-    // }
+    handleDeleteConfirm = (_id) => {
+        this.setState({
+            deleteConfirm: true,
+            itemId: _id,
+        })
+    }
+
+   
+
+    handleCloseRemove = () => {
+        this.setState({
+            deleteConfirm: false,
+        })
+    }
 
     addNewItem = () => {
         let items = this.state.items;
@@ -422,12 +432,14 @@ class tIndex extends React.Component {
         });
     }
 
-    handleRemove = (_id) => {
-        const { items } = this.state;
-        const selectIdx = items.findIndex(u => u._id === _id);
+     
+    handleRemove = () => {
+        const { itemId, items } = this.state;
+        const selectIdx = items.findIndex(u => u._id === itemId);
         items.splice(selectIdx, 1);
         this.setState({
-            items: items
+            items: items,
+            deleteConfirm: false,
         })
     }
 
@@ -458,18 +470,22 @@ class tIndex extends React.Component {
     handleCloseRequest = () => {
         const { tDesign } = this.state;
 
-        let closeReq = {
-            status: tDesign.status + 1,
+        // closeRequest('t-design', tDesign._id);
+        this.componentDidMount();
+        if(this.componentDidMount()){
+            this.setState({
+                viewTDesignInProgress: false,
+            })
         }
-        axios.put(config.url + '/t-design/' + tDesign._id, closeReq)
-            .then(res => {
-                this.reloadData('tDesigns', '/t-design');
-                alert('Data Closed ! Transaction event request with code ' + res.data.ops[0].code + ' has been close request !');
-            })
-            .catch((error) => {
-                alert(error);
-            })
     }
+
+    // deleteConfirm = () =>{
+
+    // }
+
+    // deleteConfirmClose = () => {
+
+    // }
 
     fileSelectedHandler = event => {
         this.setState({
@@ -493,8 +509,8 @@ class tIndex extends React.Component {
 
 
     render() {
-        if(!isLogged()){
-            return(<Redirect to= {'/login'} />)
+        if (!isLogged()) {
+            return (<Redirect to={'/login'} />)
         }
         const { tDesigns } = this.state;
         let i = 1;
@@ -507,6 +523,9 @@ class tIndex extends React.Component {
                     handleSubmit={this.handleSubmit}
                     handleChange={this.handleChange}
                     handleRemove={this.handleRemove}
+                    handleCloseRemove={this.handleCloseRemove}
+                    deleteConfirm={this.state.deleteConfirm}
+                    handleDeleteConfirm={this.handleDeleteConfirm}
                     handleChangeSelectItems={this.handleChangeSelectItems}
                     addNewItem={this.addNewItem}
                     tDesign={this.state.tDesign}
@@ -522,6 +541,7 @@ class tIndex extends React.Component {
                     handleClose={this.handleClose}
                     handleSubmit={this.handleSubmit}
                     handleChange={this.handleChange}
+                    handleRemove={this.handleRemove}
                     handleChangeSelectItems={this.handleChangeSelectItems}
                     addNewItem={this.addNewItem}
                     tDesign={this.state.tDesign}
