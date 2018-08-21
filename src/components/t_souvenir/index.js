@@ -387,6 +387,7 @@ class T_Souvenir extends React.Component {
                             <TableCell style={{ fontWeight: "bolder", color: "black" }}>No</TableCell>
                             <TableCell style={{ fontWeight: "bolder", color: "black" }}>Transaction Code</TableCell>
                             <TableCell style={{ fontWeight: "bolder", color: "black" }}>Recieved By</TableCell>
+                            <TableCell style={{ fontWeight: "bolder", color: "black" }}>Recieved Date</TableCell>
 
                             <TableCell style={{ fontWeight: "bolder", color: "black" }}>Create By</TableCell>
                             <TableCell style={{ fontWeight: "bolder", color: "black" }}>Create Date</TableCell>
@@ -400,8 +401,10 @@ class T_Souvenir extends React.Component {
                                     <TableCell>{i++}</TableCell>
                                     <TableCell>{n.code}</TableCell>
                                     <TableCell>{n.EmployeeFirstName} {n.EmployeeLastName}</TableCell>
-
-                                    <TableCell>{n.recieved_date}</TableCell>
+                                    <TableCell>{n.received_date}</TableCell>
+                                    <TableCell>{n.created_by}</TableCell>
+                                   
+                                    
                                     <TableCell>{n.createDate}</TableCell>
                                     <TableCell style={{ textAlign: 'center' }}>
 
