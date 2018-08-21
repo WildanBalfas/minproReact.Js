@@ -6,13 +6,16 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import { error } from 'util';
 
-export default ({ createNew, handleToggle, handleClose, handleSubmit,handleChange, product: { code, name, description } }) => {
+export default ({ createNew, handleToggle, handleClose, handleSubmit,handleChange, errors:{nameErr, descriptionErr}, product: { code, name, description } }) => {
     return <Fragment>
-        <Button onClick={handleToggle} variant="contained" color="primary" >Create</Button>
+    <Button onClick={handleToggle} variant="contained" color="primary" style={{ float:'right' }}>Add</Button>
         <Dialog
             open={createNew}
             onClose={handleClose}
+            fullWidth
+            style={{textAlign:"center"}}
         >
             <DialogTitle id="alert-dialog-title">{"Add Product"}</DialogTitle>
             <DialogContent>
@@ -22,9 +25,9 @@ export default ({ createNew, handleToggle, handleClose, handleSubmit,handleChang
                 <form>
                     <TextField label="Code" value={code} onChange={handleChange('code')} margin='normal' disabled />
                     <br />
-                    <TextField label="Name" value={name} onChange={handleChange('name')} margin='normal' />
+                    <TextField label={nameErr == 0 ? "Name" : nameErr }value={name} onChange={handleChange('name')}  errorText={'tes'}margin='normal' error={nameErr == 0 ? false : true } />
                     <br />
-                    <TextField label="Description" value={description} onChange={handleChange('description')} margin='normal' />
+                    <TextField label={descriptionErr == 0 ? "Description" : descriptionErr } value={description} onChange={handleChange('description')} margin='normal' error={descriptionErr == 0 ? false : true } />
                     <br />
                     
                     

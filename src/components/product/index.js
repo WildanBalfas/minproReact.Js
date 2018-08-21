@@ -11,15 +11,15 @@ import { withStyles } from '@material-ui/core/styles';
 import IconDelete from '@material-ui/icons/Delete';
 import IconEdit from '@material-ui/icons/Edit';
 import IconSeacrh from '@material-ui/icons/Search';
-// import Checkbox from '@material-ui/core/Checkbox';
+import LSData from '../base/base.localstorage';
+
 
 
 import CreateProduct from './create';
 import ViewProduct from './view';
 import EditProduct from './edit';
 import DeleteProduct from './delete';
-// import EditUser from './edit';
-// import DeleteUser from './delete';
+
 
 
 import { config } from '../configuration/config';
@@ -28,28 +28,68 @@ import axios from 'axios';
 class M_Product extends React.Component {
 
     productModel = {
-        _id: '', code: '', name: '',  description: '', is_delete: 0, create_by: '', createDate: '', update_by:'', update_date:''
+        _id: '', 
+        code: '',
+        name: '',  
+        description: '', 
+        is_delete: 0, 
+        create_by: '', 
+        createDate: '', 
+        update_by:'', 
+        update_date:''
+    }
+
+    errModel = {
+        nameErr: '',  
+        descriptionErr: '',  
     }
     
- 
+
 
     constructor(props) {
         super(props);
         this.state = {
-            products: [
-
-            ],
+            products: [],
             createNew: false,
             editProduct: false,
             viewProduct: false,
             deleteProduct:false,
             load: true,
+            errors:this.errModel,
             product: {}
 
         }
     }
+
+    validate = () => {
+        
+        const { product} = this.state;
+        let isError = false;
+        const errors = {
+          nameErr: "",
+          descriptionErr: "",
+        };
+    
+        if (product.name.length < 1) {
+          isError = true;
+          errors.nameErr = "Fill out Name";
+        }
+        
+        if (product.description.length < 1) {
+            isError = true;
+            errors.descriptionErr = "Fill out Description";
+          }
+        
+    
+        this.setState({
+          errors:errors
+        });
+        console.log(errors)
+        return isError;
+      };
+    
     reloadProductData = () => {
-        axios.get(config.url + '/m-product')
+        axios.get(config.url + '/m_product_aggregation')
         .then(res => {
             this.setState({
                 products: res.data,
@@ -57,7 +97,7 @@ class M_Product extends React.Component {
                 editProduct: false,
                 viewProduct:false,
                 deleteProduct:false,
-                // product: this.productModel,
+                product: this.productModel,
                 load: false
             })
          
@@ -87,7 +127,8 @@ class M_Product extends React.Component {
             editProduct: false,
             viewProduct: false,
             deleteProduct:false,
-            product: this.productModel
+            product: this.productModel,
+            errors:this.errModel
 
         })
     }
@@ -104,28 +145,27 @@ class M_Product extends React.Component {
         })
     }
 
-    // handleChangeCheckBox = name => event =>{
-    //     this.setState({
-    //         product: {
-    //             ...this.state.product,
-    //             [name]: event.target.checked
-    //         }
-    //     })
-    // }
 
 
     handleSubmit = () => {
-        const { products, product, createNew } = this.state;
-
-
-
+        // console.log('hehe')
+        const err = this.validate();
+        if (!err) {
+            // console.log('haha')
+        
+        const {  product, createNew } = this.state;
         let newProduct = {
-
-           
             code: product.code,
             name: product.name,
             description: product.description,
-            
+            created_by: LSData.loginRoleId(),
+        }
+
+        let upProduct = {
+            code: product.code,
+            name: product.name,
+            description: product.description,
+            updated_by: LSData.loginRoleId(),
         }
 
         if (createNew) {
@@ -135,15 +175,13 @@ class M_Product extends React.Component {
                     this.reloadProductData();
                     alert('has been saved ' + res.data.ops[0].code);
                     console.log(res.data);
-                    
-
                 })
                 .catch((error) => {
                     alert(error);
                 })
 
         } else {
-            axios.put(config.url + '/m-product/' + product._id, newProduct)
+            axios.put(config.url + '/m-product/' + product._id, upProduct)
                 .then(res =>{
                     
                     this.reloadProductData();
@@ -156,6 +194,7 @@ class M_Product extends React.Component {
                 })
 
         }
+    }
 
     }
 
@@ -236,7 +275,7 @@ class M_Product extends React.Component {
         return (
             <div>
                 <h3>List Of Master Product</h3>
-                <CreateProduct style={{ alignItem: 'right'  }}createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} product={this.state.product}  handleSubmit={this.handleSubmit} />
+                <CreateProduct style={{ alignItem: 'right'  }} errors={this.state.errors} createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} product={this.state.product}  handleSubmit={this.handleSubmit} />
 
                 <EditProduct editProduct={this.state.editProduct} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} product={this.state.product} handleSubmit={this.handleSubmit} />
 
@@ -271,7 +310,7 @@ class M_Product extends React.Component {
                                     <TableCell >{n.name}</TableCell>
                                     <TableCell >{n.description}</TableCell>
                                     <TableCell >{n.createDate}</TableCell>
-                                    <TableCell >{n.create_by}</TableCell>
+                                    <TableCell >{n.created_by}</TableCell>
                                     <TableCell >{n.is_delete}</TableCell>
                                     <TableCell style = {{textAlign:'center'}}>
                                       
