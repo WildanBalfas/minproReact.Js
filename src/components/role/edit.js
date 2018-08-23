@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
-export default ({editRole,handleChange,handleClose,handleSubmit, role: {code, name, description}}) => {
+export default ({errors:{nameErr},editRole,handleChange,handleClose,handleSubmit, role: {code, name, description}}) => {
   return <Fragment>
   <Dialog
   open={editRole}
@@ -20,11 +20,11 @@ export default ({editRole,handleChange,handleClose,handleSubmit, role: {code, na
   <div class="title">Edit Role</div>
   </DialogContentText>
   <form class="martop">
-  <TextField label='*Role Code' value={code} onChange={handleChange('code')} margin='normal' disabled={true}/>
+  <TextField label='Role Code' value={code} onChange={handleChange('code')} margin='normal' disabled={true} required/>
   <br/>
-  <TextField label='*Role Name' value={name} onChange={handleChange('name')} margin='normal'/>
+  <TextField label="Role Name " value={name} onChange={handleChange('name')} error={nameErr == 0 ? false : true } margin='normal' InputLabelProps={{shrink: true}} required/>
   <br/>
-  <TextField label='*Description Name' value={description} onChange={handleChange('description')} margin='normal'/>
+  <TextField label='Description Name' value={description} onChange={handleChange('description')} margin='normal'/>
   <br/>
   </form>
   </DialogContent>

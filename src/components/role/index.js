@@ -17,6 +17,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
+import LSData from '../base/base.localstorage';
+import { Redirect } from 'react-router-dom';
+import { isLogged } from '../configuration/config';
+import { changeDateFormat } from '../system/base.function';
 
 class Roles extends React.Component {
   
@@ -26,8 +30,13 @@ class Roles extends React.Component {
     name:'',
     description:'',
     createDate: '',
-    is_delete:''
+    is_delete:'',
+    created_by: LSData.loginRoleId(),
   }
+
+  errModel = {
+    nameErr: '',   
+}
   
   constructor(props){
     super(props);
@@ -37,12 +46,13 @@ class Roles extends React.Component {
       deleteRole:false,
       editRole:false,
       loading: true,
-      role:this.roleModel
+      role:this.roleModel,
+      errors:this.errModel
     }
   }
   
   reloadRoleData = () => {
-    axios.get(config.url + '/m-role')
+    axios.get(config.url + '/m_role_ctrl')
     .then(res => {
       this.setState({
         roles: res.data,
@@ -75,7 +85,8 @@ class Roles extends React.Component {
       deleteRole:false,
       editRole:false,
       viewRole:false,
-      role: this.roleModel
+      role: this.roleModel,
+      errors:this.errModel
     })
   }
   
@@ -89,13 +100,15 @@ class Roles extends React.Component {
   }
   
   handleSubmit = () => {
-    const { role, createNew } = this.state;
-    let newRole = {
-      code: role.code,
-      name: role.name,
-      description: role.description,
-      is_delete:0
-    }
+    const err = this.validate();
+    if (!err) {
+      const { role, createNew } = this.state;
+      let newRole = {
+        code: role.code,
+        name: role.name,
+        description: role.description,
+        created_by: role.created_by
+      }
     
     if (createNew) {
       axios.post(config.url + '/m-role', newRole)
@@ -117,6 +130,7 @@ class Roles extends React.Component {
       })
     }
   }
+}
 
   handleEdit = (_id) => {
     const { roles } = this.state;
@@ -175,18 +189,44 @@ class Roles extends React.Component {
             alert(error)
         })
   }
+
+  validate = () => {
+        
+    const { role } = this.state;
+    let isError = false;
+    const errors = {
+      nameErr: ""
+    };
+
+    if (role.name.length < 1) {
+      isError = true;
+      errors.nameErr = alert("Fill out Role name");
+    }
+    
+
+    this.setState({
+      errors:errors
+    });
+    console.log(errors)
+    return isError;
+  };
+
   
   render(){
+    if(!isLogged()){
+      return(<Redirect to= {'/login'} />)
+  }
     const { roles, loading } = this.state;
     const { classes } = this.props;
     let i=1;
     return(
       <div>
       <h3 style={{color:'#3f51b5'}}><center>List Role</center></h3>
-      <CreateRole createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} role={this.state.role} />
+      <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
+      <CreateRole errors={this.state.errors} createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} role={this.state.role} />
       <DeleteRole deleteRole={this.state.deleteRole} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} role={this.state.role}/>
       <ViewRole viewRole={this.state.viewRole} handleClose={this.handleClose} role={this.state.role}/>
-      <EditRole editRole={this.state.editRole} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} role={this.state.role} />
+      <EditRole errors={this.state.errors} editRole={this.state.editRole} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} role={this.state.role} />
       <Table>
       <TableHead>
       <TableRow>
@@ -208,8 +248,8 @@ class Roles extends React.Component {
           {n.code}
           </TableCell>
           <TableCell>{n.name}</TableCell>
-          <TableCell>{n.createDate}</TableCell>
-          <TableCell>createBy</TableCell>
+          <TableCell>{changeDateFormat(n.createDate)}</TableCell>
+          <TableCell>{n.created_by}</TableCell>
           {/* <TableCell>{n.is_delete}</TableCell> */}
           <TableCell style={{textAlign:"center"}}>
           <IconButton onClick={() => this.handleView(n._id)}><SearchIcon color="primary" /></IconButton>
@@ -228,10 +268,10 @@ class Roles extends React.Component {
 
 const styles = theme => ({
   progress: {
-    position: 'absolute',
-    alignSlef: 'center',
-    top: '50%',
-    alignItem: 'center'
+      position: 'absolute',
+      alignSelf: 'center',
+      top: '50%',
+      left: '50%',
   },
 });
 

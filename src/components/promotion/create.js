@@ -10,7 +10,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 
-export default ({handleToggleNext,nextPromo,createNew,handleToggle,handleChange,handleClose,handleSubmit, promo: {code, t_event_id, flag_design, t_design_id}, events, designs}) =>{
+export default ({handleChangeSelectDesign,handleChangeSelectEvent, handleSelect, subSelect, handleToggleNext,nextPromo,createNew,handleToggle,handleChange,handleClose,handleSubmit, promo: {code,note,request_date,title, t_event_id, flag_design, t_design_id,t_event_code,t_design_code}, events, designs, promos}) =>{
     return <Fragment>
     <Button onClick={handleToggle} variant="contained" color="primary" style={{ float:'right' }}>Add</Button>
     <Dialog open={createNew} onClose={handleClose}  >
@@ -23,7 +23,7 @@ export default ({handleToggleNext,nextPromo,createNew,handleToggle,handleChange,
     <InputLabel shrink htmlFor="menu-simple" >* Select Event</InputLabel>
     <Select
     value={t_event_id}
-    onChange={handleChange('t_event_id')}
+    onChange={handleChangeSelectEvent('t_event_id')}
     inputProps={{
         name: 't_event_id',
         id: 'menu-simple'
@@ -33,9 +33,9 @@ export default ({handleToggleNext,nextPromo,createNew,handleToggle,handleChange,
     <MenuItem value='' style={{color:'grey', fontFamily:'Helvetica'}}>
     -Select Event-
     </MenuItem>
-    {events.map(x => {
+    {events.map(e => {
         return(
-            <MenuItem key={x._id} value={x._id}>{x.code}</MenuItem>
+            <MenuItem key={e._id} value={e._id}>{e.code}</MenuItem>
         )
     })}
     </Select>
@@ -46,7 +46,7 @@ export default ({handleToggleNext,nextPromo,createNew,handleToggle,handleChange,
     <InputLabel shrink htmlFor="menu-simple">* Select from Design</InputLabel>
     <Select
     value={flag_design}
-    onChange={handleChange('flag_design')}
+    onChange={handleSelect}
     inputProps={{
         name: 'flag_design',
         id: 'menu-simple'
@@ -56,17 +56,17 @@ export default ({handleToggleNext,nextPromo,createNew,handleToggle,handleChange,
     <MenuItem value='' style={{color:'grey', fontFamily:'Helvetica'}}>
     -Please Select-
     </MenuItem>
-    <MenuItem value='yes' >Yes</MenuItem>
-    <MenuItem value='no'>No</MenuItem>
+    <MenuItem value='1'>Yes</MenuItem>
+    <MenuItem value='0'>No</MenuItem>
     </Select>
     </FormControl>
     <br/>
     <br/>
-    <FormControl fullWidth='true'>
-    <InputLabel shrink htmlFor="menu-simple" >* Select Design</InputLabel>
+    <FormControl fullWidth='true' style={{ visibility: subSelect ? "hidden" : "visible"}}>
+    <InputLabel shrink htmlFor="menu-simple" >{subSelect} * Select Design</InputLabel>
     <Select
     value={t_design_id}
-    onChange={handleChange('t_design_id')}
+    onChange={handleChangeSelectDesign('t_design_id')}
     inputProps={{
         name: 't_design_id',
         id: 'menu-simple'
@@ -97,14 +97,61 @@ export default ({handleToggleNext,nextPromo,createNew,handleToggle,handleChange,
     </Dialog>
     <Dialog open={nextPromo} onClose={handleClose} >
     <DialogContent style={{paddimngLeft:25, paddingRight:25}}>
-    <DialogContentText id="alert-dialog-description">
+    <div className="clear">
+    <DialogContentText id="alert-dialog-description" className="border">
     <div class="title">Add Marketing Promotion</div>
+    <div className="dialogtitle">MARKETING HEADER PROMOTION</div>
     <form class="martop">
     <TextField label='Transaction Code' value={code} margin='normal' disabled={true} InputLabelProps={{shrink: true}} placeholder="Auto Generated"/>
+    &nbsp;
+    {promos.map(p => {
+        return(
+            <TextField key={p._id} label='* Request By' value={(p.request_by.first ? p.request_by.first + " " : "") + (p.request_by.last ? p.request_by.last + " " : "")} margin='normal' disabled={true} InputLabelProps={{shrink: true}}/>
+        )
+    })}
+    <br/>
+    
+    <TextField label='* Event Code' value={events.t_event_code} margin='normal' disabled={true} InputLabelProps={{shrink: true}}/>
+    
+    &nbsp;
+    <TextField label='* Requst Date' value={request_date} margin='normal' disabled={true} InputLabelProps={{shrink: true}}/>
+    <br/>
+    <TextField label='* Title Header' value={title} onChange={handleChange('title')} margin='normal' InputLabelProps={{shrink: true}}/>
+    &nbsp;
+    <TextField label='Note' value={note} margin='normal' onChange={handleChange('note')} InputLabelProps={{shrink: true}}/>
     </form>
     <br/>
     </DialogContentText>
+    </div>
+    <div className="clear">
+    <DialogContentText id="alert-dialog-description" className="border">
+    <div className="dialogtitle">DESIGN HEADER INFORMATION -</div>
+    <form class="martop">
+    <TextField label='Design Code' value={designs.t_design_code} margin='normal' disabled={true} InputLabelProps={{shrink: true}} required/>
+    &nbsp;
+    <TextField label='Note' value={note} margin='normal' onChange={handleChange('note')} InputLabelProps={{shrink: true}}/>
+    <br/>
+    <TextField label='* Title Header' value={title} onChange={handleChange('title')} margin='normal' InputLabelProps={{shrink: true}}/>
+    <br/>
+    {promos.map(p => {
+        return(
+            <TextField key={p._id} label='* Request By' value={(p.request_by.first ? p.request_by.first + " " : "") + (p.request_by.last ? p.request_by.last + " " : "")} margin='normal' disabled={true} InputLabelProps={{shrink: true}}/>
+        )
+    })}
+    <br/>
+    <TextField label='* Requst Date' value={request_date} margin='normal' disabled={true} InputLabelProps={{shrink: true}}/>
+    </form>
+    </DialogContentText>
+    </div>
     </DialogContent>
+    <DialogActions>
+    <Button onClick={handleClose} color="secondary" variant="contained">
+    Cancel
+    </Button>
+    <Button color="primary" variant="contained" autoFocus>
+    Next
+    </Button>
+    </DialogActions>
     </Dialog>
     </Fragment>
 }

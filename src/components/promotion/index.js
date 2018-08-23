@@ -17,8 +17,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
-import { isLogged } from '../configuration/config';
 
 class Promotions extends React.Component {
 
@@ -31,6 +29,8 @@ class Promotions extends React.Component {
     t_design_id: '',
     is_delete: '',
     note: '',
+    t_event_code: '',
+    t_design_code: ''
   }
 
   constructor(props) {
@@ -43,9 +43,9 @@ class Promotions extends React.Component {
       createNew: false,
       deletePromo: false,
       editPromo: false,
-      subSelect: false,
+      subSelect: true,
       loading: true,
-      promo: this.promoModel
+      promo: this.promoModel,
     }
   }
 
@@ -123,22 +123,78 @@ class Promotions extends React.Component {
     this.setState({
       createNew: false,
       promo: this.promoModel,
-      nextPromo:true
+      nextPromo:true,
     })
   }
 
+  handleSelect = e => {
+    const { subSelect } = this.state;
+    const value = e.target.value;
+    let select;
+    if(value==1){
+      select = false;
+    }
+    
+    else if(value==0){
+      // if(subSelect){
+      //   select = true;
+      // }else{
+      //   select = false;
+      // }
+      select= true;
+    }
+    console.log(select);
+    
+    this.setState({
+      subSelect: select,
+    })
+
+  }
   handleClose = () => {
     this.setState({
       createNew: false,
       deletePromo: false,
       editPromo: false,
       viewPromo: false,
-      promo: this.promoModel
+      nextPromo: false,
+      promo: this.promoModel,
+      
     })
   }
 
   handleChange = name => ({ target: { value } }) => {
     this.setState({
+      promo: {
+        ...this.state.promo,
+        [name]: value
+      }
+    })
+  }
+  handleChangeSelectEvent = name => ({ target: { value } }) => {
+    const { events} = this.state;
+    console.log(value);
+    var event = events.find(o => o._id === value);
+    events.t_event_code = event.code;
+
+    console.log(event.code);
+    this.setState({
+      events: events,
+      promo: {
+        ...this.state.promo,
+        [name]: value
+      }
+    })
+  }
+
+  handleChangeSelectDesign = name => ({ target: { value } }) => {
+    const { designs } = this.state;
+    console.log(value);
+    var design = designs.find(o => o._id === value);
+    designs.t_design_code = design.code;
+
+    console.log(design.code);
+    this.setState({
+      designs: designs,
       promo: {
         ...this.state.promo,
         [name]: value
@@ -223,9 +279,6 @@ class Promotions extends React.Component {
   }
 
   render() {
-    if(!isLogged()){
-      return(<Redirect to= {'/login'} />)
-  }
     const { promos, loading, events, employes, designs } = this.state;
     const { classes } = this.props;
     let i = 1;
@@ -233,10 +286,9 @@ class Promotions extends React.Component {
       <div>
         <h3 style={{ color: '#3f51b5' }}><center>List Promotions</center></h3>
         <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />
-        <CreatePromo createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} promo={this.state.promo} events={this.state.events} designs={this.state.designs} handleToggleNext={this.handleToggleNext} nextPromo={this.state.nextPromo} />
-        {/* <DeletePromo deletePromo={this.state.deletePromo} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} promo={this.state.promo}/>
-      <ViewPromo viewPromo={this.state.viewPromo} handleClose={this.handleClose} promo={this.state.promo}/>
-      <EditPromo editPromo={this.state.editPromo} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} promo={this.state.promo} /> */}
+
+        <CreatePromo handleChangeSelectDesign={this.handleChangeSelectDesign} handleChangeSelectEvent={this.handleChangeSelectEvent} subSelect={this.state.subSelect} handleSelect={this.handleSelect} createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} promo={this.state.promo} events={this.state.events} designs={this.state.designs} handleToggleNext={this.handleToggleNext} nextPromo={this.state.nextPromo} promos={this.state.promos}/>
+        
         <Table>
           <TableHead>
             <TableRow>

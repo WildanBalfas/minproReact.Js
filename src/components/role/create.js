@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
-export default ({createNew,handleToggle,handleChange,handleClose,handleSubmit, role: {code, name, description}}) =>{
+export default ({createNew,handleToggle,handleChange,handleClose,handleSubmit, errors:{nameErr}, role: {code, name, description}}) =>{
   return <Fragment>
     <Button onClick={handleToggle} variant="contained" color="primary" style={{ float:'right' }}>Add</Button>
     <Dialog open={createNew} onClose={handleClose} >
@@ -17,11 +17,11 @@ export default ({createNew,handleToggle,handleChange,handleClose,handleSubmit, r
                 <DialogContentText id="alert-dialog-description">
                 <div class="title">Add Role</div>
     <form class="martop">
-                <TextField label='Role Code' value={code} onChange={handleChange('code')} margin='normal' InputLabelProps={{shrink:true}} placeholder="Auto Generated" disabled/>
+                <TextField label='Role Code' value={code} onChange={handleChange('code')} margin='normal' InputLabelProps={{shrink:true}} placeholder="Auto Generated" disabled required/>
                 <br/>
-                <TextField label='*Role Name' value={name} onChange={handleChange('name')} margin='normal'/>
+                <TextField label="Role Name" value={name} onChange={handleChange('name')} error={nameErr == 0 ? false : true } margin='normal' InputLabelProps={{shrink: true}} required/>
                 <br/>
-                <TextField label='*Description Name' value={description} onChange={handleChange('description')} margin='normal'/>
+                <TextField label='Description Name' value={description} onChange={handleChange('description')} margin='normal'/>
                 <br/>
             </form>
             </DialogContentText>

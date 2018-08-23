@@ -11,7 +11,7 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
-export default ({editMenu,handleChange,handleClose,handleEdit,handleSubmit, menu: {_id, code, name, controller,parent_id}, menus}) => {
+export default ({errors:{nameErr, controllerErr},editMenu,handleChange,handleClose,handleEdit,handleSubmit, menu: {_id, code, name, controller,parent_id}, menus}) => {
   return <Fragment>
   <Dialog
   open={editMenu}
@@ -22,11 +22,11 @@ export default ({editMenu,handleChange,handleClose,handleEdit,handleSubmit, menu
   <div class="title">Edit Menu</div>
   </DialogContentText>
   <form class="martop">
-  <TextField label='*Menu Code' value={code} onChange={handleChange('code')} margin='normal' disabled={true} />
+  <TextField label='Menu Code' value={code} onChange={handleChange('code')} margin='normal' disabled={true} required />
   <br/>
-  <TextField label='*Menu Name' value={name} onChange={handleChange('name')} margin='normal'/>
+  <TextField label='Menu Name' value={name} onChange={handleChange('name')} margin='normal' error={nameErr != 0 ? true : false} InputLabelProps={{shrink:true}} required/>
   <br/>
-  <TextField label='*Controller Name' value={controller} onChange={handleChange('controller')} margin='normal'/>
+  <TextField label='Controller Name' value={controller} onChange={handleChange('controller')} margin='normal' error={controllerErr != 0 ? true : false} InputLabelProps={{shrink:true}} required/>
   <br/>
   <FormControl fullWidth='true'>
     <InputLabel shrink htmlFor="menu-simple" >Parent </InputLabel>
