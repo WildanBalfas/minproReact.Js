@@ -122,7 +122,7 @@ class Menus extends React.Component {
         axios.post(config.url + '/m-menu', newMenu)
         .then(res => {
           this.reloadMenuData();
-          alert('Data Saved! New menu has been added');
+          alert('Data Saved! New menu has been added ' + menu.code);
         })
         .catch((error) => {
           alert(error)
@@ -199,6 +199,7 @@ class Menus extends React.Component {
             alert(error)
         })
   }
+
   
   validate = () => {
         
@@ -217,6 +218,7 @@ class Menus extends React.Component {
       isError = true;
       errors.controllerErr = alert("Fill out menu controller");
     }
+    
     
 
     this.setState({
@@ -247,6 +249,7 @@ class Menus extends React.Component {
       <TableCell style={{fontWeight:"bold", color:"black"}}>No</TableCell>
       <TableCell style={{fontWeight:"bold", color:"black"}}>Menu Code</TableCell>
       <TableCell style={{fontWeight:"bold", color:"black"}}>Menu Name</TableCell>
+      <TableCell style={{fontWeight:"bold", color:"black"}}>Controller Name</TableCell>
       <TableCell style={{fontWeight:"bold", color:"black"}}>Create Date</TableCell>
       <TableCell style={{fontWeight:"bold", color:"black"}}>Create By</TableCell>
       {/* <TableCell style={{textAlign:"center",fontWeight:"bold", color:"black"}}>is_delete</TableCell> */}
@@ -262,6 +265,7 @@ class Menus extends React.Component {
           {n.code}
           </TableCell>
           <TableCell>{n.name}</TableCell>
+          <TableCell>{n.controller}</TableCell>
           <TableCell>{changeDateFormat(n.createDate)}</TableCell>
           <TableCell>{n.created_by}</TableCell>
           {/* <TableCell style={{textAlign:"center"}}>{n.is_delete}</TableCell> */}

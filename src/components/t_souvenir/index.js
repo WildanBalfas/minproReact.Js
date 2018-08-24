@@ -297,6 +297,7 @@ class T_Souvenir extends React.Component {
                 axios.post(config.url + '/add_souvenir_stock', arr)
                     .then(res => {
                         this.reloadTSouvenirData();
+                        this.reloadTSouvenirDataItems();
                         alert('has been saved ' + res.data.ops[0].code);
                         // console.log(res.data);
 
