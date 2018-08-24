@@ -15,8 +15,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Table from '@material-ui/core/Table';
+import IconDelete from '@material-ui/icons/Delete';
+import IconEdit from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
 
-export default ({ editTSouvenir,handleChange,handleClose,handleSubmit,handleChangeItem, handleAddItem,m_souvenirs, m_employee, t_souvenir_stock:{code, received_by, received_date, note }, items}) => {
+export default ({ editTSouvenir,handleChange,handleClose,handleSubmit,handleChangeItem, handleAddItem,m_souvenirs, m_employee, t_souvenir_stock:{code, received_by, received_date, note }, items, handleCloseRemove, deleteConfirm, handleDeleteConfirm, handleDis, handleRemove}) => {
   
     return <Fragment>
                 <Dialog
@@ -57,7 +60,7 @@ export default ({ editTSouvenir,handleChange,handleClose,handleSubmit,handleChan
                     <br/>
                     {/* <DatePicker></DatePicker>
                     <br/> */}
-                    <TextField style={{width:200}} label="Received Date" value={received_date} onChange={handleChange('received_date')} margin='normal'  />
+                    <TextField type= "date"style={{width:200}} label="Received Date" value={received_date} onChange={handleChange('received_date')} margin='normal'  />
                     <br />
                     <TextField style={{width:200}} label="Note" value={note} onChange={handleChange('note')} margin="normal" InputLabelProps={{shrink: true}} placeholder="Type Note" multiline />&nbsp;
                
@@ -103,7 +106,10 @@ export default ({ editTSouvenir,handleChange,handleClose,handleSubmit,handleChan
                                     </TableCell>
                                     <TableCell><TextField   type="number" style={{width:70,  paddingLeft: 10, paddingRight:10 }}  value={n.qty } onChange={handleChangeItem('qty', n._id)} margin="normal" InputLabelProps={{shrink: true}}></TextField></TableCell>
                                     <TableCell><TextField  style={{ width: 200, }} value={n.notes} onChange={handleChangeItem('notes', n._id)} margin="normal" placeholder="Note"  ></TextField></TableCell>
-                                 </TableRow>
+                                    <TableCell>
+                                    <IconButton onClick={() => handleDis(n.dis, n._id)}><IconEdit color="primary" /></IconButton>
+                                    <IconButton onClick={() => handleDeleteConfirm(n._id)}><IconDelete color="secondary" /></IconButton></TableCell>
+                                    </TableRow>
                             );
                         })}
                 </TableBody>
@@ -122,5 +128,14 @@ export default ({ editTSouvenir,handleChange,handleClose,handleSubmit,handleChan
                
             </DialogActions>
         </Dialog>
+        <Dialog open={deleteConfirm} onClose=''>
+                <DialogContent>
+                    <DialogContentText>Delete Item?</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleRemove}variant="contained" color="primary" autoFocus>Delete</Button>
+                    <Button onClick={handleCloseRemove} variant="contained" color="secondary" >Cancel</Button>
+                </DialogActions>
+            </Dialog>
     </Fragment>
 }

@@ -99,7 +99,7 @@ export default ({ validator, createNew,handleToggle,handleChange,handleRemove, h
                                             <MenuItem value='0' key='0' disabled>
                                                 <em>Select Souvenir Name</em>
                                             </MenuItem>
-                                            {validator.message('m_souvenir_id', n.m_souvenir_id , 'required', 'text-danger')}
+                                            {/* {validator.message('m_souvenir_id', n.m_souvenir_id , 'required', 'text-danger')} */}
                                             {m_souvenirs.map(c => {
                                                 return (
                                                     <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
@@ -113,7 +113,9 @@ export default ({ validator, createNew,handleToggle,handleChange,handleRemove, h
                                     {/* {validator.message('notes', n.notes , 'required|alpha')} */}
                                         <TextField  style={{ width: 200, }} value={n.notes} onChange={handleChangeItem('notes', n._id)} margin="normal" placeholder="Note" disabled={n.dis % 2 == 0 ? false : true}></TextField>
                                         </TableCell>
-                                    <TableCell><IconButton onClick={() => handleDis(n.dis, n._id)}><IconEdit color="primary" /></IconButton><IconButton onClick={() => handleDeleteConfirm(n._id)}><IconDelete color="secondary" /></IconButton></TableCell>
+                                    <TableCell>
+                                    <IconButton onClick={() => handleDis(n.dis, n._id)}><IconEdit color="primary" /></IconButton>
+                                    <IconButton onClick={() => handleDeleteConfirm(n._id)}><IconDelete color="secondary" /></IconButton></TableCell>
                                  </TableRow>
                             );
                         })}

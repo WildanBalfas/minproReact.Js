@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import LSData from '../base/base.localstorage';
 import { changeDateFormat } from '../system/base.function';
-import SimpleReactValidator from 'simple-react-validator';
+// import SimpleReactValidator from 'simple-react-validator';
 
 import IconEdit from '@material-ui/icons/Edit';
 import IconSeacrh from '@material-ui/icons/Search';
@@ -65,7 +65,7 @@ class T_Souvenir extends React.Component {
             load: true
 
         }
-        this.validator = new SimpleReactValidator();
+        // this.validator = new SimpleReactValidator();
 
     }
 
@@ -469,7 +469,7 @@ class T_Souvenir extends React.Component {
 
                 <ViewSouvenir viewTSouvenir={this.state.viewTSouvenir} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit} m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} items={this.state.items} handleChangeItem={this.handleChangeItem} />
 
-                <EditSouvenir editTSouvenir={this.state.editTSouvenir} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit} m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} items={this.state.items} handleChangeItem={this.handleChangeItem} />
+                <EditSouvenir editTSouvenir={this.state.editTSouvenir} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit} m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} items={this.state.items} handleChangeItem={this.handleChangeItem}  handleRemove={this.handleRemove} handleCloseRemove={this.handleCloseRemove} deleteConfirm={this.state.deleteConfirm} handleDeleteConfirm={this.handleDeleteConfirm} handleDis={this.handleDis} />
 
 
                 <CircularProgress className={classes.progress} style={{ visibility: (load ? 'visible' : 'hidden') }} color="secondary" />
