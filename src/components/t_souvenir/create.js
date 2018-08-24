@@ -15,8 +15,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Table from '@material-ui/core/Table';
+import IconDelete from '@material-ui/icons/Delete';
+import IconEdit from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
 
-export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit,handleChangeItem, handleAddItem,m_souvenirs, m_employee, t_souvenir_stock:{received_by, received_date, note }, errorsT:{received_byErr, received_dateErr, noteErr}, items}) => {
+export default ({ validator, createNew,handleToggle,handleChange,handleRemove, handleClose,handleSubmit,handleChangeItem, handleAddItem,m_souvenirs, m_employee, t_souvenir_stock:{received_by, received_date, note }, errorsT:{received_byErr, received_dateErr, noteErr}, items,handleCloseRemove, deleteConfirm, handleDeleteConfirm, handleDis}) => {
     return <Fragment>
         <Button onClick={handleToggle} variant="contained" color="primary" style={{float: 'right'}}>Add</Button>
         <Dialog
@@ -90,10 +93,13 @@ export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit,h
                                             inputProps={{
                                                 name: 'm_souvenir_id',
                                                 id: 'souvenir-simple',
-                                            }}>
+                                            }}
+                                            disabled={n.dis % 2 == 0 ? false : true}
+                                            >
                                             <MenuItem value='0' key='0' disabled>
                                                 <em>Select Souvenir Name</em>
                                             </MenuItem>
+                                            {validator.message('m_souvenir_id', n.m_souvenir_id , 'required', 'text-danger')}
                                             {m_souvenirs.map(c => {
                                                 return (
                                                     <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
@@ -102,8 +108,12 @@ export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit,h
                                             
                                         </Select>
                                     </TableCell>
-                                    <TableCell><TextField   type="number" style={{width:50,  paddingLeft: 10, paddingRight:10 }}  value={n.qty } onChange={handleChangeItem('qty', n._id)} margin="normal" InputLabelProps={{shrink: true}}></TextField></TableCell>
-                                    <TableCell><TextField  style={{ width: 200, }} value={n.notes} onChange={handleChangeItem('notes', n._id)} margin="normal" placeholder="Note" ></TextField></TableCell>
+                                    <TableCell><TextField   type="number" style={{width:50,  paddingLeft: 10, paddingRight:10 }}  value={n.qty } onChange={handleChangeItem('qty', n._id)} margin="normal" InputLabelProps={{shrink: true}} disabled={n.dis % 2 == 0 ? false : true}></TextField></TableCell>
+                                    <TableCell>
+                                    {/* {validator.message('notes', n.notes , 'required|alpha')} */}
+                                        <TextField  style={{ width: 200, }} value={n.notes} onChange={handleChangeItem('notes', n._id)} margin="normal" placeholder="Note" disabled={n.dis % 2 == 0 ? false : true}></TextField>
+                                        </TableCell>
+                                    <TableCell><IconButton onClick={() => handleDis(n.dis, n._id)}><IconEdit color="primary" /></IconButton><IconButton onClick={() => handleDeleteConfirm(n._id)}><IconDelete color="secondary" /></IconButton></TableCell>
                                  </TableRow>
                             );
                         })}
@@ -122,5 +132,15 @@ export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit,h
             </Button>
             </DialogActions>
         </Dialog>
+
+        <Dialog open={deleteConfirm} onClose=''>
+                <DialogContent>
+                    <DialogContentText>Delete Item?</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleRemove}variant="contained" color="primary" autoFocus>Delete</Button>
+                    <Button onClick={handleCloseRemove} variant="contained" color="secondary" >Cancel</Button>
+                </DialogActions>
+            </Dialog>
     </Fragment>
 }

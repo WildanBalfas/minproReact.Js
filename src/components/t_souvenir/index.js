@@ -8,7 +8,10 @@ import IconButton from '@material-ui/core/IconButton';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import IconDelete from '@material-ui/icons/Delete';
+import LSData from '../base/base.localstorage';
+import { changeDateFormat } from '../system/base.function';
+import SimpleReactValidator from 'simple-react-validator';
+
 import IconEdit from '@material-ui/icons/Edit';
 import IconSeacrh from '@material-ui/icons/Search';
 
@@ -31,6 +34,9 @@ class T_Souvenir extends React.Component {
         EmployeeFirstName: "",
         EmployeeLastName: "",
     }
+    itemModel = {
+        dis: 1
+    }
     errTModel = {
         received_byErr: "",
         received_dateErr: "",
@@ -45,6 +51,7 @@ class T_Souvenir extends React.Component {
             t_souvenirs_stock: [],
             items: [],
             item: {},
+            itemId: '',
             t_souvenir_stock: {},
             m_souvenirs: [],
             m_employee: [],
@@ -58,13 +65,18 @@ class T_Souvenir extends React.Component {
             load: true
 
         }
+        this.validator = new SimpleReactValidator();
+
     }
 
 
     validate = () => {
-
-        const { t_souvenir_stock } = this.state;
+        items
+        const { t_souvenir_stock, items } = this.state;
+        console.log(items);
         let isError = false;
+        let isError2 = false;
+        let isError3;
         const errorsT = {
             received_byErr: "",
             received_dateErr: "",
@@ -84,6 +96,32 @@ class T_Souvenir extends React.Component {
             isError = true;
             errorsT.noteErr = "Fill out Note";
         }
+        // isError3 = isError;
+
+        // for (let i = 0; i < items.length; i++) {
+        //     for (let j = i + 1; j < items.length; j++) {
+        //         if (items[i].m_souvenir_id == (items[j].m_souvenir_id)) {
+        //             isError = true;
+        //             // alert('hey sama itu')
+        //         }
+        //         if (items[i].m_souvenir_id == "") {
+        //             isError = true;
+        //             // alert('kosong')
+        //         }
+
+
+
+        //     }
+        //     isError2 = isError;
+
+
+
+
+        // }
+        // if (isError2 == true) {
+        //     alert('hey sama itu')
+
+        // }
 
 
         this.setState({
@@ -91,6 +129,7 @@ class T_Souvenir extends React.Component {
         });
         console.log(errorsT)
         return isError;
+
     };
 
     reloadTSouvenirData = () => {
@@ -99,6 +138,7 @@ class T_Souvenir extends React.Component {
                 this.setState({
                     t_souvenirs_stock: res.data,
                     createNew: false,
+                    editTSouvenir: false,                    
                     load: false,
                 })
             })
@@ -172,10 +212,10 @@ class T_Souvenir extends React.Component {
         })
     }
 
-    handleChangeItem = (shit, _id) => ({ target: { value } }) => {
+    handleChangeItem = (name, _id) => ({ target: { value } }) => {
         const { items } = this.state;
         var item = items.find(o => o._id === _id);
-        item[shit] = value;
+        item[name] = value;
         this.setState({
             items: items
         })
@@ -183,12 +223,16 @@ class T_Souvenir extends React.Component {
 
     }
 
+   
+
     handleClose = () => {
         this.setState({
             createNew: false,
             viewTSouvenir: false,
             editTSouvenir: false,
             items: [],
+            errorsT: this.errTModel,
+
             // editProduct: false,
             // viewProduct: false,
             // deleteProduct: false,
@@ -207,6 +251,7 @@ class T_Souvenir extends React.Component {
             m_souvenir_id: '',
             qty: 0,
             note: '',
+            dis: 1
 
         };
         //newOrder._id = _id;
@@ -224,17 +269,29 @@ class T_Souvenir extends React.Component {
     handleSubmit = () => {
         const err = this.validate();
         if (!err) {
-            const { items, t_souvenir_stock, createNew } = this.state
+            // console.log('ship')
+            const { items, t_souvenir_stock, createNew } = this.state;
             let arr = [];
+            let arr2 = [];
             let newStock = {
 
                 received_by: t_souvenir_stock.received_by,
                 received_date: t_souvenir_stock.received_date,
                 note: t_souvenir_stock.note,
-                type: 'addtional'
+                type: 'addtional',
+                created_by:LSData.loginRoleId()
+            }
+            let upStock = {
+
+                received_by: t_souvenir_stock.received_by,
+                received_date: t_souvenir_stock.received_date,
+                note: t_souvenir_stock.note,
+                type: 'addtional',
+                updated_by:LSData.loginRoleId()
             }
 
             arr.push(newStock, items)
+            arr2.push(upStock, items)
 
             if (createNew) {
                 axios.post(config.url + '/add_souvenir_stock', arr)
@@ -249,18 +306,18 @@ class T_Souvenir extends React.Component {
                         alert(error);
                     })
             } else {
-                axios.put(config.url + '/update_souvenir_stock/' + t_souvenir_stock._id, arr)
-                    // console.log(config.url + '/update_souvenir_stock/' + t_souvenir_stock._id, arr)
+                axios.post(config.url + '/update_souvenir_stock/' + t_souvenir_stock._id, arr2)
                     .then(res => {
-                        // this.reloadTSouvenirData();
-                        // alert('has been saved ' + res.data.ops[0].code);
-                        // console.log(res.data);
+                        this.reloadTSouvenirData();
+                        this.reloadTSouvenirDataItems();
+                        alert('has been Update ' + res.data.value.code );
+                        console.log(res.data);
 
 
                     })
-                // .catch((error) => {
-                //     alert(error);
-                // })
+                .catch((error) => {
+                    alert(error);
+                })
             }
         }
 
@@ -309,6 +366,43 @@ class T_Souvenir extends React.Component {
 
         })
 
+    }
+
+    handleDeleteConfirm = (_id) => {
+        // console.log('hehe')
+        this.setState({
+            deleteConfirm: true,
+            itemId: _id,
+        })
+    }
+
+    handleDis = (dis, _id) => {
+        console.log('hehe')
+        const { items } = this.state;
+        var item = items.find(o => o._id === _id);
+        item.dis = dis + 1;
+        this.setState({
+            items: items
+        })
+        console.log(item.dis)
+    }
+
+
+
+    handleCloseRemove = () => {
+        this.setState({
+            deleteConfirm: false,
+        })
+    }
+
+    handleRemove = () => {
+        const { items, itemId } = this.state;
+        const selectIdx = items.findIndex(u => u._id === itemId);
+        items.splice(selectIdx, 1);
+        this.setState({
+            items: items,
+            deleteConfirm: false
+        })
     }
 
     handleView = (_id) => {
@@ -371,7 +465,7 @@ class T_Souvenir extends React.Component {
 
             <div>
                 <h3>List Of Transaksi Souvenir Stock</h3>
-                <AddSouvenir errorsT={this.state.errorsT} createNew={this.state.createNew} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit} items={this.state.items} m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} item={this.state.item} handleChangeItem={this.handleChangeItem} />
+                <AddSouvenir validator={this.validator} errorsT={this.state.errorsT} createNew={this.state.createNew} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit} items={this.state.items} m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} item={this.state.item} handleChangeItem={this.handleChangeItem} handleRemove={this.handleRemove} items={this.state.items} handleCloseRemove={this.handleCloseRemove} deleteConfirm={this.state.deleteConfirm} handleDeleteConfirm={this.handleDeleteConfirm} handleDis={this.handleDis}/>
 
                 <ViewSouvenir viewTSouvenir={this.state.viewTSouvenir} handleAddItem={this.handleAddItem} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleChangeCheckBox={this.handleChangeCheckBox} t_souvenir_stock={this.state.t_souvenir_stock} handleSubmit={this.handleSubmit} m_employee={this.state.m_employee} m_souvenirs={this.state.m_souvenirs} items={this.state.items} handleChangeItem={this.handleChangeItem} />
 
@@ -401,11 +495,11 @@ class T_Souvenir extends React.Component {
                                     <TableCell>{i++}</TableCell>
                                     <TableCell>{n.code}</TableCell>
                                     <TableCell>{n.EmployeeFirstName} {n.EmployeeLastName}</TableCell>
-                                    <TableCell>{n.received_date}</TableCell>
+                                    <TableCell>{changeDateFormat(n.received_date)}</TableCell>
                                     <TableCell>{n.created_by}</TableCell>
-                                   
-                                    
-                                    <TableCell>{n.createDate}</TableCell>
+
+
+                                    <TableCell>{changeDateFormat(n.createDate)}</TableCell>
                                     <TableCell style={{ textAlign: 'center' }}>
 
                                         <IconButton onClick={() => this.handleView(n._id)} ><IconSeacrh variant="contained" color="default" >Search</IconSeacrh></IconButton>

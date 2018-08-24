@@ -25,7 +25,7 @@ export default ({ createNew, handleToggle, handleClose, handleSubmit,handleChang
                 <form>
                     <TextField label="Code" value={code} onChange={handleChange('code')} margin='normal' disabled />
                     <br />
-                    <TextField label={nameErr == 0 ? "Name" : nameErr } value={name} onChange={handleChange('name')}  errorText={'tes'}margin='normal' error={nameErr == 0 ? false : true } />
+                    <TextField label={nameErr == 0 ? "Name" : nameErr } value={name} onChange={handleChange('name')}  margin='normal' error={nameErr == 0 ? false : true } />
                     <br />
                     <TextField label={descriptionErr == 0 ? "Description" : descriptionErr } value={description} onChange={handleChange('description')} margin='normal' error={descriptionErr == 0 ? false : true } />
                     <br />

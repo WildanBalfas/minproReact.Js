@@ -61,18 +61,28 @@ class M_Product extends React.Component {
         }
     }
 
-    validate = () => {
+    validate = (name) => {
         
-        const { product} = this.state;
+        const { product, products} = this.state;
+        console.log(name)
+        const names = products.findIndex(u => u.name === name);
+        console.log(names)
+        
         let isError = false;
         const errors = {
           nameErr: "",
           descriptionErr: "",
         };
-    
+        
+        // if(names == 1){
+        //     isError = true;
+        //     alert("nama tidak boleh sama")
+        // }
+
         if (product.name.length < 1) {
           isError = true;
           errors.nameErr = "Fill out Name";
+      
         }
         
         if (product.description.length < 1) {
@@ -149,7 +159,8 @@ class M_Product extends React.Component {
 
     handleSubmit = () => {
         // console.log('hehe')
-        const err = this.validate();
+        const {  product, createNew } = this.state;
+        const err = this.validate(product.name);
         if (!err) {
             // console.log('haha')
         
@@ -295,7 +306,7 @@ class M_Product extends React.Component {
                             <TableCell style={{fontWeight:"bolder",color:"black"}}>Description </TableCell>
                             <TableCell style={{fontWeight:"bolder",color:"black"}}>Create Date </TableCell>
                             <TableCell style={{fontWeight:"bolder",color:"black"}}>Create By </TableCell>
-                            <TableCell style={{fontWeight:"bolder",color:"black"}}>is Delete </TableCell>
+                            {/* <TableCell style={{fontWeight:"bolder",color:"black"}}>is Delete </TableCell> */}
                             <TableCell style = {{textAlign:'center', fontWeight:"bolder",color:"black"}} >Action</TableCell>
 
                         </TableRow>
@@ -311,7 +322,7 @@ class M_Product extends React.Component {
                                     <TableCell >{n.description}</TableCell>
                                     <TableCell >{n.createDate}</TableCell>
                                     <TableCell >{n.created_by}</TableCell>
-                                    <TableCell >{n.is_delete}</TableCell>
+                                    {/* <TableCell >{n.is_delete}</TableCell> */}
                                     <TableCell style = {{textAlign:'center'}}>
                                       
                                           <IconButton onClick={() => this.handleView(n._id)} ><IconSeacrh  variant="contained" color="default" >Search</IconSeacrh></IconButton>

@@ -6,8 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import  TextField  from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+
 
 export default ({ editProduct,handleSubmit, handleChange, handleClose, product:{code, name, description} }) => {
     return <Fragment>
