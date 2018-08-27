@@ -74,10 +74,10 @@ class M_Product extends React.Component {
           descriptionErr: "",
         };
         
-        // if(names == 1){
-        //     isError = true;
-        //     alert("nama tidak boleh sama")
-        // }
+        if(names == 1){
+            isError = true;
+            alert("nama tidak boleh sama")
+        }
 
         if (product.name.length < 1) {
           isError = true;

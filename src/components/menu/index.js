@@ -102,9 +102,9 @@ class Menus extends React.Component {
   }
   
   handleSubmit = () => {
-    const err = this.validate();
+    const { menu, createNew } = this.state;
+    const err = this.validate(menu.controller);
     if (!err) {
-      const { menu, createNew } = this.state;
       let newMenu = {
         code: menu.code,
         name: menu.name,
@@ -121,8 +121,9 @@ class Menus extends React.Component {
       if (createNew) {
         axios.post(config.url + '/m-menu', newMenu)
         .then(res => {
+          console.log(res.data.ops[0].code);
           this.reloadMenuData();
-          alert('Data Saved! New menu has been added ' + menu.code);
+          alert('Data Saved! New menu has been added '+ res.data.ops[0].code);
         })
         .catch((error) => {
           alert(error)
@@ -201,14 +202,22 @@ class Menus extends React.Component {
   }
 
   
-  validate = () => {
-        
-    const { menu } = this.state;
+  validate = (controller) => {
+    const { menu, menus } = this.state;
+    const controllers = menus.findIndex(u => u.controller === controller);
+    console.log(controllers);
+
     let isError = false;
     const errors = {
       nameErr: "",
       controllerErr:""
     };
+    //controllers -1 false dan 3 true
+    if(controllers != -1){
+      isError = true;
+      errors.controllerErr = "Fill out controller name"
+      alert("controller tidak boleh sama")
+    }
 
     if (menu.name.length < 1) {
       isError = true;
