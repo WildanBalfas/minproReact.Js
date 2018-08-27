@@ -35,6 +35,12 @@ class m_unit extends React.Component {
    
 
     }
+
+    errModel = {
+        nameErr: '',   
+        descErr: ''
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -45,10 +51,35 @@ class m_unit extends React.Component {
             deleteUnit: false,
             loading: true,
             viewUnit : false,
-            unit: this.unitModel
+            unit: this.unitModel,
+            errors:this.errModel
 
         }
     }
+
+    validate = () => {
+        const { unit } = this.state;
+        let isError = false;
+        const errors = {
+          nameErr: "",
+          descErr:""
+        };
+        
+        if (unit.name.length < 1) {
+          isError = true;
+          errors.nameErr = alert("Fill out unit name");
+        }
+        if (unit.description.length < 1) {
+          isError = true;
+          errors.descErr = alert("Fill out unit description");
+        }
+        
+        this.setState({
+          errors:errors
+        });
+        console.log(errors)
+        return isError;
+      };
 
     reloadUnitData = () => {
         axios.get(config.url + '/m_unit_aggregation')
@@ -110,40 +141,41 @@ class m_unit extends React.Component {
         })
     }
 
-    handleSubmit = () => {
+    handleSubmit = () => { 
         const { unit, createNew } = this.state;
-    
-        let newUnit =
-        {
-            code: unit.code,
-            name: unit.name,
-            description : unit.description,
-            createDate: unit.createDate,
-            created_by: unit.created_by
+        const err = this.validate();
+        if (!err) {
             
-        }
-
-        if(createNew){
-            axios.post(config.url + '/m-unit', newUnit)
+            let newUnit =
+            {
+                code: unit.code,
+                name: unit.name,
+                description : unit.description,
+                createDate: unit.createDate,
+                created_by: unit.created_by
+                
+            }
+    
+            if(createNew){
+                axios.post(config.url + '/m-unit', newUnit)
+                    .then(res => {
+                        this.reloadUnitData();
+                        alert('Data Saved! New unit has been added with code ' + res.data.ops[0].code);
+                    })
+                    .catch((error) => {
+                        alert(error)
+                    })
+            }else{
+                axios.put(config.url + '/m-unit/' + unit._id , newUnit)
                 .then(res => {
                     this.reloadUnitData();
-                    alert('Data Saved! New unit has been added with code ' + res.data.ops[0].code);
+                    alert('Unit has been updated ' );
                 })
                 .catch((error) => {
                     alert(error)
                 })
-        }else{
-            axios.put(config.url + '/m-unit/' + unit._id , newUnit)
-            .then(res => {
-                this.reloadUnitData();
-                alert('Unit has been updated ' );
-            })
-            .catch((error) => {
-                alert(error)
-            })
-        }
-    
-        
+            }
+        }  
     }
     
     handleEdit = (_id) => {
@@ -216,8 +248,8 @@ class m_unit extends React.Component {
         return (
             <div>
                 <h3><center>List of Unit</center></h3>
-                <CreateUnit createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleChangeCheckBox = {this.handleChangeCheckBox} unit = {this.state.unit} />
-                <EditUnit editUnit={this.state.editUnit} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleChangeCheckBox = {this.handleChangeCheckBox} unit = {this.state.unit} />
+                <CreateUnit errors={this.state.errors} createNew={this.state.createNew} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleChangeCheckBox = {this.handleChangeCheckBox} unit = {this.state.unit} />
+                <EditUnit errors={this.state.errors} editUnit={this.state.editUnit} handleToggle={this.handleToggle} handleClose={this.handleClose} handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleChangeCheckBox = {this.handleChangeCheckBox} unit = {this.state.unit} />
                 <DeleteUnit deleteUnit={this.state.deleteUnit} handleClose={this.handleClose} handleDelete={this.handleDeleteConfirm} handleChangeCheckBox = {this.handleChangeCheckBox} unit={this.state.unit} handleChange = {this.handleChange} />
                 <ViewUnit viewUnit={this.state.viewUnit} handleClose={this.handleClose} unit={this.state.unit} />
                 <CircularProgress className={classes.progress} style={{ visibility: (loading ? 'visible' : 'hidden') }} color="secondary" />

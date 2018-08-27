@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 
 
 
-export default ({editUnit, handleClose , handleChange, handleSubmit, handleChangeCheckBox, unit : {code, name,description}}) => {
+export default ({errors: {nameErr, descErr}, editUnit, handleClose , handleChange, handleSubmit, handleChangeCheckBox, unit : {code, name,description}}) => {
     return <Fragment>
         <Dialog
             open={editUnit}
@@ -23,9 +23,9 @@ export default ({editUnit, handleClose , handleChange, handleSubmit, handleChang
             <form>
                 <TextField label = 'Unit Code' value = {code}  margin = 'normal' disabled = {true}/>
                 <br/>
-                <TextField label='Unit Name' value={name} onChange={handleChange('name')} margin='normal'/>
+                <TextField label='Unit Name' value={name} error={nameErr == 0 ? false : true} onChange={handleChange('name')} margin='normal' required InputLabelProps={{shrink: true}}/>
                 <br/>
-                <TextField label='Description' value={description} onChange={handleChange('description')} margin='normal'/>
+                <TextField label='Description' value={description} error={descErr == 0 ? false : true} onChange={handleChange('description')} margin='normal' required InputLabelProps={{shrink: true}}/>
                 <br/>
             </form>
             </DialogContent>

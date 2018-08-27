@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 
 
 
-export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, unit : {code, name,description}}) => {
+export default ({errors:{nameErr,descErr}, createNew,handleToggle,handleChange,handleClose,handleSubmit, unit : {code, name,description}}) => {
     return <Fragment>
        
        <Button onClick={handleToggle} variant="contained" color="primary" style={{ float:'right' }}>Add</Button>
@@ -24,9 +24,9 @@ export default ({ createNew,handleToggle,handleChange,handleClose,handleSubmit, 
             <form>
             <TextField label = 'Unit Code' value = {code}  margin = 'normal' disabled = {true}/>
                 <br/>
-                <TextField label='Unit Name' value={name} onChange={handleChange('name')} margin='normal'/>
+                <TextField label='Unit Name' value={name} error={nameErr == 0 ? false : true} onChange={handleChange('name')} margin='normal' required InputLabelProps={{shrink: true}}/>
                 <br/>
-                <TextField label='Description' value={description} onChange={handleChange('description')} margin='normal'/>
+                <TextField label='Description' value={description} error={descErr == 0 ? false : true} onChange={handleChange('description')} margin='normal' required InputLabelProps={{shrink: true}}/>
                 <br/>
 
             </form>
